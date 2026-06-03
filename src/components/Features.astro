@@ -1,0 +1,51 @@
+---
+import ShoppingBag from '@lucide/astro/icons/shopping-bag';
+import CreditCard from '@lucide/astro/icons/credit-card';
+import Store from '@lucide/astro/icons/store';
+import PackageOpen from '@lucide/astro/icons/package-open';
+import ShieldCheck from '@lucide/astro/icons/shield-check';
+import Smartphone from '@lucide/astro/icons/smartphone';
+import LayoutDashboard from '@lucide/astro/icons/layout-dashboard';
+import SearchCheck from '@lucide/astro/icons/search-check';
+
+const features = [
+  { Icon: ShoppingBag,     title: 'Catálogo completo',       description: 'Productos con variantes (talla, color), imágenes múltiples, categorías y stock en tiempo real.' },
+  { Icon: CreditCard,      title: 'Mercado Pago integrado',  description: 'Checkout nativo con MP, webhooks automáticos y actualización de órdenes sin intervención manual.' },
+  { Icon: Store,           title: 'Multi-tienda',            description: 'Una plataforma, múltiples tiendas. Cada cliente tiene su subdominio y panel propio.' },
+  { Icon: PackageOpen,     title: 'Importación masiva',      description: 'Cargá cientos de productos desde Excel/CSV con detección automática de imágenes.' },
+  { Icon: ShieldCheck,     title: 'Auth con Google',         description: 'Login con Google OAuth2, roles de usuario y sesiones seguras con JWT.' },
+  { Icon: Smartphone,      title: 'Responsive',              description: 'Diseño adaptado a mobile, tablet y desktop. Experiencia de compra fluida en cualquier dispositivo.' },
+  { Icon: LayoutDashboard, title: 'Panel de admin',          description: 'Personalizá tu tienda: colores, logo, banners y datos del negocio, sin tocar código.' },
+  { Icon: SearchCheck,     title: 'SEO ready',               description: 'Metadatos optimizados, URLs amigables y estructura semántica para posicionar en Google.' },
+];
+---
+
+<section id="features" class="py-24 transition-colors duration-300" style="background-color: var(--bg-secondary);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-black mb-4 transition-colors" style="color: var(--text-primary);">
+        Todo lo que tu tienda necesita
+      </h2>
+      <p class="text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
+        Una plataforma construida con tecnología moderna y pensada para el mercado argentino.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {features.map(({ Icon, title, description }) => (
+        <div
+          class="rounded-2xl p-6 transition-all group border cursor-default hover:border-orange-500/40"
+          style="background-color: var(--bg-card); border-color: var(--border);"
+        >
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-orange-500/30 transition-colors group-hover:bg-orange-500/20"
+            style="background-color: rgba(249,115,22,0.10);">
+            <Icon class="w-6 h-6 text-orange-500" />
+          </div>
+          <h3 class="font-bold text-lg mb-2 group-hover:text-orange-500 transition-colors"
+            style="color: var(--text-primary);">{title}</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--text-muted);">{description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

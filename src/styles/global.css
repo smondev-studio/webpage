@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-teal-900: #0d3340;
+  --color-teal-800: #134d60;
+  --color-teal-700: #1a6880;
+  --color-teal-600: #1f7d9a;
+  --color-teal-500: #2596b5;
+  --color-orange-500: #f97316;
+  --color-orange-400: #fb923c;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ---- DARK MODE (default) ---- */
+:root {
+  --bg-primary: #0d3340;
+  --bg-secondary: #0a2b38;
+  --bg-card: rgba(255,255,255,0.05);
+  --bg-card-hover: rgba(255,255,255,0.10);
+  --border: rgba(255,255,255,0.10);
+  --border-hover: rgba(249,115,22,0.30);
+  --text-primary: #ffffff;
+  --text-muted: rgba(255,255,255,0.60);
+  --text-faint: rgba(255,255,255,0.30);
+  --navbar-bg: rgba(13,51,64,0.90);
+  --input-bg: rgba(255,255,255,0.10);
+}
+
+/* ---- LIGHT MODE ---- */
+html.light {
+  --bg-primary: #f0f9ff;
+  --bg-secondary: #e0f2fe;
+  --bg-card: rgba(255,255,255,0.80);
+  --bg-card-hover: rgba(255,255,255,1);
+  --border: rgba(19,77,96,0.15);
+  --border-hover: rgba(249,115,22,0.40);
+  --text-primary: #0d3340;
+  --text-muted: rgba(13,51,64,0.65);
+  --text-faint: rgba(13,51,64,0.35);
+  --navbar-bg: rgba(240,249,255,0.92);
+  --input-bg: rgba(13,51,64,0.06);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
