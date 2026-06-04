@@ -9,8 +9,18 @@
   <div class="absolute bottom-0 left-10 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
   <div class="relative max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+    <!-- Hero image — swaps on theme toggle -->
+    <div class="relative flex justify-center items-end order-1 md:order-2">
+      <img
+        id="hero-img"
+        src="/images/hero-dark.png"
+        alt="SmonDev Studio"
+        class="relative z-0 max-h-[520px] w-auto object-contain drop-shadow-2xl rounded-2xl"
+      />
+    </div>
+
     <!-- Text -->
-    <div>
+    <div class="order-2 md:order-1">
       <div class="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 text-orange-500 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
         <span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
         Disponible para nuevos proyectos
@@ -61,16 +71,6 @@
           <div class="text-sm mt-1" style="color: var(--text-faint);">Escalable desde el día uno</div>
         </div>
       </div>
-    </div>
-
-    <!-- Hero image — swaps on theme toggle -->
-    <div class="relative flex justify-center items-end">
-      <img
-        id="hero-img"
-        src="/images/hero-dark.png"
-        alt="SmonDev Studio"
-        class="relative z-0 max-h-[520px] w-auto object-contain drop-shadow-2xl rounded-2xl"
-      />
     </div>
   </div>
 

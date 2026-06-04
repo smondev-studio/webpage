@@ -118,16 +118,28 @@ const links = [
     }
   }
 
+  function getSystemTheme(): string {
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+
   function toggleTheme() {
-    const current = localStorage.getItem('theme') || 'dark';
+    const current = localStorage.getItem('theme') || getSystemTheme();
     const next = current === 'dark' ? 'light' : 'dark';
     localStorage.setItem('theme', next);
     applyTheme(next);
   }
 
   // Init on load
-  const saved = localStorage.getItem('theme') || 'dark';
-  applyTheme(saved);
+  const saved = localStorage.getItem('theme');
+  const initialTheme = saved || getSystemTheme();
+  applyTheme(initialTheme);
+
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
 
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
   document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
