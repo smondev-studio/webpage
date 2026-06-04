@@ -1,45 +1,77 @@
 ---
+import { getStores } from '../lib/projects';
+
+const stores = await getStores();
 ---
 
 <section id="portfolio" class="py-24 transition-colors duration-300" style="background-color: var(--bg-secondary);">
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-16">
       <h2 class="text-3xl md:text-4xl font-black mb-4" style="color: var(--text-primary);">
-        Tiendas reales en producción
+        Tiendas de nuestros clientes
       </h2>
       <p class="text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
         Proyectos desarrollados sobre la misma plataforma, cada uno con su identidad propia.
       </p>
     </div>
 
-    <div class="rounded-3xl overflow-hidden border transition-colors"
-      style="background-color: var(--bg-card); border-color: var(--border);">
-      <div class="grid md:grid-cols-2 gap-0">
-        <div class="p-10 flex flex-col justify-center">
-          <div class="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 text-green-600 text-xs font-semibold px-3 py-1 rounded-full mb-6 w-fit">
-            <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-            En producción
+    {stores.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {stores.map((store) => (
+          <a href={store.url} target="_blank" rel="noopener noreferrer"
+            class="rounded-3xl overflow-hidden border transition-all hover:border-orange-500/40 group block"
+            style="background-color: var(--bg-card); border-color: var(--border);">
+            <div class="relative h-48 overflow-hidden"
+              style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);">
+              <img src={store.image} alt={store.name}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            </div>
+            <div class="p-6">
+              <div class="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 text-green-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                En producción
+              </div>
+              <h3 class="text-xl font-black mb-2 group-hover:text-orange-500 transition-colors"
+                style="color: var(--text-primary);">{store.name}</h3>
+              {store.description && (
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  {store.description}
+                </p>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="rounded-3xl overflow-hidden border transition-colors"
+        style="background-color: var(--bg-card); border-color: var(--border);">
+        <div class="grid md:grid-cols-2 gap-0">
+          <div class="p-10 flex flex-col justify-center">
+            <div class="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 text-green-600 text-xs font-semibold px-3 py-1 rounded-full mb-6 w-fit">
+              <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+              En producción
+            </div>
+            <h3 class="text-2xl font-black mb-3" style="color: var(--text-primary);">Quina</h3>
+            <p class="text-sm leading-relaxed mb-6" style="color: var(--text-muted);">
+              Tienda de indumentaria con catálogo completo, variantes por talla y color, y checkout con Mercado Pago. Panel de administración para gestión de stock y pedidos.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              {['Indumentaria', 'Variantes', 'MP Checkout', 'Admin Panel'].map((tag) => (
+                <span class="text-xs px-3 py-1 rounded-full border"
+                  style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
-          <h3 class="text-2xl font-black mb-3" style="color: var(--text-primary);">Quina</h3>
-          <p class="text-sm leading-relaxed mb-6" style="color: var(--text-muted);">
-            Tienda de indumentaria con catálogo completo, variantes por talla y color, y checkout con Mercado Pago. Panel de administración para gestión de stock y pedidos.
-          </p>
-          <div class="flex flex-wrap gap-2">
-            {['Indumentaria', 'Variantes', 'MP Checkout', 'Admin Panel'].map((tag) => (
-              <span class="text-xs px-3 py-1 rounded-full border"
-                style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);">
-                {tag}
-              </span>
-            ))}
+          <div class="relative flex items-end justify-center p-8 min-h-64"
+            style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);">
+            <img src="/images/hero-light.png" alt="Demo tienda"
+              class="max-h-72 w-auto object-contain drop-shadow-2xl rounded-xl" />
           </div>
-        </div>
-        <div class="relative flex items-end justify-center p-8 min-h-64"
-          style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);">
-          <img src="/images/hero-light.png" alt="Demo tienda"
-            class="max-h-72 w-auto object-contain drop-shadow-2xl rounded-xl" />
         </div>
       </div>
-    </div>
+    )}
 
     <p class="text-center text-sm mt-8" style="color: var(--text-faint);">
       ¿Querés ser el próximo caso de éxito?
