@@ -10,6 +10,7 @@ const {
 } = Astro.props;
 
 import '../styles/global.css';
+import Analytics from '../components/Analytics.astro';
 ---
 
 <!doctype html>
@@ -52,6 +53,9 @@ import '../styles/global.css';
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://smondevstudio.com/" />
+
+    <!-- Analytics -->
+    <Analytics />
 
     <!-- Inline script to prevent flash of wrong theme -->
     <script is:inline>
