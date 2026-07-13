@@ -26,6 +26,25 @@ import '../styles/global.css';
       rel="stylesheet"
     />
     <title>{title}</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://smondevstudio.com/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://smondevstudio.com/images/og-image.png" />
+    <meta property="og:locale" content="es_AR" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://smondevstudio.com/" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content="https://smondevstudio.com/images/og-image.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://smondevstudio.com/" />
+
     <!-- Inline script to prevent flash of wrong theme -->
     <script is:inline>
       (function() {

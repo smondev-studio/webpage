@@ -1,0 +1,147 @@
+---
+import Check from '@lucide/astro/icons/check';
+import X from '@lucide/astro/icons/x';
+
+const tiers = [
+  {
+    name: 'Starter',
+    price: '18.000',
+    setup: '20.000',
+    description: 'Ideal para comercios pequeños que quieren presencia online rápida',
+    features: [
+      'Catálogo básico (productos, variantes, fotos)',
+      'Checkout con Mercado Pago',
+      'Subdominio temporal / dominio propio (opcional)',
+      'Panel admin básico: productos, pedidos, clientes',
+      'Soporte por mensaje (respuesta 48h)',
+      'Importación CSV básica',
+    ],
+    excluded: [
+      'Dominio propio configurado',
+      'WhatsApp integrado',
+      'Reportes mensuales',
+      'SEO avanzado',
+    ],
+    popular: false,
+  },
+  {
+    name: 'Commerce',
+    price: '38.000',
+    setup: '35.000',
+    description: 'Ideal para comercios con facturación media, integraciones de ventas',
+    features: [
+      'Todo lo de Starter',
+      'Dominio propio y configuración DNS',
+      'WhatsApp integrado (botón + plantillas)',
+      'Métodos de pago adicionales',
+      'Reportes mensuales básicos',
+      'Mejora de SEO y optimización',
+      'SLA de soporte (respuesta <24h)',
+      'Exportación/backup mensual',
+    ],
+    excluded: [
+      'Multi-sucursal',
+      'Analytics avanzado',
+      'Integración con marketplaces',
+    ],
+    popular: true,
+  },
+  {
+    name: 'Enterprise',
+    price: '75.000',
+    setup: '50.000',
+    description: 'Ideal para cadenas, multi-sucursal, integración avanzada',
+    features: [
+      'Todo lo de Commerce',
+      'Multi-sucursal / multi-ubicación',
+      'Integraciones con POS',
+      'Analytics avanzado (dashboards, cohortes, funnels)',
+      'Soporte prioritario (teléfono / reunión semanal)',
+      'Integración con marketplaces y redes sociales',
+      'Opciones de white-label',
+    ],
+    excluded: [],
+    popular: false,
+  },
+];
+---
+
+<section id="pricing" class="py-24 transition-colors duration-300" style="background-color: var(--bg-secondary);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-black mb-4 transition-colors" style="color: var(--text-primary);">
+        Planes para cada etapa de tu negocio
+      </h2>
+      <p class="text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
+        Precios en pesos argentinos. Setup único + mensual recurrente. Sin contratos forzados, mínimo recomendado 3 meses.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      {tiers.map((tier) => (
+        <div
+          class={`rounded-3xl p-8 border transition-all relative ${
+            tier.popular 
+              ? 'border-orange-500/50 shadow-xl shadow-orange-500/10 scale-105 z-10' 
+              : 'border'
+          }`}
+          style="background-color: var(--bg-card); border-color: ${tier.popular ? 'var(--border-hover)' : 'var(--border)'};"
+        >
+          {tier.popular && (
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span class="bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">
+                Más Popular
+              </span>
+            </div>
+          )}
+
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-black mb-2" style="color: var(--text-primary);">{tier.name}</h3>
+            <p class="text-sm mb-4" style="color: var(--text-muted);">{tier.description}</p>
+            <div class="flex items-baseline justify-center gap-1">
+              <span class="text-4xl md:text-5xl font-black text-orange-500">ARS {tier.price}</span>
+              <span class="text-sm" style="color: var(--text-muted);">/mes</span>
+            </div>
+            <div class="text-sm mt-1" style="color: var(--text-faint);">
+              Setup único: ARS {tier.setup}
+            </div>
+          </div>
+
+          <ul class="space-y-3 mb-8">
+            {tier.features.map((feature) => (
+              <li class="flex items-start gap-3">
+                <Check class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <span class="text-sm" style="color: var(--text-muted);">{feature}</span>
+              </li>
+            ))}
+            {tier.excluded.map((feature) => (
+              <li class="flex items-start gap-3 opacity-50">
+                <X class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <span class="text-sm" style="color: var(--text-muted);">{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href="#contact"
+            class={`block w-full text-center font-bold py-3.5 rounded-xl transition-all transform hover:scale-105 ${
+              tier.popular
+                ? 'bg-orange-500 hover:bg-orange-400 text-white shadow-lg shadow-orange-500/30'
+                : 'border hover:border-orange-500/40'
+            }`}
+            style="border-color: var(--border); color: ${tier.popular ? 'white' : 'var(--text-muted)'};"
+          >
+            {tier.popular ? 'Comenzar ahora' : 'Consultar'}
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 text-center">
+      <p class="text-sm" style="color: var(--text-faint);">
+        ¿Necesitas una solución personalizada? 
+        <a href="#contact" class="text-orange-500 hover:text-orange-400 font-semibold ml-1">Hablemos →</a>
+      </p>
+    </div>
+  </div>
+</section>
