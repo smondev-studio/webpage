@@ -23,7 +23,7 @@ const stores = await getStores();
             style="background-color: var(--bg-card); border-color: var(--border);">
             <div class="relative h-48 overflow-hidden"
               style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);">
-              <img src={store.image} alt={store.name}
+              <img src={store.image} alt={store.name} loading="lazy"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             </div>
             <div class="p-6">
@@ -66,7 +66,7 @@ const stores = await getStores();
           </div>
           <div class="relative flex items-end justify-center p-8 min-h-64"
             style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);">
-            <img src="/images/hero-light.png" alt="Demo tienda"
+            <img src="/images/hero-light.png" alt="Demo tienda" loading="lazy"
               class="max-h-72 w-auto object-contain drop-shadow-2xl rounded-xl" />
           </div>
         </div>

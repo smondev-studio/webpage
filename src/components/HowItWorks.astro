@@ -1,9 +1,34 @@
 ---
+import Zap from '@lucide/astro/icons/zap';
+import Code from '@lucide/astro/icons/code';
+import CreditCard from '@lucide/astro/icons/credit-card';
+import Rocket from '@lucide/astro/icons/rocket';
+
 const steps = [
-  { number: '01', title: 'Me contás tu negocio', description: 'Hablamos sobre tu rubro, productos, necesidades y cómo querés que se vea tu tienda.' },
-  { number: '02', title: 'Diseño y desarrollo', description: 'Construyo tu tienda personalizada con tu marca, colores y catálogo de productos.' },
-  { number: '03', title: 'Integración de pagos', description: 'Conecto tu cuenta de Mercado Pago para recibir pagos directamente en tu cuenta.' },
-  { number: '04', title: 'Lanzamiento y soporte', description: 'Tu tienda sale al aire en tu dominio y te acompaño en el proceso de adaptación.' },
+  { 
+    number: '01', 
+    title: 'Me contás tu negocio', 
+    description: 'Hablamos sobre tu rubro, productos, necesidades y cómo querés que se vea tu tienda.',
+    Icon: Zap
+  },
+  { 
+    number: '02', 
+    title: 'Diseño y desarrollo', 
+    description: 'Construyo tu tienda personalizada con tu marca, colores y catálogo de productos.',
+    Icon: Code
+  },
+  { 
+    number: '03', 
+    title: 'Integración de pagos', 
+    description: 'Conecto tu cuenta de Mercado Pago para recibir pagos directamente en tu cuenta.',
+    Icon: CreditCard
+  },
+  { 
+    number: '04', 
+    title: 'Lanzamiento y soporte', 
+    description: 'Tu tienda sale al aire en tu dominio y te acompaño en el proceso de adaptación.',
+    Icon: Rocket
+  },
 ];
 ---
 
@@ -11,7 +36,7 @@ const steps = [
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-16">
       <h2 class="text-3xl md:text-4xl font-black mb-4" style="color: var(--text-primary);">¿Cómo funciona?</h2>
-      <p class="text-lg" style="color: var(--text-muted);">Del primer contacto al lanzamiento.</p>
+      <p class="text-lg" style="color: var(--text-muted);">Del primer contacto al lanzamiento en 4 pasos simples.</p>
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -21,9 +46,9 @@ const steps = [
             <div class="hidden lg:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-orange-500/40 to-transparent z-0"></div>
           )}
           <div class="relative z-10">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 border border-orange-500/40"
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 border border-orange-500/40 transition-colors group-hover:bg-orange-500/20"
               style="background-color: rgba(249,115,22,0.15);">
-              <span class="text-orange-500 font-black text-xl">{step.number}</span>
+              <step.Icon class="w-8 h-8 text-orange-500" />
             </div>
             <h3 class="font-bold text-lg mb-2" style="color: var(--text-primary);">{step.title}</h3>
             <p class="text-sm leading-relaxed" style="color: var(--text-muted);">{step.description}</p>
@@ -35,8 +60,8 @@ const steps = [
     <div class="mt-20 text-center">
       <p class="text-sm mb-6 uppercase tracking-widest font-semibold" style="color: var(--text-faint);">Stack tecnológico</p>
       <div class="flex flex-wrap justify-center gap-3">
-        {['SvelteKit', 'NestJS', 'PostgreSQL', 'TypeScript', 'Mercado Pago', 'Docker', 'Tailwind CSS'].map((tech) => (
-          <span class="text-sm px-4 py-1.5 rounded-full font-medium border transition-colors"
+        {['Astro', 'TailwindCSS', 'TypeScript', 'Supabase', 'Mercado Pago API', 'Vitest'].map((tech) => (
+          <span class="text-sm px-4 py-1.5 rounded-full font-medium border transition-colors hover:border-orange-500/40"
             style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);">
             {tech}
           </span>
