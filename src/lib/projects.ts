@@ -8,6 +8,25 @@ export interface Store {
 
 const API_URL = import.meta.env.PUBLIC_API_URL;
 
+interface BackendStore {
+  id: string;
+  name: string;
+  url: string;
+  logo: string | null;
+  heroImage: string | null;
+  description: string | null;
+}
+
+function mapStore(s: BackendStore): Store {
+  return {
+    id: s.id,
+    name: s.name,
+    url: s.url,
+    image: s.logo || s.heroImage || '/images/hero-light.png',
+    description: s.description || undefined,
+  };
+}
+
 export async function getStores(): Promise<Store[]> {
   if (!API_URL) {
     console.warn('PUBLIC_API_URL not configured');
@@ -15,30 +34,14 @@ export async function getStores(): Promise<Store[]> {
   }
 
   try {
-    const response = await fetch(`${API_URL}/stores`);
+    const response = await fetch(`${API_URL}/stores/public`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return await response.json();
+    const data: BackendStore[] = await response.json();
+    return data.map(mapStore);
   } catch (error) {
     console.error('Failed to fetch stores:', error);
     return [];
-  }
-}
-
-export async function getStoreById(id: string): Promise<Store | null> {
-  if (!API_URL) {
-    return null;
-  }
-
-  try {
-    const response = await fetch(`${API_URL}/stores/${id}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Failed to fetch store:', error);
-    return null;
   }
 }

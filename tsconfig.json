@@ -1,9 +1,13 @@
 {
-  "extends": "@astrojs/tsconfig/strict",
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
     "module": "esnext",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "preserve"
   }
 }

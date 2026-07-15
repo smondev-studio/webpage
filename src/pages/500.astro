@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="En mantenimiento | SmonDev Studio">
+  <main class="min-h-screen flex items-center justify-center px-6"
+    style="background-color: var(--bg-primary);">
+    <div class="text-center max-w-md">
+      <img
+        src="/images/logo.png"
+        alt="SmonDev Studio"
+        class="mx-auto h-20 w-auto rounded-xl mb-8"
+      />
+
+      <h1 class="text-2xl font-black mb-3" style="color: var(--text-primary);">
+        SmonDev Studio
+      </h1>
+
+      <p class="text-lg mb-2" style="color: var(--text-muted);">
+        Estamos trabajando en el sitio
+      </p>
+
+      <p class="text-sm" style="color: var(--text-faint);">
+        Volvé en unos minutos. Si el problema persiste,{' '}
+        <a href="mailto:hola@smondevstudio.com" class="text-orange-500 hover:text-orange-400 font-semibold">
+          contactanos
+        </a>.
+      </p>
+    </div>
+  </main>
+</Layout>
