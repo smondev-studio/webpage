@@ -118,22 +118,46 @@
       const meta = await collectMetadata();
       const payload = { ...raw, ...meta };
 
-      const response = await fetch('/api/contact', {
+      const sanitizedPayload = {
+        name: payload.name?.trim().slice(0, 100),
+        email: payload.email?.trim().slice(0, 100),
+        business: payload.business?.trim().slice(0, 100),
+        message: payload.message?.trim().slice(0, 500),
+        country: payload.country,
+        city: payload.city,
+        timezone: payload.timezone,
+        language: payload.language,
+      };
+
+      const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+      const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !supabaseKey) {
+        errorMessage.textContent = 'Error de configuración del servidor.';
+        errorBox.classList.remove('hidden');
+        return;
+      }
+
+      const supabaseResponse = await fetch(`${supabaseUrl}/rest/v1/contact_requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+          Prefer: 'return=minimal',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...sanitizedPayload,
+          created_at: new Date().toISOString(),
+        }),
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.ok) {
+      if (supabaseResponse.ok) {
         form.reset();
         successBox.classList.remove('hidden');
-        recordSubmission(); // Registrar envío exitoso
+        recordSubmission();
       } else {
-        errorMessage.textContent = result.error || 'Ocurrió un error al enviar. Intentá de nuevo más tarde.';
+        errorMessage.textContent = 'Error al enviar. Intentá de nuevo.';
         errorBox.classList.remove('hidden');
       }
     } catch (error) {
