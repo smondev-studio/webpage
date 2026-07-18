@@ -7,6 +7,7 @@ export interface Store {
 }
 
 const API_URL = import.meta.env.PUBLIC_API_URL;
+const FETCH_TIMEOUT_MS = 8000;
 
 interface BackendStore {
   id: string;
@@ -29,19 +30,30 @@ function mapStore(s: BackendStore): Store {
 
 export async function getStores(): Promise<Store[]> {
   if (!API_URL) {
-    console.warn('PUBLIC_API_URL not configured');
+    console.warn('PUBLIC_API_URL not configured, skipping store fetch');
     return [];
   }
 
   try {
-    const response = await fetch(`${API_URL}/stores/public`);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+    const response = await fetch(`${API_URL}/stores/public`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data: BackendStore[] = await response.json();
     return data.map(mapStore);
   } catch (error) {
-    console.error('Failed to fetch stores:', error);
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.warn(`Stores API request timed out after ${FETCH_TIMEOUT_MS}ms`);
+    } else {
+      console.warn('Failed to fetch stores, showing static fallback:', (error as Error).message || error);
+    }
     return [];
   }
 }
