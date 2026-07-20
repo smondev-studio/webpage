@@ -8,15 +8,17 @@ const tiers = [
     price: '50.000',
     setup: '35.000',
     description: 'Ideal para comercios pequeños que quieren presencia online rápida',
+    productLimit: 'Hasta 100 productos',
     features: [
       'Catálogo básico (productos, variantes, fotos)',
+      'Carga manual de productos (uno por uno)',
       'Checkout con Mercado Pago',
       'Subdominio temporal / dominio propio (opcional)',
       'Panel admin básico: productos, pedidos, clientes',
       'Soporte por mensaje (respuesta 48h)',
-      // 'Importación CSV básica',
     ],
     excluded: [
+      'Importación masiva CSV/Excel',
       'Dominio propio configurado',
       'WhatsApp integrado',
       'Reportes mensuales',
@@ -29,8 +31,10 @@ const tiers = [
     price: '70.000',
     setup: '50.000',
     description: 'Ideal para comercios con facturación media, integraciones de ventas',
+    productLimit: 'Hasta 1.000 productos',
     features: [
       'Todo lo de Starter',
+      'Importación masiva CSV/Excel',
       'Dominio propio y configuración DNS',
       'WhatsApp integrado (botón + plantillas)',
       'Métodos de pago adicionales',
@@ -48,13 +52,14 @@ const tiers = [
   },
   {
     name: 'Enterprise',
-    price: '75.000',
-    setup: '50.000',
+    price: 'Consultar',
+    setup: '',
     description: 'Ideal para cadenas, multi-sucursal, integración avanzada',
+    productLimit: 'Productos ilimitados',
     features: [
       'Todo lo de Commerce',
       'Multi-sucursal / multi-ubicación',
-      'Integraciones con POS',
+      'Productos ilimitados',
       'Analytics avanzado (dashboards, cohortes, funnels)',
       'Soporte prioritario (teléfono / reunión semanal)',
       'Integración con marketplaces y redes sociales',
@@ -105,7 +110,10 @@ const tiers = [
               <span class="text-sm" style="color: var(--text-muted);">/mes</span>
             </div>
             <div class="text-sm mt-1" style="color: var(--text-faint);">
-              Setup único: ARS {tier.setup}
+              {tier.setup ? `Setup único: ARS ${tier.setup}` : ''}
+            </div>
+            <div class="mt-4 inline-flex items-center gap-2 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-3 py-1.5 rounded-full">
+              <span class="text-cyan-400">{tier.productLimit}</span>
             </div>
           </div>
 
