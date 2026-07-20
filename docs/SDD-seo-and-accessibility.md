@@ -235,95 +235,102 @@ export const DEFAULT_SEO_CONFIG: SEOConfig = {
 };
 ```
 
-### 5.3 Componente SEO Head Manager
+### 5.3 Componente SEO Head Manager (SvelteKit)
 
-```typescript
-// components/SEOHead.tsx
-interface SEOHeadProps {
-  config: SEOConfig;
-  pageType: 'home' | 'product' | 'category' | 'blog';
-  pageData?: Record<string, any>;
-}
+En SvelteKit, el SEO se maneja usando `<svelte:head>` en las páginas o layouts.
 
-function SEOHead({ config, pageType, pageData }: SEOHeadProps) {
+```svelte
+<!-- src/lib/components/SEOHead.svelte -->
+<script lang="ts">
+  import type { SEOConfig } from '$lib/types/seo-config';
+  import { generateStructuredData } from '$lib/utils/structured-data';
+  
+  interface Props {
+    config: SEOConfig;
+    pageType: 'home' | 'product' | 'category' | 'blog';
+    pageData?: Record<string, any>;
+  }
+  
+  let { config, pageType, pageData }: Props = $props();
+  
   // Generar título dinámico
-  const title = pageType === 'product' && pageData
+  $: title = pageType === 'product' && pageData
     ? `${pageData.name} | ${config.title}`
     : config.title;
   
   // Generar descripción dinámica
-  const description = pageType === 'product' && pageData
+  $: description = pageType === 'product' && pageData
     ? pageData.description || config.description
     : config.description;
   
   // Generar URL canónica
-  const canonicalUrl = pageType === 'product' && pageData
+  $: canonicalUrl = pageType === 'product' && pageData
     ? `${config.canonicalUrl}/productos/${pageData.slug}`
     : config.canonicalUrl;
   
   // Generar structured data
-  const structuredData = generateStructuredData(pageType, pageData, config);
-  
-  return (
-    <>
-      {/* Meta tags básicos */}
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      {config.keywords.length > 0 && (
-        <meta name="keywords" content={config.keywords.join(', ')} />
-      )}
-      <meta name="author" content={config.author} />
-      
-      {/* Robots */}
-      <meta name="robots" content={`
-        ${config.robots.index ? 'index' : 'noindex'},
-        ${config.robots.follow ? 'follow' : 'nofollow'}
-        ${config.robots.noarchive ? ', noarchive' : ''}
-        ${config.robots.nosnippet ? ', nosnippet' : ''}
-      `} />
-      
-      {/* Canonical URL */}
-      <link rel="canonical" href={canonicalUrl} />
-      
-      {/* Hreflang (multi-idioma) */}
-      {config.alternateUrls?.map((alt) => (
-        <link
-          key={alt.hreflang}
-          rel="alternate"
-          hreflang={alt.hreflang}
-          href={alt.url}
-        />
-      ))}
-      
-      {/* Open Graph */}
-      <meta property="og:type" content={config.ogType} />
-      <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:title" content={config.ogTitle || title} />
-      <meta property="og:description" content={config.ogDescription || description} />
-      <meta property="og:image" content={config.ogImage} />
-      <meta property="og:locale" content="es_AR" />
-      <meta property="og:site_name" content={config.title} />
-      
-      {/* Twitter Cards */}
-      <meta name="twitter:card" content={config.twitterCard} />
-      <meta name="twitter:url" content={canonicalUrl} />
-      <meta name="twitter:title" content={config.twitterTitle || title} />
-      <meta name="twitter:description" content={config.twitterDescription || description} />
-      <meta name="twitter:image" content={config.twitterImage} />
-      
-      {/* Structured Data */}
-      {structuredData.map((data, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-        />
-      ))}
-    </>
-  );
-}
+  $: structuredData = generateStructuredData(pageType, pageData, config);
+</script>
 
-function generateStructuredData(
+<svelte:head>
+  <!-- Meta tags básicos -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {#if config.keywords.length > 0}
+    <meta name="keywords" content={config.keywords.join(', ')} />
+  {/if}
+  <meta name="author" content={config.author} />
+  
+  <!-- Robots -->
+  <meta name="robots" content="
+    {config.robots.index ? 'index' : 'noindex'},
+    {config.robots.follow ? 'follow' : 'nofollow'}
+    {config.robots.noarchive ? ', noarchive' : ''}
+    {config.robots.nosnippet ? ', nosnippet' : ''}
+  " />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href={canonicalUrl} />
+  
+  <!-- Hreflang (multi-idioma) -->
+  {#each config.alternateUrls || [] as alt}
+    <link
+      rel="alternate"
+      hreflang={alt.hreflang}
+      href={alt.url}
+    />
+  {/each}
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content={config.ogType} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:title" content={config.ogTitle || title} />
+  <meta property="og:description" content={config.ogDescription || description} />
+  <meta property="og:image" content={config.ogImage} />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:site_name" content={config.title} />
+  
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content={config.twitterCard} />
+  <meta name="twitter:url" content={canonicalUrl} />
+  <meta name="twitter:title" content={config.twitterTitle || title} />
+  <meta name="twitter:description" content={config.twitterDescription || description} />
+  <meta name="twitter:image" content={config.twitterImage} />
+  
+  <!-- Structured Data -->
+  {#each structuredData as data}
+    <script type="application/ld+json">
+      {JSON.stringify(data)}
+    </script>
+  {/each}
+</svelte:head>
+```
+
+```typescript
+// src/lib/utils/structured-data.ts
+import type { SEOConfig } from '$lib/types/seo-config';
+
+export function generateStructuredData(
   pageType: string,
   pageData: any,
   config: SEOConfig
@@ -395,10 +402,95 @@ function generateStructuredData(
 }
 ```
 
-### 5.4 Generador de Sitemap
+**Ejemplo de uso en una página de producto:**
+
+```svelte
+<!-- src/routes/productos/[slug]/+page.svelte -->
+<script lang="ts">
+  import SEOHead from '$lib/components/SEOHead.svelte';
+  import { DEFAULT_SEO_CONFIG } from '$lib/config/default-seo-config';
+  
+  interface PageData {
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    slug: string;
+    images: string[];
+  }
+  
+  let { data }: { data: PageData } = $props();
+</script>
+
+<SEOHead 
+  config={DEFAULT_SEO_CONFIG} 
+  pageType="product" 
+  {data}
+/>
+
+<!-- Contenido de la página -->
+<h1>{data.name}</h1>
+<p>{data.description}</p>
+```
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "ARS",
+        "price": pageData.price,
+        "availability": pageData.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        "url": `${config.canonicalUrl}/productos/${pageData.slug}`,
+      },
+    });
+  }
+  
+  // BreadcrumbList (todas las páginas excepto home)
+  if (pageType !== 'home' && pageData?.breadcrumbs) {
+    structuredData.push({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": pageData.breadcrumbs.map((crumb: any, index: number) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": crumb.name,
+        "item": `${config.canonicalUrl}${crumb.url}`,
+      })),
+    });
+  }
+  
+  // LocalBusiness (página de contacto o about)
+  if (pageType === 'contact' && pageData?.businessInfo) {
+    structuredData.push({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": config.title,
+      "image": `${config.canonicalUrl}/images/logo.png`,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": pageData.businessInfo.address,
+        "addressLocality": pageData.businessInfo.city,
+        "addressCountry": "AR",
+      },
+      "telephone": pageData.businessInfo.phone,
+      "email": pageData.businessInfo.email,
+    });
+  }
+  
+  return structuredData;
+}
+```
+
+### 5.4 Generador de Sitemap (NestJS)
 
 ```typescript
-// services/sitemap-generator.ts
+// src/seo/services/sitemap.service.ts (Backend - NestJS)
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from '../../products/product.entity';
+import { Category } from '../../categories/category.entity';
+import { Store } from '../../stores/store.entity';
+
 interface SitemapEntry {
   url: string;
   lastmod?: string;
@@ -415,70 +507,73 @@ interface SitemapConfig {
   priority: number;
 }
 
-async function generateSitemap(config: SitemapConfig): Promise<string> {
-  const entries: SitemapEntry[] = [];
-  
-  // Página principal
-  entries.push({
-    url: config.baseUrl,
-    changefreq: 'daily',
-    priority: 1.0,
-  });
-  
-  // Páginas estáticas
-  const staticPages = ['/about', '/contact', '/privacy', '/terms'];
-  staticPages.forEach(page => {
-    entries.push({
-      url: `${config.baseUrl}${page}`,
-      changefreq: 'monthly',
-      priority: 0.5,
-    });
-  });
-  
-  // Productos
-  if (config.includeProducts) {
-    const products = await fetchProducts();
-    products.forEach(product => {
-      entries.push({
-        url: `${config.baseUrl}/productos/${product.slug}`,
-        lastmod: product.updatedAt,
-        changefreq: config.changeFrequency,
-        priority: 0.8,
-      });
-    });
-  }
-  
-  // Categorías
-  if (config.includeCategories) {
-    const categories = await fetchCategories();
-    categories.forEach(category => {
-      entries.push({
-        url: `${config.baseUrl}/categorias/${category.slug}`,
-        changefreq: 'weekly',
-        priority: 0.7,
-      });
-    });
-  }
-  
-  // Blog
-  if (config.includeBlog) {
-    const posts = await fetchBlogPosts();
-    posts.forEach(post => {
-      entries.push({
-        url: `${config.baseUrl}/blog/${post.slug}`,
-        lastmod: post.publishedAt,
-        changefreq: 'monthly',
-        priority: 0.6,
-      });
-    });
-  }
-  
-  // Generar XML
-  return generateSitemapXML(entries);
-}
+@Injectable()
+export class SitemapService {
+  constructor(
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+    @InjectRepository(Store)
+    private storeRepository: Repository<Store>,
+  ) {}
 
-function generateSitemapXML(entries: SitemapEntry[]): string {
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+  async generateSitemap(config: SitemapConfig): Promise<string> {
+    const entries: SitemapEntry[] = [];
+    
+    // Página principal
+    entries.push({
+      url: config.baseUrl,
+      changefreq: 'daily',
+      priority: 1.0,
+    });
+    
+    // Páginas estáticas
+    const staticPages = ['/about', '/contact', '/privacy', '/terms'];
+    staticPages.forEach(page => {
+      entries.push({
+        url: `${config.baseUrl}${page}`,
+        changefreq: 'monthly',
+        priority: 0.5,
+      });
+    });
+    
+    // Productos
+    if (config.includeProducts) {
+      const products = await this.productRepository.find();
+      products.forEach(product => {
+        entries.push({
+          url: `${config.baseUrl}/productos/${product.slug}`,
+          lastmod: product.updatedAt?.toISOString(),
+          changefreq: config.changeFrequency,
+          priority: 0.8,
+        });
+      });
+    }
+    
+    // Categorías
+    if (config.includeCategories) {
+      const categories = await this.categoryRepository.find();
+      categories.forEach(category => {
+        entries.push({
+          url: `${config.baseUrl}/categorias/${category.slug}`,
+          changefreq: 'weekly',
+          priority: 0.7,
+        });
+      });
+    }
+    
+    // Blog (si aplica)
+    if (config.includeBlog) {
+      // Implementar según necesidad
+    }
+    
+    // Generar XML
+    return this.generateSitemapXML(entries);
+  }
+
+  private generateSitemapXML(entries: SitemapEntry[]): string {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${entries.map(entry => `
   <url>
@@ -489,37 +584,55 @@ function generateSitemapXML(entries: SitemapEntry[]): string {
   </url>
   `).join('')}
 </urlset>`;
-  
-  return xml;
-}
-
-// Endpoint para servir el sitemap
-// GET /sitemap.xml
-app.get('/sitemap.xml', async (req, res) => {
-  const store = await getStoreFromDomain(req.hostname);
-  
-  if (!store.seo.sitemap.enabled) {
-    return res.status(404).send('Sitemap not available');
+    
+    return xml;
   }
-  
-  const sitemap = await generateSitemap({
-    baseUrl: `https://${req.hostname}`,
-    includeProducts: store.seo.sitemap.includeProducts,
-    includeCategories: store.seo.sitemap.includeCategories,
-    includeBlog: store.seo.sitemap.includeBlog,
-    changeFrequency: store.seo.sitemap.changeFrequency,
-    priority: store.seo.sitemap.priority,
-  });
-  
-  res.set('Content-Type', 'application/xml');
-  res.send(sitemap);
-});
+}
 ```
 
-### 5.5 Generador de Robots.txt
+```typescript
+// src/seo/seo.controller.ts (Backend - NestJS)
+import { Controller, Get, Req, Res, NotFoundException } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { SitemapService } from './services/sitemap.service';
+import { StoreService } from '../stores/store.service';
+
+@Controller()
+export class SeoController {
+  constructor(
+    private readonly sitemapService: SitemapService,
+    private readonly storeService: StoreService,
+  ) {}
+
+  @Get('sitemap.xml')
+  async getSitemap(@Req() req: Request, @Res() res: Response) {
+    const store = await this.storeService.getStoreFromDomain(req.hostname);
+    
+    if (!store.seo.sitemap.enabled) {
+      throw new NotFoundException('Sitemap not available');
+    }
+    
+    const sitemap = await this.sitemapService.generateSitemap({
+      baseUrl: `https://${req.hostname}`,
+      includeProducts: store.seo.sitemap.includeProducts,
+      includeCategories: store.seo.sitemap.includeCategories,
+      includeBlog: store.seo.sitemap.includeBlog,
+      changeFrequency: store.seo.sitemap.changeFrequency,
+      priority: store.seo.sitemap.priority,
+    });
+    
+    res.set('Content-Type', 'application/xml');
+    res.send(sitemap);
+  }
+}
+```
+
+### 5.5 Generador de Robots.txt (NestJS)
 
 ```typescript
-// services/robots-generator.ts
+// src/seo/services/robots.service.ts (Backend - NestJS)
+import { Injectable } from '@nestjs/common';
+
 interface RobotsConfig {
   baseUrl: string;
   allowPaths: string[];
@@ -528,52 +641,60 @@ interface RobotsConfig {
   crawlDelay?: number;
 }
 
-function generateRobotsTxt(config: RobotsConfig): string {
-  let robots = `User-agent: *
-`;
-  
-  // Allow paths
-  config.allowPaths.forEach(path => {
-    robots += `Allow: ${path}
-`;
-  });
-  
-  // Disallow paths
-  config.disallowPaths.forEach(path => {
-    robots += `Disallow: ${path}
-`;
-  });
-  
-  // Crawl delay
-  if (config.crawlDelay) {
-    robots += `Crawl-delay: ${config.crawlDelay}
-`;
+@Injectable()
+export class RobotsService {
+  generateRobotsTxt(config: RobotsConfig): string {
+    let robots = `User-agent: *\n`;
+    
+    // Allow paths
+    config.allowPaths.forEach(path => {
+      robots += `Allow: ${path}\n`;
+    });
+    
+    // Disallow paths
+    config.disallowPaths.forEach(path => {
+      robots += `Disallow: ${path}\n`;
+    });
+    
+    // Crawl delay
+    if (config.crawlDelay) {
+      robots += `Crawl-delay: ${config.crawlDelay}\n`;
+    }
+    
+    // Sitemap
+    robots += `\nSitemap: ${config.sitemapUrl}\n`;
+    
+    return robots;
   }
-  
-  // Sitemap
-  robots += `
-Sitemap: ${config.sitemapUrl}
-`;
-  
-  return robots;
 }
+```
 
-// Endpoint para servir robots.txt
-// GET /robots.txt
-app.get('/robots.txt', (req, res) => {
-  const store = await getStoreFromDomain(req.hostname);
-  
-  const robots = generateRobotsTxt({
-    baseUrl: `https://${req.hostname}`,
-    allowPaths: ['/', '/productos', '/categorias'],
-    disallowPaths: ['/admin', '/api', '/checkout', '/cart'],
-    sitemapUrl: `https://${req.hostname}/sitemap.xml`,
-    crawlDelay: 1,
-  });
-  
-  res.set('Content-Type', 'text/plain');
-  res.send(robots);
-});
+```typescript
+// src/seo/seo.controller.ts (Backend - NestJS) - agregar método
+@Controller()
+export class SeoController {
+  constructor(
+    private readonly sitemapService: SitemapService,
+    private readonly storeService: StoreService,
+    private readonly robotsService: RobotsService,
+  ) {}
+
+  // ... getSitemap method ...
+
+  @Get('robots.txt')
+  getRobotsTxt(@Req() req: Request, @Res() res: Response) {
+    const robots = this.robotsService.generateRobotsTxt({
+      baseUrl: `https://${req.hostname}`,
+      allowPaths: ['/', '/productos', '/categorias'],
+      disallowPaths: ['/admin', '/api', '/checkout', '/cart'],
+      sitemapUrl: `https://${req.hostname}/sitemap.xml`,
+      crawlDelay: 1,
+    });
+    
+    res.set('Content-Type', 'text/plain');
+    res.send(robots);
+  }
+}
 ```
 
 ## 6. Implementación Técnica - Accesibilidad
@@ -644,28 +765,389 @@ export const DEFAULT_ACCESSIBILITY_CONFIG: AccessibilityConfig = {
 };
 ```
 
-### 6.2 Componente Skip Links
+### 6.2 Componente Skip Links (SvelteKit)
+
+```svelte
+<!-- src/lib/components/SkipLinks.svelte -->
+<nav class="skip-links" aria-label="Navegación rápida">
+  <a href="#main-content" class="skip-link">
+    Saltar al contenido principal
+  </a>
+  <a href="#navigation" class="skip-link">
+    Saltar a la navegación
+  </a>
+  <a href="#search" class="skip-link">
+    Saltar a la búsqueda
+  </a>
+  <a href="#footer" class="skip-link">
+    Saltar al pie de página
+  </a>
+</nav>
+
+<style>
+  .skip-links {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .skip-link:focus {
+    top: 0;
+    outline: 3px solid #f97316;
+  }
+</style>
+```
+
+### 6.3 Store de Focus Management (SvelteKit)
 
 ```typescript
-// components/SkipLinks.tsx
-function SkipLinks() {
-  return (
-    <nav class="skip-links" aria-label="Navegación rápida">
-      <a href="#main-content" class="skip-link">
-        Saltar al contenido principal
-      </a>
-      <a href="#navigation" class="skip-link">
-        Saltar a la navegación
-      </a>
-      <a href="#search" class="skip-link">
-        Saltar a la búsqueda
-      </a>
-      <a href="#footer" class="skip-link">
-        Saltar al pie de página
-      </a>
-    </nav>
-  );
+// src/lib/stores/focusManagement.ts
+interface UseFocusManagementReturn {
+  trapFocus: (container: HTMLElement) => void;
+  releaseFocus: () => void;
 }
+
+export function useFocusManagement(): UseFocusManagementReturn {
+  let previousFocus: HTMLElement | null = null;
+  
+  function trapFocus(container: HTMLElement) {
+    previousFocus = document.activeElement as HTMLElement;
+    
+    const focusableElements = container.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    
+    firstElement?.focus();
+    
+    function handleTabKey(e: KeyboardEvent) {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
+      }
+      
+      if (e.key === 'Escape') {
+        releaseFocus();
+      }
+    }
+    
+    container.addEventListener('keydown', handleTabKey);
+  }
+  
+  function releaseFocus() {
+    previousFocus?.focus();
+  }
+  
+  return { trapFocus, releaseFocus };
+}
+```
+
+### 6.4 Componente de Navegación Accesible (SvelteKit)
+
+```svelte
+<!-- src/lib/components/AccessibleNavigation.svelte -->
+<script lang="ts">
+  interface NavItem {
+    id: string;
+    label: string;
+    href: string;
+    children?: Array<{
+      id: string;
+      label: string;
+      href: string;
+    }>;
+  }
+  
+  interface Props {
+    items: NavItem[];
+    currentPath: string;
+  }
+  
+  let { items, currentPath }: Props = $props();
+  let expandedItems: string[] = $state([]);
+  
+  function toggleExpand(itemId: string) {
+    if (expandedItems.includes(itemId)) {
+      expandedItems = expandedItems.filter(id => id !== itemId);
+    } else {
+      expandedItems = [...expandedItems, itemId];
+    }
+  }
+</script>
+
+<nav id="navigation" aria-label="Navegación principal">
+  <ul role="menubar">
+    {#each items as item}
+      <li role="none">
+        {#if item.children}
+          <button
+            role="menuitem"
+            aria-haspopup="true"
+            aria-expanded={expandedItems.includes(item.id)}
+            on:click={() => toggleExpand(item.id)}
+            class={currentPath.startsWith(item.href) ? 'active' : ''}
+          >
+            {item.label}
+            <span aria-hidden="true">▼</span>
+          </button>
+          <ul
+            role="menu"
+            aria-label="Submenú de {item.label}"
+            class={expandedItems.includes(item.id) ? 'expanded' : 'collapsed'}
+          >
+            {#each item.children as child}
+              <li role="none">
+                <a
+                  role="menuitem"
+                  href={child.href}
+                  class={currentPath === child.href ? 'active' : ''}
+                  aria-current={currentPath === child.href ? 'page' : undefined}
+                >
+                  {child.label}
+                </a>
+              </li>
+            {/each}
+          </ul>
+        {:else}
+          <a
+            role="menuitem"
+            href={item.href}
+            class={currentPath === item.href ? 'active' : ''}
+            aria-current={currentPath === item.href ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        {/if}
+      </li>
+    {/each}
+  </ul>
+</nav>
+```
+
+### 6.5 Componente de Imagen Accesible (SvelteKit)
+
+```svelte
+<!-- src/lib/components/AccessibleImage.svelte -->
+<script lang="ts">
+  interface Props {
+    src: string;
+    alt: string;
+    decorative?: boolean;
+    caption?: string;
+  }
+  
+  let { src, alt, decorative = false, caption }: Props = $props();
+</script>
+
+<figure role="group" aria-labelledby={caption ? 'image-caption' : undefined}>
+  <img
+    {src}
+    alt={decorative ? '' : alt}
+    role={decorative ? 'presentation' : 'img'}
+    loading="lazy"
+  />
+  {#if caption}
+    <figcaption id="image-caption" class="image-caption">
+      {caption}
+    </figcaption>
+  {/if}
+</figure>
+```
+
+### 6.6 Toolbar de Accesibilidad (SvelteKit)
+
+```svelte
+<!-- src/lib/components/AccessibilityToolbar.svelte -->
+<script lang="ts">
+  import type { AccessibilityConfig } from '$lib/types/accessibility-config';
+  
+  interface Props {
+    config: AccessibilityConfig;
+  }
+  
+  let { config }: Props = $props();
+  
+  let textSize: number = $state(100);
+  let highContrast: boolean = $state(false);
+  let highlightLinks: boolean = $state(false);
+  let readingMode: boolean = $state(false);
+  
+  function increaseTextSize() {
+    textSize = Math.min(textSize + 10, 150);
+    document.documentElement.style.fontSize = `${textSize}%`;
+  }
+  
+  function decreaseTextSize() {
+    textSize = Math.max(textSize - 10, 80);
+    document.documentElement.style.fontSize = `${textSize}%`;
+  }
+  
+  function resetTextSize() {
+    textSize = 100;
+    document.documentElement.style.fontSize = '100%';
+  }
+  
+  function toggleHighContrast() {
+    highContrast = !highContrast;
+    document.documentElement.classList.toggle('high-contrast');
+  }
+  
+  function toggleHighlightLinks() {
+    highlightLinks = !highlightLinks;
+    document.documentElement.classList.toggle('highlight-links');
+  }
+  
+  function toggleReadingMode() {
+    readingMode = !readingMode;
+    document.documentElement.classList.toggle('reading-mode');
+  }
+  
+  if (!config.toolbar.enabled) {
+    // No renderizar nada
+  }
+</script>
+
+{#if config.toolbar.enabled}
+  <div class="accessibility-toolbar" role="toolbar" aria-label="Herramientas de accesibilidad">
+    <button
+      on:click={decreaseTextSize}
+      aria-label="Disminuir tamaño de texto"
+      title="Disminuir texto"
+    >
+      A-
+    </button>
+    
+    <button
+      on:click={resetTextSize}
+      aria-label="Restablecer tamaño de texto"
+      title="Texto normal"
+    >
+      A
+    </button>
+    
+    <button
+      on:click={increaseTextSize}
+      aria-label="Aumentar tamaño de texto"
+      title="Aumentar texto"
+    >
+      A+
+    </button>
+    
+    <div class="toolbar-divider" role="separator"></div>
+    
+    <button
+      on:click={toggleHighContrast}
+      aria-label="Alternar alto contraste"
+      aria-pressed={highContrast}
+      title="Alto contraste"
+    >
+      🌓
+    </button>
+    
+    <button
+      on:click={toggleHighlightLinks}
+      aria-label="Resaltar enlaces"
+      aria-pressed={highlightLinks}
+      title="Resaltar enlaces"
+    >
+      🔗
+    </button>
+    
+    <button
+      on:click={toggleReadingMode}
+      aria-label="Modo lectura"
+      aria-pressed={readingMode}
+      title="Modo lectura"
+    >
+      
+    </button>
+  </div>
+{/if}
+```
+
+### 6.7 Store de Atajos de Teclado (SvelteKit)
+
+```typescript
+// src/lib/stores/keyboardShortcuts.ts
+interface KeyboardShortcut {
+  key: string;
+  ctrl?: boolean;
+  alt?: boolean;
+  shift?: boolean;
+  action: () => void;
+  description: string;
+}
+
+export function useKeyboardShortcuts(shortcuts: KeyboardShortcut[]) {
+  $effect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      shortcuts.forEach(shortcut => {
+        const keyMatch = e.key.toLowerCase() === shortcut.key.toLowerCase();
+        const ctrlMatch = shortcut.ctrl ? e.ctrlKey || e.metaKey : !e.ctrlKey && !e.metaKey;
+        const altMatch = shortcut.alt ? e.altKey : !e.altKey;
+        const shiftMatch = shortcut.shift ? e.shiftKey : !e.shiftKey;
+        
+        if (keyMatch && ctrlMatch && altMatch && shiftMatch) {
+          e.preventDefault();
+          shortcut.action();
+        }
+      });
+    }
+    
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+}
+
+// Ejemplo de uso en un componente Svelte
+// <script lang="ts">
+//   import { useKeyboardShortcuts } from '$lib/stores/keyboardShortcuts';
+//   import { navigate } from '$app/navigation';
+//   
+//   const shortcuts = [
+//     {
+//       key: 'k',
+//       ctrl: true,
+//       action: () => document.getElementById('search')?.focus(),
+//       description: 'Buscar',
+//     },
+//     {
+//       key: 'h',
+//       alt: true,
+//       action: () => navigate('/'),
+//       description: 'Ir al inicio',
+//     },
+//   ];
+//   
+//   useKeyboardShortcuts(shortcuts);
+// </script>
 ```
 
 ```css
@@ -1126,24 +1608,28 @@ function Storefront() {
 
 ## 7. Panel de Administración
 
-### 7.1 Configuración de SEO
+### 7.1 Configuración de SEO (SvelteKit)
 
-```typescript
-// components/admin/SEOSettings.tsx
-interface SEOSettingsProps {
-  config: SEOConfig;
-  onSave: (config: SEOConfig) => void;
-}
-
-function SEOSettings({ config, onSave }: SEOSettingsProps) {
-  const [title, setTitle] = useState(config.title);
-  const [description, setDescription] = useState(config.description);
-  const [keywords, setKeywords] = useState(config.keywords.join(', '));
-  const [ogImage, setOgImage] = useState(config.ogImage);
-  const [canonicalUrl, setCanonicalUrl] = useState(config.canonicalUrl);
-  const [sitemapEnabled, setSitemapEnabled] = useState(config.sitemap.enabled);
+```svelte
+<!-- src/lib/components/admin/SEOSettings.svelte -->
+<script lang="ts">
+  import type { SEOConfig } from '$lib/types/seo-config';
   
-  const handleSave = () => {
+  interface Props {
+    config: SEOConfig;
+    onSave: (config: SEOConfig) => void;
+  }
+  
+  let { config, onSave }: Props = $props();
+  
+  let title: string = $state(config.title);
+  let description: string = $state(config.description);
+  let keywords: string = $state(config.keywords.join(', '));
+  let ogImage: string = $state(config.ogImage);
+  let canonicalUrl: string = $state(config.canonicalUrl);
+  let sitemapEnabled: boolean = $state(config.sitemap.enabled);
+  
+  function handleSave() {
     const newConfig: SEOConfig = {
       ...config,
       title,
@@ -1157,111 +1643,107 @@ function SEOSettings({ config, onSave }: SEOSettingsProps) {
       },
     };
     onSave(newConfig);
-  };
+  }
+</script>
+
+<div class="settings-section">
+  <h3>Configuración SEO</h3>
   
-  return (
-    <div class="settings-section">
-      <h3>Configuración SEO</h3>
-      
-      <div class="setting-item">
-        <label>Título del sitio:</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Mi Tienda Online"
-        />
-        <p class="setting-description">
-          Aparece en los resultados de búsqueda y pestañas del navegador
-        </p>
-      </div>
-      
-      <div class="setting-item">
-        <label>Descripción:</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Descripción breve de tu tienda (150-160 caracteres)"
-          rows={3}
-          maxLength={160}
-        />
-        <p class="setting-description">
-          {description.length}/160 caracteres
-        </p>
-      </div>
-      
-      <div class="setting-item">
-        <label>Palabras clave (separadas por coma):</label>
-        <input
-          type="text"
-          value={keywords}
-          onChange={(e) => setKeywords(e.target.value)}
-          placeholder="tienda online, productos, Argentina"
-        />
-      </div>
-      
-      <div class="setting-item">
-        <label>Imagen para redes sociales (Open Graph):</label>
-        <input
-          type="text"
-          value={ogImage}
-          onChange={(e) => setOgImage(e.target.value)}
-          placeholder="/images/og-image.png"
-        />
-      </div>
-      
-      <div class="setting-item">
-        <label>URL canónica:</label>
-        <input
-          type="text"
-          value={canonicalUrl}
-          onChange={(e) => setCanonicalUrl(e.target.value)}
-          placeholder="https://mitienda.com"
-        />
-      </div>
-      
-      <div class="setting-item">
-        <label class="toggle-label">
-          <input
-            type="checkbox"
-            checked={sitemapEnabled}
-            onChange={(e) => setSitemapEnabled(e.target.checked)}
-          />
-          <span class="toggle-slider"></span>
-          <span>Habilitar sitemap.xml</span>
-        </label>
-        <p class="setting-description">
-          Genera automáticamente un sitemap para Google
-        </p>
-      </div>
-      
-      <button onClick={handleSave} class="btn-primary">
-        Guardar cambios
-      </button>
-    </div>
-  );
-}
+  <div class="setting-item">
+    <label>Título del sitio:</label>
+    <input
+      type="text"
+      bind:value={title}
+      placeholder="Mi Tienda Online"
+    />
+    <p class="setting-description">
+      Aparece en los resultados de búsqueda y pestañas del navegador
+    </p>
+  </div>
+  
+  <div class="setting-item">
+    <label>Descripción:</label>
+    <textarea
+      bind:value={description}
+      placeholder="Descripción breve de tu tienda (150-160 caracteres)"
+      rows={3}
+      maxLength={160}
+    />
+    <p class="setting-description">
+      {description.length}/160 caracteres
+    </p>
+  </div>
+  
+  <div class="setting-item">
+    <label>Palabras clave (separadas por coma):</label>
+    <input
+      type="text"
+      bind:value={keywords}
+      placeholder="tienda online, productos, Argentina"
+    />
+  </div>
+  
+  <div class="setting-item">
+    <label>Imagen para redes sociales (Open Graph):</label>
+    <input
+      type="text"
+      bind:value={ogImage}
+      placeholder="/images/og-image.png"
+    />
+  </div>
+  
+  <div class="setting-item">
+    <label>URL canónica:</label>
+    <input
+      type="text"
+      bind:value={canonicalUrl}
+      placeholder="https://mitienda.com"
+    />
+  </div>
+  
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={sitemapEnabled}
+      />
+      <span class="toggle-slider"></span>
+      <span>Habilitar sitemap.xml</span>
+    </label>
+    <p class="setting-description">
+      Genera automáticamente un sitemap para Google
+    </p>
+  </div>
+  
+  <button on:click={handleSave} class="btn-primary">
+    Guardar cambios
+  </button>
+</div>
 ```
 
-### 7.2 Configuración de Accesibilidad
+### 7.2 Configuración de Accesibilidad (SvelteKit)
 
-```typescript
-// components/admin/AccessibilitySettings.tsx
-interface AccessibilitySettingsProps {
-  config: AccessibilityConfig;
-  onSave: (config: AccessibilityConfig) => void;
-}
-
-function AccessibilitySettings({ config, onSave }: AccessibilitySettingsProps) {
-  const [keyboardNav, setKeyboardNav] = useState(config.keyboardNavigation.enabled);
-  const [focusVisible, setFocusVisible] = useState(config.keyboardNavigation.focusVisible);
-  const [skipLinks, setSkipLinks] = useState(config.keyboardNavigation.skipLinks);
-  const [ariaLabels, setAriaLabels] = useState(config.ariaLabels.enabled);
-  const [altTexts, setAltTexts] = useState(config.content.altTexts);
-  const [colorContrast, setColorContrast] = useState(config.content.colorContrast);
-  const [toolbarEnabled, setToolbarEnabled] = useState(config.toolbar.enabled);
+```svelte
+<!-- src/lib/components/admin/AccessibilitySettings.svelte -->
+<script lang="ts">
+  import type { AccessibilityConfig } from '$lib/types/accessibility-config';
   
-  const handleSave = () => {
+  interface Props {
+    config: AccessibilityConfig;
+    onSave: (config: AccessibilityConfig) => void;
+  }
+  
+  let { config, onSave }: Props = $props();
+  
+  let keyboardNav: boolean = $state(config.keyboardNavigation.enabled);
+  let focusVisible: boolean = $state(config.keyboardNavigation.focusVisible);
+  let skipLinks: boolean = $state(config.keyboardNavigation.skipLinks);
+  let ariaLabels: boolean = $state(config.ariaLabels.enabled);
+  let altTexts: boolean = $state(config.content.altTexts);
+  let colorContrast: 'AA' | 'AAA' = $state(config.content.colorContrast);
+  let toolbarEnabled: boolean = $state(config.toolbar.enabled);
+  
+  function handleSave() {
     const newConfig: AccessibilityConfig = {
       ...config,
       keyboardNavigation: {
@@ -1285,36 +1767,102 @@ function AccessibilitySettings({ config, onSave }: AccessibilitySettingsProps) {
       },
     };
     onSave(newConfig);
-  };
+  }
+</script>
+
+<div class="settings-section">
+  <h3>Configuración de Accesibilidad</h3>
   
-  return (
-    <div class="settings-section">
-      <h3>Configuración de Accesibilidad</h3>
-      
-      <h4>Navegación por teclado</h4>
-      
-      <div class="setting-item">
-        <label class="toggle-label">
-          <input
-            type="checkbox"
-            checked={keyboardNav}
-            onChange={(e) => setKeyboardNav(e.target.checked)}
-          />
-          <span class="toggle-slider"></span>
-          <span>Habilitar navegación por teclado</span>
-        </label>
-      </div>
-      
-      <div class="setting-item">
-        <label class="toggle-label">
-          <input
-            type="checkbox"
-            checked={focusVisible}
-            onChange={(e) => setFocusVisible(e.target.checked)}
-          />
-          <span class="toggle-slider"></span>
-          <span>Focus visible en elementos interactivos</span>
-        </label>
+  <h4>Navegación por teclado</h4>
+  
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={keyboardNav}
+      />
+      <span class="toggle-slider"></span>
+      <span>Habilitar navegación por teclado</span>
+    </label>
+  </div>
+  
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={focusVisible}
+      />
+      <span class="toggle-slider"></span>
+      <span>Focus visible en elementos interactivos</span>
+    </label>
+  </div>
+  
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={skipLinks}
+      />
+      <span class="toggle-slider"></span>
+      <span>Skip links (saltar al contenido)</span>
+    </label>
+  </div>
+  
+  <h4>ARIA y estructura</h4>
+  
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={ariaLabels}
+      />
+      <span class="toggle-slider"></span>
+      <span>Labels ARIA y roles semánticos</span>
+    </label>
+  </div>
+  
+  <h4>Contenido</h4>
+  
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={altTexts}
+      />
+      <span class="toggle-slider"></span>
+      <span>Textos alternativos en imágenes</span>
+    </label>
+  </div>
+  
+  <div class="setting-item">
+    <label>Nivel de contraste de color:</label>
+    <select bind:value={colorContrast}>
+      <option value="AA">AA (estándar)</option>
+      <option value="AAA">AAA (alto contraste)</option>
+    </select>
+  </div>
+  
+  <h4>Toolbar de accesibilidad</h4>
+  
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={toolbarEnabled}
+      />
+      <span class="toggle-slider"></span>
+      <span>Mostrar toolbar de accesibilidad</span>
+    </label>
+    <p class="setting-description">
+      Permite a los usuarios ajustar tamaño de texto, contraste, etc.
+    </p>
+  </div>
+  
+  <button on:click={handleSave} class="btn-primary">
+    Guardar cambios
+  </button>
+</div>
+```
       </div>
       
       <div class="setting-item">
@@ -1395,26 +1943,17 @@ function AccessibilitySettings({ config, onSave }: AccessibilitySettingsProps) {
 
 ## 8. Testing
 
-### 8.1 Testing de SEO
+### 8.1 Testing de SEO (Vitest)
 
 ```typescript
+// src/lib/__tests__/seo.test.ts
+import { describe, it, expect } from 'vitest';
+import { DEFAULT_SEO_CONFIG } from '$lib/config/default-seo-config';
+import { generateStructuredData } from '$lib/utils/structured-data';
+import { SitemapService } from '$lib/services/sitemap.service';
+import { RobotsService } from '$lib/services/robots.service';
+
 describe('SEO', () => {
-  it('should render meta tags correctly', () => {
-    const config = {
-      ...DEFAULT_SEO_CONFIG,
-      title: 'Mi Tienda',
-      description: 'Descripción de prueba',
-    };
-    
-    render(<SEOHead config={config} pageType="home" />);
-    
-    expect(document.title).toBe('Mi Tienda');
-    expect(document.querySelector('meta[name="description"]')).toHaveAttribute(
-      'content',
-      'Descripción de prueba'
-    );
-  });
-  
   it('should generate product structured data', () => {
     const config = DEFAULT_SEO_CONFIG;
     const pageData = {
@@ -1433,6 +1972,7 @@ describe('SEO', () => {
   });
   
   it('should generate sitemap XML', async () => {
+    const sitemapService = new SitemapService();
     const config = {
       baseUrl: 'https://mitienda.com',
       includeProducts: true,
@@ -1442,7 +1982,7 @@ describe('SEO', () => {
       priority: 0.5,
     };
     
-    const sitemap = await generateSitemap(config);
+    const sitemap = await sitemapService.generateSitemap(config);
     
     expect(sitemap).toContain('<?xml version="1.0"');
     expect(sitemap).toContain('<urlset');
@@ -1450,6 +1990,7 @@ describe('SEO', () => {
   });
   
   it('should generate robots.txt', () => {
+    const robotsService = new RobotsService();
     const config = {
       baseUrl: 'https://mitienda.com',
       allowPaths: ['/'],
@@ -1457,7 +1998,7 @@ describe('SEO', () => {
       sitemapUrl: 'https://mitienda.com/sitemap.xml',
     };
     
-    const robots = generateRobotsTxt(config);
+    const robots = robotsService.generateRobotsTxt(config);
     
     expect(robots).toContain('User-agent: *');
     expect(robots).toContain('Allow: /');
@@ -1467,28 +2008,22 @@ describe('SEO', () => {
 });
 ```
 
-### 8.2 Testing de Accesibilidad
+### 8.2 Testing de Accesibilidad (Vitest + @testing-library/svelte)
 
 ```typescript
+// src/lib/__tests__/accessibility.test.ts
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/svelte';
+import SkipLinks from '$lib/components/SkipLinks.svelte';
+import AccessibleNavigation from '$lib/components/AccessibleNavigation.svelte';
+import AccessibleImage from '$lib/components/AccessibleImage.svelte';
+
 describe('Accessibility', () => {
   it('should render skip links', () => {
-    render(<SkipLinks />);
+    render(SkipLinks);
     
     expect(screen.getByText('Saltar al contenido principal')).toBeInTheDocument();
     expect(screen.getByText('Saltar a la navegación')).toBeInTheDocument();
-  });
-  
-  it('should trap focus in modal', () => {
-    render(<Modal>
-      <button>First</button>
-      <button>Last</button>
-    </Modal>);
-    
-    const { trapFocus } = useFocusManagement();
-    const modal = screen.getByRole('dialog');
-    trapFocus(modal);
-    
-    expect(document.activeElement).toBe(screen.getByText('First'));
   });
   
   it('should render accessible navigation', () => {
@@ -1497,7 +2032,64 @@ describe('Accessibility', () => {
       { id: '2', label: 'Productos', href: '/productos' },
     ];
     
-    render(<AccessibleNavigation items={items} currentPath="/" />);
+    render(AccessibleNavigation, { props: { items, currentPath: '/' } });
+    
+    expect(screen.getByRole('menubar')).toBeInTheDocument();
+    expect(screen.getByText('Inicio')).toHaveAttribute('aria-current', 'page');
+  });
+  
+  it('should render accessible image with alt text', () => {
+    render(AccessibleImage, { 
+      props: {
+        src: '/test.jpg',
+        alt: 'Descripción de la imagen'
+      } 
+    });
+    
+    const img = screen.getByRole('img');
+    expect(img).toHaveAttribute('alt', 'Descripción de la imagen');
+  });
+  
+  it('should render decorative image without alt text', () => {
+    render(AccessibleImage, { 
+      props: {
+        src: '/decorative.jpg',
+        alt: '',
+        decorative: true
+      } 
+    });
+    
+    const img = screen.getByRole('presentation');
+    expect(img).toHaveAttribute('alt', '');
+  });
+});
+```
+
+### 8.3 Testing de Lighthouse (Playwright)
+
+```typescript
+// e2e/lighthouse.spec.ts
+import { test, expect } from '@playwright/test';
+
+test('Lighthouse SEO score should be above 90', async ({ page }) => {
+  // Navegar a la página
+  await page.goto('https://mitienda.com');
+  
+  // Ejecutar Lighthouse (requiere configuración adicional)
+  // Ver documentación de Lighthouse CI
+  const lighthouseResult = await runLighthouse(page.url());
+  
+  expect(lighthouseResult.categories.seo.score).toBeGreaterThan(0.9);
+});
+
+test('Lighthouse Accessibility score should be above 90', async ({ page }) => {
+  await page.goto('https://mitienda.com');
+  
+  const lighthouseResult = await runLighthouse(page.url());
+  
+  expect(lighthouseResult.categories.accessibility.score).toBeGreaterThan(0.9);
+});
+```
     
     expect(screen.getByRole('menubar')).toBeInTheDocument();
     expect(screen.getByText('Inicio')).toHaveAttribute('aria-current', 'page');
@@ -1706,12 +2298,15 @@ CREATE INDEX idx_accessibility_config_store_id ON accessibility_config(store_id)
 
 ## 12. Dependencias
 
-- Sistema de configuración de tiendas
-- Base de datos (Supabase)
-- Sistema de routing
+- Sistema de configuración de tiendas (NestJS)
+- Base de datos (Supabase/PostgreSQL)
+- Sistema de routing (SvelteKit)
 - Componentes UI (botones, toggles, inputs)
 - Lighthouse (para testing)
 - Playwright (para e2e testing)
+- Svelte 5, SvelteKit
+- Vitest, @testing-library/svelte
+- NestJS, TypeORM
 
 ## 13. Riesgos y Mitigaciones
 

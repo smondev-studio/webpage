@@ -226,13 +226,15 @@ Este documento describe el diseño del dashboard del panel de administración de
 ### 5.1 Arquitectura de Componentes
 
 ```typescript
-// types/dashboard.ts
+// src/lib/types/dashboard.ts
+import type { Component } from 'svelte';
+
 interface DashboardWidget {
   id: string;
   type: 'kpi' | 'chart' | 'list' | 'alert' | 'action' | 'locked';
   title: string;
   requiredPlan: 'starter' | 'commerce' | 'enterprise';
-  component: React.ComponentType<any>;
+  component: Component<any>;
   props?: Record<string, any>;
   order: number;
   size: 'small' | 'medium' | 'large' | 'full';
@@ -408,83 +410,94 @@ export function getDashboardConfig(userPlan: string): DashboardConfig {
 }
 ```
 
-### 5.3 Componente Principal del Dashboard
+### 5.3 Componente Principal del Dashboard (SvelteKit)
 
-```typescript
-// components/Dashboard.tsx
-interface DashboardProps {
-  userPlan: 'starter' | 'commerce' | 'enterprise';
-  storeId: string;
-}
-
-function Dashboard({ userPlan, storeId }: DashboardProps) {
-  const config = getDashboardConfig(userPlan);
-  const [widgets, setWidgets] = useState<DashboardWidget[]>(config.widgets);
+```svelte
+<!-- src/lib/components/Dashboard.svelte -->
+<script lang="ts">
+  import { getDashboardConfig, type DashboardWidget } from '$lib/config/dashboard-widgets';
+  import { loadWidgetData } from '$lib/services/dashboard-api';
+  import DashboardHeader from './DashboardHeader.svelte';
+  import DashboardWidgetRenderer from './DashboardWidgetRenderer.svelte';
   
-  // Cargar datos de widgets en paralelo
-  useEffect(() => {
-    const loadData = async () => {
-      const promises = widgets.map(widget => 
-        loadWidgetData(widget, storeId)
-      );
-      const results = await Promise.all(promises);
-      // Actualizar widgets con datos
-    };
-    
-    loadData();
-  }, [widgets, storeId]);
-  
-  return (
-    <div class={`dashboard dashboard-${config.layout}`}>
-      <DashboardHeader userPlan={userPlan} />
-      
-      <div class="dashboard-grid">
-        {widgets.map(widget => (
-          <DashboardWidgetRenderer 
-            key={widget.id}
-            widget={widget}
-            storeId={storeId}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function DashboardWidgetRenderer({ widget, storeId }: { 
-  widget: DashboardWidget; 
-  storeId: string 
-}) {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    loadWidgetData(widget, storeId).then(result => {
-      setData(result);
-      setLoading(false);
-    });
-  }, [widget.id, storeId]);
-  
-  if (widget.type === 'locked') {
-    return (
-      <LockedFeatureCard 
-        feature={widget.title}
-        requiredPlan={widget.requiredPlan}
-        upgradePath={`/pricing?plan=${widget.requiredPlan}`}
-      />
-    );
+  interface Props {
+    userPlan: 'starter' | 'commerce' | 'enterprise';
+    storeId: string;
   }
   
-  if (loading) return <WidgetSkeleton size={widget.size} />;
+  let { userPlan, storeId }: Props = $props();
   
-  const Component = widget.component;
-  return (
-    <div class={`widget widget-${widget.size}`}>
-      <WidgetHeader title={widget.title} />
-      <Component {...widget.props} data={data} />
-    </div>
-  );
-}
+  const config = getDashboardConfig(userPlan);
+  let widgets: DashboardWidget[] = $state(config.widgets);
+  
+  // Cargar datos de widgets en paralelo
+  async function loadAllData() {
+    const promises = widgets.map(widget => 
+      loadWidgetData(widget, storeId)
+    );
+    const results = await Promise.all(promises);
+    // Actualizar widgets con datos
+  }
+  
+  $effect(() => {
+    loadAllData();
+  });
+</script>
+
+<div class="dashboard dashboard-{config.layout}">
+  <DashboardHeader {userPlan} />
+  
+  <div class="dashboard-grid">
+    {#each widgets as widget}
+      <DashboardWidgetRenderer {widget} {storeId} />
+    {/each}
+  </div>
+</div>
+```
+
+```svelte
+<!-- src/lib/components/DashboardWidgetRenderer.svelte -->
+<script lang="ts">
+  import { loadWidgetData, type DashboardWidget } from '$lib/services/dashboard-api';
+  import LockedFeatureCard from './LockedFeatureCard.svelte';
+  import WidgetSkeleton from './WidgetSkeleton.svelte';
+  import WidgetHeader from './WidgetHeader.svelte';
+  
+  interface Props {
+    widget: DashboardWidget;
+    storeId: string;
+  }
+  
+  let { widget, storeId }: Props = $props();
+  let data: any = $state(null);
+  let loading: boolean = $state(true);
+  
+  $effect(() => {
+    loadWidgetData(widget, storeId).then(result => {
+      data = result;
+      loading = false;
+    });
+  });
+  
+  if (widget.type === 'locked') {
+    // Svelte no permite retornar condicionalmente, usar {#if}
+  }
+</script>
+
+{#if widget.type === 'locked'}
+  <LockedFeatureCard 
+    feature={widget.title}
+    requiredPlan={widget.requiredPlan}
+    upgradePath={`/pricing?plan=${widget.requiredPlan}`}
+  />
+{:else if loading}
+  <WidgetSkeleton size={widget.size} />
+{:else}
+  <div class="widget widget-{widget.size}">
+    <WidgetHeader title={widget.title} />
+    <svelte:component this={widget.component} {...widget.props} {data} />
+  </div>
+{/if}
 ```
 
 ### 5.4 Sistema de Layouts
@@ -542,10 +555,12 @@ function DashboardWidgetRenderer({ widget, storeId }: {
 }
 ```
 
-### 5.5 API de Datos
+### 5.5 API de Datos (NestJS)
 
 ```typescript
-// services/dashboard-api.ts
+// src/dashboard/services/dashboard-api.service.ts (Frontend - SvelteKit)
+import type { DashboardWidget } from '$lib/types/dashboard';
+
 interface WidgetDataRequest {
   widgetId: string;
   storeId: string;
@@ -553,7 +568,7 @@ interface WidgetDataRequest {
   locationId?: string;
 }
 
-async function loadWidgetData(
+export async function loadWidgetData(
   widget: DashboardWidget, 
   storeId: string
 ): Promise<any> {
@@ -575,26 +590,93 @@ async function loadWidgetData(
   
   return response.json();
 }
+```
 
-// Endpoint del servidor
-// POST /api/dashboard/widgets/:widgetId
-app.post('/api/dashboard/widgets/:widgetId', async (req, res) => {
-  const { widgetId } = req.params;
-  const { storeId, period, locationId } = req.body;
-  
-  // Verificar permisos según plan
-  const store = await getStore(storeId);
-  const widget = DASHBOARD_WIDGETS.find(w => w.id === widgetId);
-  
-  if (!isPlanAllowed(widget.requiredPlan, store.plan)) {
-    return res.status(403).json({ error: 'Plan not allowed' });
+```typescript
+// src/dashboard/dashboard.controller.ts (Backend - NestJS)
+import { Controller, Post, Body, Param, ForbiddenException } from '@nestjs/common';
+import { DashboardService } from './dashboard.service';
+
+interface WidgetDataRequest {
+  storeId: string;
+  period?: string;
+  locationId?: string;
+}
+
+@Controller('dashboard/widgets')
+export class DashboardController {
+  constructor(private readonly dashboardService: DashboardService) {}
+
+  @Post(':widgetId')
+  async getWidgetData(
+    @Param('widgetId') widgetId: string,
+    @Body() body: WidgetDataRequest,
+  ) {
+    const { storeId, period, locationId } = body;
+    
+    // Verificar permisos según plan
+    const store = await this.dashboardService.getStore(storeId);
+    const widget = this.dashboardService.getWidget(widgetId);
+    
+    if (!this.dashboardService.isPlanAllowed(widget.requiredPlan, store.plan)) {
+      throw new ForbiddenException('Plan not allowed');
+    }
+    
+    // Cargar datos según tipo de widget
+    const data = await this.dashboardService.getWidgetData(
+      widgetId, 
+      storeId, 
+      period, 
+      locationId
+    );
+    
+    return data;
   }
-  
-  // Cargar datos según tipo de widget
-  const data = await getWidgetData(widgetId, storeId, period, locationId);
-  
-  res.json(data);
-});
+}
+```
+
+```typescript
+// src/dashboard/dashboard.service.ts (Backend - NestJS)
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Store } from '../stores/store.entity';
+import { DASHBOARD_WIDGETS } from './dashboard-widgets.config';
+
+@Injectable()
+export class DashboardService {
+  constructor(
+    @InjectRepository(Store)
+    private storeRepository: Repository<Store>,
+  ) {}
+
+  async getStore(storeId: string): Promise<Store> {
+    return this.storeRepository.findOne({ where: { id: storeId } });
+  }
+
+  getWidget(widgetId: string) {
+    const widget = DASHBOARD_WIDGETS.find(w => w.id === widgetId);
+    if (!widget) {
+      throw new Error(`Widget ${widgetId} not found`);
+    }
+    return widget;
+  }
+
+  isPlanAllowed(requiredPlan: string, userPlan: string): boolean {
+    const planOrder = ['starter', 'commerce', 'enterprise'];
+    return planOrder.indexOf(userPlan) >= planOrder.indexOf(requiredPlan);
+  }
+
+  async getWidgetData(
+    widgetId: string,
+    storeId: string,
+    period?: string,
+    locationId?: string,
+  ): Promise<any> {
+    // Implementar lógica según tipo de widget
+    // Ej: productos, pedidos, ventas, etc.
+  }
+}
 ```
 
 ## 6. Flujos de Usuario
@@ -677,29 +759,46 @@ function trackWidgetInteraction(event: DashboardAnalytics) {
 
 ### 8.2 Optimizaciones
 
-```typescript
-// Virtualización para listas largas
-import { VirtualList } from 'react-virtualized';
+```svelte
+<!-- Virtualización para listas largas (Svelte) -->
+<script lang="ts">
+  import { VirtualList } from 'svelte-virtual-list';
+  import OrderRow from './OrderRow.svelte';
+  
+  interface Props {
+    data: Order[];
+  }
+  
+  let { data }: Props = $props();
+</script>
 
-function RecentOrdersWidget({ data }: { data: Order[] }) {
-  return (
-    <VirtualList
-      height={400}
-      rowCount={data.length}
-      rowHeight={60}
-      rowRenderer={({ index, style }) => (
-        <OrderRow order={data[index]} style={style} />
-      )}
-    />
-  );
-}
+<VirtualList
+  height={400}
+  itemCount={data.length}
+  itemSize={60}
+  let:index
+  let:style
+>
+  <OrderRow order={data[index]} {style} />
+</VirtualList>
+```
 
-// Memoización de gráficos
-import { memo } from 'react';
+```svelte
+<!-- Memoización de gráficos (Svelte) -->
+<script lang="ts">
+  import { LineChart } from './charts/LineChart.svelte';
+  
+  interface Props {
+    data: SalesData[];
+  }
+  
+  let { data }: Props = $props();
+  
+  // Svelte 5: $derived para memoización
+  $: chartData = data; // Se recalcula solo cuando data cambia
+</script>
 
-const SalesChartWidget = memo(({ data }: { data: SalesData[] }) => {
-  return <LineChart data={data} />;
-});
+<LineChart data={chartData} />
 ```
 
 ## 9. Personalización Futura
@@ -735,9 +834,15 @@ interface UserDashboardPreferences {
 
 ## 10. Testing
 
-### 10.1 Test Cases
+### 10.1 Test Cases (Vitest + @testing-library/svelte)
 
 ```typescript
+// src/lib/__tests__/dashboard.test.ts
+import { describe, it, expect, vi } from 'vitest';
+import { render, waitFor } from '@testing-library/svelte';
+import Dashboard from '$lib/components/Dashboard.svelte';
+import { getDashboardConfig } from '$lib/config/dashboard-widgets';
+
 describe('Dashboard', () => {
   it('should show only starter widgets for starter plan', () => {
     const config = getDashboardConfig('starter');
@@ -758,10 +863,12 @@ describe('Dashboard', () => {
   });
   
   it('should load widget data in parallel', async () => {
-    const mockFetch = jest.fn().mockResolvedValue({ data: [] });
+    const mockFetch = vi.fn().mockResolvedValue({ data: [] });
     global.fetch = mockFetch;
     
-    render(<Dashboard userPlan="commerce" storeId="123" />);
+    render(Dashboard, { 
+      props: { userPlan: 'commerce', storeId: '123' } 
+    });
     
     // Esperar a que todos los widgets carguen
     await waitFor(() => {
@@ -788,11 +895,13 @@ describe('Dashboard', () => {
 ## 12. Dependencias
 
 - Sistema de autenticación y planes
-- API de métricas y reportes
+- API de métricas y reportes (NestJS)
 - Base de datos de pedidos, productos, clientes
 - Sistema de notificaciones
 - Google Analytics / herramientas de tracking
-- Componentes de gráficos (Chart.js, Recharts, etc.)
+- Componentes de gráficos (Chart.js, svelte-chartjs, etc.)
+- Svelte 5, SvelteKit
+- Vitest, @testing-library/svelte
 
 ## 13. Riesgos y Mitigaciones
 

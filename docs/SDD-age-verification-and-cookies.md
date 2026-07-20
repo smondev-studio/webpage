@@ -277,27 +277,31 @@ export const DEFAULT_STORE_CONFIG: StoreConfig = {
 };
 ```
 
-### 5.3 Componente de Verificación de Edad
+### 5.3 Componente de Verificación de Edad (SvelteKit)
 
-```typescript
-// components/AgeVerificationModal.tsx
-interface AgeVerificationModalProps {
-  storeConfig: StoreConfig;
-  onVerified: () => void;
-  onRejected: () => void;
-}
-
-function AgeVerificationModal({ storeConfig, onVerified, onRejected }: AgeVerificationModalProps) {
-  const [birthDate, setBirthDate] = useState('');
-  const [error, setError] = useState('');
+```svelte
+<!-- src/lib/components/AgeVerificationModal.svelte -->
+<script lang="ts">
+  import type { StoreConfig } from '$lib/types/store-config';
+  
+  interface Props {
+    storeConfig: StoreConfig;
+    onVerified: () => void;
+    onRejected: () => void;
+  }
+  
+  let { storeConfig, onVerified, onRejected }: Props = $props();
+  
+  let birthDate: string = $state('');
+  let error: string = $state('');
   
   const config = storeConfig.ageVerification;
   
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: Event) {
     e.preventDefault();
     
     if (!birthDate) {
-      setError('Por favor ingresa tu fecha de nacimiento');
+      error = 'Por favor ingresa tu fecha de nacimiento';
       return;
     }
     
@@ -318,203 +322,216 @@ function AgeVerificationModal({ storeConfig, onVerified, onRejected }: AgeVerifi
     } else {
       onRejected();
     }
-  };
-  
-  return (
-    <div class="age-verification-overlay">
-      <div class="age-verification-modal">
-        <div class="modal-header">
-          <h2>Verificación de Edad</h2>
-        </div>
-        
-        <div class="modal-body">
-          <p>{config.message || 'Este sitio contiene productos para adultos. ¿Eres mayor de 18 años?'}</p>
-          
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="birthDate">Fecha de nacimiento:</label>
-            <input
-              type="date"
-              id="birthDate"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              max={new Date().toISOString().split('T')[0]}
-              required
-            />
-            
-            {error && <p class="error-message">{error}</p>}
-            
-            <div class="modal-actions">
-              <button type="submit" class="btn-primary">
-                Verificar
-              </button>
-            </div>
-          </form>
-          
-          <p class="modal-footer-text">
-            Al ingresar confirmas que eres mayor de {config.minimumAge} años
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
+  }
+</script>
 
-function AgeRejectionMessage({ message }: { message: string }) {
-  return (
-    <div class="age-rejection-page">
-      <div class="rejection-content">
-        <h1>Acceso Restringido</h1>
-        <p>{message || 'Debes ser mayor de 18 años para acceder a este sitio.'}</p>
-        <a href="https://www.google.com" class="btn-secondary">
-          Volver a Google
-        </a>
-      </div>
+<div class="age-verification-overlay">
+  <div class="age-verification-modal">
+    <div class="modal-header">
+      <h2>Verificación de Edad</h2>
     </div>
-  );
-}
+    
+    <div class="modal-body">
+      <p>{config.message || 'Este sitio contiene productos para adultos. ¿Eres mayor de 18 años?'}</p>
+      
+      <form on:submit={handleSubmit}>
+        <label for="birthDate">Fecha de nacimiento:</label>
+        <input
+          type="date"
+          id="birthDate"
+          bind:value={birthDate}
+          max={new Date().toISOString().split('T')[0]}
+          required
+        />
+        
+        {#if error}
+          <p class="error-message">{error}</p>
+        {/if}
+        
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary">
+            Verificar
+          </button>
+        </div>
+      </form>
+      
+      <p class="modal-footer-text">
+        Al ingresar confirmas que eres mayor de {config.minimumAge} años
+      </p>
+    </div>
+  </div>
+</div>
 ```
 
-### 5.4 Componente de Consentimiento de Cookies
+```svelte
+<!-- src/lib/components/AgeRejectionMessage.svelte -->
+<script lang="ts">
+  interface Props {
+    message: string;
+  }
+  
+  let { message }: Props = $props();
+</script>
 
-```typescript
-// components/CookieConsentBanner.tsx
-interface CookieConsentBannerProps {
-  storeConfig: StoreConfig;
-  onAccept: (categories: string[]) => void;
-  onReject: () => void;
-}
+<div class="age-rejection-page">
+  <div class="rejection-content">
+    <h1>Acceso Restringido</h1>
+    <p>{message || 'Debes ser mayor de 18 años para acceder a este sitio.'}</p>
+    <a href="https://www.google.com" class="btn-secondary">
+      Volver a Google
+    </a>
+  </div>
+</div>
+```
 
-function CookieConsentBanner({ storeConfig, onAccept, onReject }: CookieConsentBannerProps) {
-  const [showPreferences, setShowPreferences] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(['technical']);
+### 5.4 Componente de Consentimiento de Cookies (SvelteKit)
+
+```svelte
+<!-- src/lib/components/CookieConsentBanner.svelte -->
+<script lang="ts">
+  import type { StoreConfig } from '$lib/types/store-config';
+  
+  interface Props {
+    storeConfig: StoreConfig;
+    onAccept: (categories: string[]) => void;
+    onReject: () => void;
+  }
+  
+  let { storeConfig, onAccept, onReject }: Props = $props();
+  
+  let showPreferences: boolean = $state(false);
+  let selectedCategories: string[] = $state(['technical']);
   
   const config = storeConfig.cookieConsent;
   
-  const handleAcceptAll = () => {
+  function handleAcceptAll() {
     const allCategories = config.categories.map(c => c.id);
     saveConsent(allCategories);
     onAccept(allCategories);
-  };
+  }
   
-  const handleRejectAll = () => {
+  function handleRejectAll() {
     const requiredCategories = config.categories
       .filter(c => c.required)
       .map(c => c.id);
     saveConsent(requiredCategories);
     onReject();
-  };
+  }
   
-  const handleSavePreferences = () => {
+  function handleSavePreferences() {
     saveConsent(selectedCategories);
     onAccept(selectedCategories);
-  };
+  }
   
-  const saveConsent = (categories: string[]) => {
+  function saveConsent(categories: string[]) {
     const consent = {
       categories,
       timestamp: new Date().toISOString(),
       version: '1.0',
     };
     localStorage.setItem('cookie_consent', JSON.stringify(consent));
-  };
+  }
   
-  const toggleCategory = (categoryId: string) => {
+  function toggleCategory(categoryId: string) {
     const category = config.categories.find(c => c.id === categoryId);
     if (category?.required) return; // No se puede desactivar cookies técnicas
     
-    setSelectedCategories(prev => 
-      prev.includes(categoryId)
-        ? prev.filter(id => id !== categoryId)
-        : [...prev, categoryId]
-    );
-  };
-  
-  return (
-    <div class="cookie-consent-banner">
-      {!showPreferences ? (
-        // Banner simple
-        <div class="banner-content">
-          <p>{config.bannerMessage || 'Usamos cookies para mejorar tu experiencia.'}</p>
-          <div class="banner-actions">
-            <button onClick={handleAcceptAll} class="btn-primary">
-              Aceptar todas
-            </button>
-            <button onClick={() => setShowPreferences(true)} class="btn-secondary">
-              Personalizar
-            </button>
-            <button onClick={handleRejectAll} class="btn-text">
-              Rechazar
-            </button>
-          </div>
-          {config.privacyPolicyUrl && (
-            <a href={config.privacyPolicyUrl} class="privacy-link">
-              Política de privacidad
-            </a>
-          )}
-        </div>
-      ) : (
-        // Panel de preferencias
-        <div class="preferences-panel">
-          <h3>Preferencias de Cookies</h3>
-          <p class="preferences-description">
-            Selecciona qué cookies aceptas. Las cookies técnicas son necesarias para el funcionamiento del sitio.
-          </p>
-          
-          <div class="categories-list">
-            {config.categories.map(category => (
-              <div class="category-item" key={category.id}>
-                <div class="category-header">
-                  <label class="category-toggle">
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(category.id)}
-                      onChange={() => toggleCategory(category.id)}
-                      disabled={category.required}
-                    />
-                    <span class="toggle-slider"></span>
-                  </label>
-                  <div class="category-info">
-                    <h4>{category.name}</h4>
-                    {category.required && <span class="required-badge">Requerida</span>}
-                  </div>
-                </div>
-                <p class="category-description">{category.description}</p>
-              </div>
-            ))}
-          </div>
-          
-          <div class="preferences-actions">
-            <button onClick={handleSavePreferences} class="btn-primary">
-              Guardar preferencias
-            </button>
-            <button onClick={() => setShowPreferences(false)} class="btn-secondary">
-              Volver
-            </button>
-          </div>
-        </div>
-      )}
+    if (selectedCategories.includes(categoryId)) {
+      selectedCategories = selectedCategories.filter(id => id !== categoryId);
+    } else {
+      selectedCategories = [...selectedCategories, categoryId];
+    }
+  }
+</script>
+
+<div class="cookie-consent-banner">
+  {#if !showPreferences}
+    <!-- Banner simple -->
+    <div class="banner-content">
+      <p>{config.bannerMessage || 'Usamos cookies para mejorar tu experiencia.'}</p>
+      <div class="banner-actions">
+        <button on:click={handleAcceptAll} class="btn-primary">
+          Aceptar todas
+        </button>
+        <button on:click={() => showPreferences = true} class="btn-secondary">
+          Personalizar
+        </button>
+        <button on:click={handleRejectAll} class="btn-text">
+          Rechazar
+        </button>
+      </div>
+      {#if config.privacyPolicyUrl}
+        <a href={config.privacyPolicyUrl} class="privacy-link">
+          Política de privacidad
+        </a>
+      {/if}
     </div>
-  );
-}
+  {:else}
+    <!-- Panel de preferencias -->
+    <div class="preferences-panel">
+      <h3>Preferencias de Cookies</h3>
+      <p class="preferences-description">
+        Selecciona qué cookies aceptas. Las cookies técnicas son necesarias para el funcionamiento del sitio.
+      </p>
+      
+      <div class="categories-list">
+        {#each config.categories as category}
+          <div class="category-item">
+            <div class="category-header">
+              <label class="category-toggle">
+                <input
+                  type="checkbox"
+                  checked={selectedCategories.includes(category.id)}
+                  on:change={() => toggleCategory(category.id)}
+                  disabled={category.required}
+                />
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="category-info">
+                <h4>{category.name}</h4>
+                {#if category.required}
+                  <span class="required-badge">Requerida</span>
+                {/if}
+              </div>
+            </div>
+            <p class="category-description">{category.description}</p>
+          </div>
+        {/each}
+      </div>
+      
+      <div class="preferences-actions">
+        <button on:click={handleSavePreferences} class="btn-primary">
+          Guardar preferencias
+        </button>
+        <button on:click={() => showPreferences = false} class="btn-secondary">
+          Volver
+        </button>
+      </div>
+    </div>
+  {/if}
+</div>
 ```
 
-### 5.5 Hook de Verificación de Edad
+### 5.5 Store de Verificación de Edad (SvelteKit)
 
 ```typescript
-// hooks/useAgeVerification.ts
+// src/lib/stores/ageVerification.ts
+import type { StoreConfig } from '$lib/types/store-config';
+
 interface UseAgeVerificationReturn {
   isVerified: boolean;
   isRejected: boolean;
   verify: () => void;
+  reject: () => void;
 }
 
 export function useAgeVerification(storeConfig: StoreConfig): UseAgeVerificationReturn {
-  const [isVerified, setIsVerified] = useState(false);
-  const [isRejected, setIsRejected] = useState(false);
+  let isVerified = $state(false);
+  let isRejected = $state(false);
   
-  useEffect(() => {
+  $effect(() => {
     if (!storeConfig.ageVerification.enabled) {
-      setIsVerified(true);
+      isVerified = true;
       return;
     }
     
@@ -528,32 +545,34 @@ export function useAgeVerification(storeConfig: StoreConfig): UseAgeVerification
         (Date.now() - new Date(verifiedDate).getTime()) / (1000 * 60 * 60 * 24);
       
       if (daysSinceVerification < 30) {
-        setIsVerified(true);
+        isVerified = true;
         return;
       }
     }
     
     // No verificado, mostrar modal
-    setIsVerified(false);
-  }, [storeConfig.ageVerification.enabled]);
+    isVerified = false;
+  });
   
-  const verify = () => {
-    setIsVerified(true);
-    setIsRejected(false);
-  };
+  function verify() {
+    isVerified = true;
+    isRejected = false;
+  }
   
-  const reject = () => {
-    setIsRejected(true);
-  };
+  function reject() {
+    isRejected = true;
+  }
   
   return { isVerified, isRejected, verify, reject };
 }
 ```
 
-### 5.6 Hook de Consentimiento de Cookies
+### 5.6 Store de Consentimiento de Cookies (SvelteKit)
 
 ```typescript
-// hooks/useCookieConsent.ts
+// src/lib/stores/cookieConsent.ts
+import type { StoreConfig } from '$lib/types/store-config';
+
 interface CookieConsent {
   categories: string[];
   timestamp: string;
@@ -569,12 +588,12 @@ interface UseCookieConsentReturn {
 }
 
 export function useCookieConsent(storeConfig: StoreConfig): UseCookieConsentReturn {
-  const [consent, setConsent] = useState<CookieConsent | null>(null);
-  const [showBanner, setShowBanner] = useState(false);
+  let consent = $state<CookieConsent | null>(null);
+  let showBanner = $state(false);
   
-  useEffect(() => {
+  $effect(() => {
     if (!storeConfig.cookieConsent.enabled) {
-      setShowBanner(false);
+      showBanner = false;
       return;
     }
     
@@ -584,46 +603,46 @@ export function useCookieConsent(storeConfig: StoreConfig): UseCookieConsentRetu
     if (savedConsent) {
       try {
         const parsed = JSON.parse(savedConsent) as CookieConsent;
-        setConsent(parsed);
-        setShowBanner(false);
+        consent = parsed;
+        showBanner = false;
         
         // Cargar scripts según consentimiento
         loadScriptsByConsent(parsed.categories, storeConfig);
       } catch (error) {
         console.error('Error parsing cookie consent:', error);
-        setShowBanner(true);
+        showBanner = true;
       }
     } else {
-      setShowBanner(true);
+      showBanner = true;
     }
-  }, [storeConfig.cookieConsent.enabled]);
+  });
   
-  const acceptCookies = (categories: string[]) => {
+  function acceptCookies(categories: string[]) {
     const newConsent: CookieConsent = {
       categories,
       timestamp: new Date().toISOString(),
       version: '1.0',
     };
     
-    setConsent(newConsent);
-    setShowBanner(false);
+    consent = newConsent;
+    showBanner = false;
     loadScriptsByConsent(categories, storeConfig);
-  };
+  }
   
-  const rejectCookies = () => {
+  function rejectCookies() {
     const requiredCategories = storeConfig.cookieConsent.categories
       .filter(c => c.required)
       .map(c => c.id);
     
     acceptCookies(requiredCategories);
-  };
+  }
   
-  const hasConsent = (categoryId: string): boolean => {
+  function hasConsent(categoryId: string): boolean {
     if (!consent) return false;
     return consent.categories.includes(categoryId);
-  };
+  }
   
-  const loadScriptsByConsent = (categories: string[], config: StoreConfig) => {
+  function loadScriptsByConsent(categories: string[], config: StoreConfig) {
     config.cookieConsent.categories.forEach(category => {
       if (categories.includes(category.id)) {
         category.scripts.forEach(scriptId => {
@@ -631,9 +650,9 @@ export function useCookieConsent(storeConfig: StoreConfig): UseCookieConsentRetu
         });
       }
     });
-  };
+  }
   
-  const loadScript = (scriptId: string) => {
+  function loadScript(scriptId: string) {
     // Evitar cargar scripts duplicados
     if (document.getElementById(`script-${scriptId}`)) return;
     
@@ -650,7 +669,7 @@ export function useCookieConsent(storeConfig: StoreConfig): UseCookieConsentRetu
     }
     
     document.head.appendChild(script);
-  };
+  }
   
   return {
     consent,
@@ -702,85 +721,94 @@ function getScriptConfig(scriptId: string): ScriptConfig | null {
 }
 ```
 
-### 5.7 Componente Principal de la Tienda
+### 5.7 Componente Principal de la Tienda (SvelteKit)
 
-```typescript
-// components/Storefront.tsx
-interface StorefrontProps {
-  storeConfig: StoreConfig;
-  children: React.ReactNode;
-}
-
-function Storefront({ storeConfig, children }: StorefrontProps) {
+```svelte
+<!-- src/lib/components/Storefront.svelte -->
+<script lang="ts">
+  import type { StoreConfig } from '$lib/types/store-config';
+  import { useAgeVerification } from '$lib/stores/ageVerification';
+  import { useCookieConsent } from '$lib/stores/cookieConsent';
+  import AgeVerificationModal from './AgeVerificationModal.svelte';
+  import AgeRejectionMessage from './AgeRejectionMessage.svelte';
+  import CookieConsentBanner from './CookieConsentBanner.svelte';
+  import CookiePreferencesButton from './CookiePreferencesButton.svelte';
+  
+  interface Props {
+    storeConfig: StoreConfig;
+  }
+  
+  let { storeConfig, children }: Props = $props();
+  
   const { isVerified, isRejected, verify, reject } = useAgeVerification(storeConfig);
   const { showBanner, acceptCookies, rejectCookies, hasConsent } = useCookieConsent(storeConfig);
   
-  // Si no está verificado, mostrar modal
-  if (!isVerified && !isRejected) {
-    return (
-      <AgeVerificationModal
-        storeConfig={storeConfig}
-        onVerified={verify}
-        onRejected={reject}
-      />
-    );
-  }
+  let showBannerManually = $state(false);
+</script>
+
+{#if !isVerified && !isRejected}
+  <!-- Si no está verificado, mostrar modal -->
+  <AgeVerificationModal
+    {storeConfig}
+    onVerified={verify}
+    onRejected={reject}
+  />
+{:else if isRejected}
+  <!-- Si fue rechazado, mostrar mensaje -->
+  <AgeRejectionMessage 
+    message={storeConfig.ageVerification.rejectionMessage}
+  />
+{:else}
+  <!-- Contenido de la tienda -->
+  {@render children()}
   
-  // Si fue rechazado, mostrar mensaje
-  if (isRejected) {
-    return (
-      <AgeRejectionMessage 
-        message={storeConfig.ageVerification.rejectionMessage}
-      />
-    );
-  }
+  <!-- Banner de cookies -->
+  {#if showBanner || showBannerManually}
+    <CookieConsentBanner
+      {storeConfig}
+      onAccept={(categories) => {
+        acceptCookies(categories);
+        showBannerManually = false;
+      }}
+      onReject={() => {
+        rejectCookies();
+        showBannerManually = false;
+      }}
+    />
+  {/if}
   
-  return (
-    <>
-      {/* Contenido de la tienda */}
-      {children}
-      
-      {/* Banner de cookies */}
-      {showBanner && (
-        <CookieConsentBanner
-          storeConfig={storeConfig}
-          onAccept={acceptCookies}
-          onReject={rejectCookies}
-        />
-      )}
-      
-      {/* Botón flotante para cambiar preferencias de cookies */}
-      {hasConsent('technical') && (
-        <CookiePreferencesButton 
-          onClick={() => setShowBanner(true)}
-        />
-      )}
-    </>
-  );
-}
+  <!-- Botón flotante para cambiar preferencias de cookies -->
+  {#if hasConsent('technical')}
+    <CookiePreferencesButton 
+      on:click={() => showBannerManually = true}
+    />
+  {/if}
+{/if}
 ```
 
 ## 6. Panel de Administración
 
-### 6.1 Configuración de Verificación de Edad
+### 6.1 Configuración de Verificación de Edad (SvelteKit)
 
-```typescript
-// components/admin/AgeVerificationSettings.tsx
-interface AgeVerificationSettingsProps {
-  storeConfig: StoreConfig;
-  onSave: (config: StoreConfig) => void;
-}
-
-function AgeVerificationSettings({ storeConfig, onSave }: AgeVerificationSettingsProps) {
-  const [enabled, setEnabled] = useState(storeConfig.ageVerification.enabled);
-  const [minimumAge, setMinimumAge] = useState(storeConfig.ageVerification.minimumAge);
-  const [message, setMessage] = useState(storeConfig.ageVerification.message || '');
-  const [rejectionMessage, setRejectionMessage] = useState(
-    storeConfig.ageVerification.rejectionMessage || ''
-  );
+```svelte
+<!-- src/lib/components/admin/AgeVerificationSettings.svelte -->
+<script lang="ts">
+  import type { StoreConfig } from '$lib/types/store-config';
   
-  const handleSave = () => {
-    const newConfig = {
+  interface Props {
+    storeConfig: StoreConfig;
+    onSave: (config: StoreConfig) => void;
+  }
+  
+  let { storeConfig, onSave }: Props = $props();
+  
+  let enabled: boolean = $state(storeConfig.ageVerification.enabled);
+  let minimumAge: 18 | 21 = $state(storeConfig.ageVerification.minimumAge);
+  let message: string = $state(storeConfig.ageVerification.message || '');
+  let rejectionMessage: string = $state(storeConfig.ageVerification.rejectionMessage || '');
+  
+  function handleSave() {
+    const newConfig: StoreConfig = {
       ...storeConfig,
       ageVerification: {
         enabled,
@@ -790,91 +818,81 @@ function AgeVerificationSettings({ storeConfig, onSave }: AgeVerificationSetting
       },
     };
     onSave(newConfig);
-  };
+  }
+</script>
+
+<div class="settings-section">
+  <h3>Verificación de Edad</h3>
   
-  return (
-    <div class="settings-section">
-      <h3>Verificación de Edad</h3>
-      
-      <div class="setting-item">
-        <label class="toggle-label">
-          <input
-            type="checkbox"
-            checked={enabled}
-            onChange={(e) => setEnabled(e.target.checked)}
-          />
-          <span class="toggle-slider"></span>
-          <span>Habilitar verificación de edad</span>
-        </label>
-        <p class="setting-description">
-          Requiere que los visitantes confirmen su edad antes de acceder a la tienda
-        </p>
-      </div>
-      
-      {enabled && (
-        <>
-          <div class="setting-item">
-            <label>Edad mínima:</label>
-            <select 
-              value={minimumAge} 
-              onChange={(e) => setMinimumAge(Number(e.target.value) as 18 | 21)}
-            >
-              <option value={18}>18 años</option>
-              <option value={21}>21 años</option>
-            </select>
-          </div>
-          
-          <div class="setting-item">
-            <label>Mensaje de verificación:</label>
-            <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Este sitio contiene productos para adultos. ¿Eres mayor de 18 años?"
-              rows={3}
-            />
-          </div>
-          
-          <div class="setting-item">
-            <label>Mensaje de rechazo:</label>
-            <textarea
-              value={rejectionMessage}
-              onChange={(e) => setRejectionMessage(e.target.value)}
-              placeholder="Debes ser mayor de 18 años para acceder a este sitio."
-              rows={3}
-            />
-          </div>
-        </>
-      )}
-      
-      <button onClick={handleSave} class="btn-primary">
-        Guardar cambios
-      </button>
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={enabled}
+      />
+      <span class="toggle-slider"></span>
+      <span>Habilitar verificación de edad</span>
+    </label>
+    <p class="setting-description">
+      Requiere que los visitantes confirmen su edad antes de acceder a la tienda
+    </p>
+  </div>
+  
+  {#if enabled}
+    <div class="setting-item">
+      <label>Edad mínima:</label>
+      <select bind:value={minimumAge}>
+        <option value={18}>18 años</option>
+        <option value={21}>21 años</option>
+      </select>
     </div>
-  );
-}
+    
+    <div class="setting-item">
+      <label>Mensaje de verificación:</label>
+      <textarea
+        bind:value={message}
+        placeholder="Este sitio contiene productos para adultos. ¿Eres mayor de 18 años?"
+        rows={3}
+      />
+    </div>
+    
+    <div class="setting-item">
+      <label>Mensaje de rechazo:</label>
+      <textarea
+        bind:value={rejectionMessage}
+        placeholder="Debes ser mayor de 18 años para acceder a este sitio."
+        rows={3}
+      />
+    </div>
+  {/if}
+  
+  <button on:click={handleSave} class="btn-primary">
+    Guardar cambios
+  </button>
+</div>
 ```
 
-### 6.2 Configuración de Cookies
+### 6.2 Configuración de Cookies (SvelteKit)
 
-```typescript
-// components/admin/CookieConsentSettings.tsx
-interface CookieConsentSettingsProps {
-  storeConfig: StoreConfig;
-  onSave: (config: StoreConfig) => void;
-}
-
-function CookieConsentSettings({ storeConfig, onSave }: CookieConsentSettingsProps) {
-  const [enabled, setEnabled] = useState(storeConfig.cookieConsent.enabled);
-  const [bannerMessage, setBannerMessage] = useState(
-    storeConfig.cookieConsent.bannerMessage || ''
-  );
-  const [privacyPolicyUrl, setPrivacyPolicyUrl] = useState(
-    storeConfig.cookieConsent.privacyPolicyUrl || ''
-  );
-  const [categories, setCategories] = useState(storeConfig.cookieConsent.categories);
+```svelte
+<!-- src/lib/components/admin/CookieConsentSettings.svelte -->
+<script lang="ts">
+  import type { StoreConfig, CookieCategory } from '$lib/types/store-config';
   
-  const handleSave = () => {
-    const newConfig = {
+  interface Props {
+    storeConfig: StoreConfig;
+    onSave: (config: StoreConfig) => void;
+  }
+  
+  let { storeConfig, onSave }: Props = $props();
+  
+  let enabled: boolean = $state(storeConfig.cookieConsent.enabled);
+  let bannerMessage: string = $state(storeConfig.cookieConsent.bannerMessage || '');
+  let privacyPolicyUrl: string = $state(storeConfig.cookieConsent.privacyPolicyUrl || '');
+  let categories: CookieCategory[] = $state(storeConfig.cookieConsent.categories);
+  
+  function handleSave() {
+    const newConfig: StoreConfig = {
       ...storeConfig,
       cookieConsent: {
         enabled,
@@ -885,89 +903,82 @@ function CookieConsentSettings({ storeConfig, onSave }: CookieConsentSettingsPro
       },
     };
     onSave(newConfig);
-  };
+  }
   
-  const toggleCategory = (categoryId: string) => {
-    setCategories(prev =>
-      prev.map(cat =>
-        cat.id === categoryId && !cat.required
-          ? { ...cat, enabled: !cat.enabled }
-          : cat
-      )
+  function toggleCategory(categoryId: string) {
+    categories = categories.map(cat =>
+      cat.id === categoryId && !cat.required
+        ? { ...cat, enabled: !cat.enabled }
+        : cat
     );
-  };
+  }
+</script>
+
+<div class="settings-section">
+  <h3>Gestión de Cookies</h3>
   
-  return (
-    <div class="settings-section">
-      <h3>Gestión de Cookies</h3>
-      
-      <div class="setting-item">
-        <label class="toggle-label">
-          <input
-            type="checkbox"
-            checked={enabled}
-            onChange={(e) => setEnabled(e.target.checked)}
-          />
-          <span class="toggle-slider"></span>
-          <span>Habilitar banner de cookies</span>
-        </label>
-        <p class="setting-description">
-          Muestra un banner para que los usuarios acepten o rechacen cookies
-        </p>
-      </div>
-      
-      {enabled && (
-        <>
-          <div class="setting-item">
-            <label>Mensaje del banner:</label>
-            <textarea
-              value={bannerMessage}
-              onChange={(e) => setBannerMessage(e.target.value)}
-              placeholder="Usamos cookies para mejorar tu experiencia..."
-              rows={3}
-            />
-          </div>
-          
-          <div class="setting-item">
-            <label>URL de política de privacidad:</label>
-            <input
-              type="text"
-              value={privacyPolicyUrl}
-              onChange={(e) => setPrivacyPolicyUrl(e.target.value)}
-              placeholder="/privacidad"
-            />
-          </div>
-          
-          <div class="setting-item">
-            <label>Categorías de cookies:</label>
-            <div class="categories-config">
-              {categories.map(category => (
-                <div class="category-config-item" key={category.id}>
-                  <label class="toggle-label">
-                    <input
-                      type="checkbox"
-                      checked={category.enabled || category.required}
-                      onChange={() => toggleCategory(category.id)}
-                      disabled={category.required}
-                    />
-                    <span class="toggle-slider"></span>
-                    <span>{category.name}</span>
-                    {category.required && <span class="required-badge">Requerida</span>}
-                  </label>
-                  <p class="category-description">{category.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-      
-      <button onClick={handleSave} class="btn-primary">
-        Guardar cambios
-      </button>
+  <div class="setting-item">
+    <label class="toggle-label">
+      <input
+        type="checkbox"
+        bind:checked={enabled}
+      />
+      <span class="toggle-slider"></span>
+      <span>Habilitar banner de cookies</span>
+    </label>
+    <p class="setting-description">
+      Muestra un banner para que los usuarios acepten o rechacen cookies
+    </p>
+  </div>
+  
+  {#if enabled}
+    <div class="setting-item">
+      <label>Mensaje del banner:</label>
+      <textarea
+        bind:value={bannerMessage}
+        placeholder="Usamos cookies para mejorar tu experiencia..."
+        rows={3}
+      />
     </div>
-  );
-}
+    
+    <div class="setting-item">
+      <label>URL de política de privacidad:</label>
+      <input
+        type="text"
+        bind:value={privacyPolicyUrl}
+        placeholder="/privacidad"
+      />
+    </div>
+    
+    <div class="setting-item">
+      <label>Categorías de cookies:</label>
+      <div class="categories-config">
+        {#each categories as category}
+          <div class="category-config-item">
+            <label class="toggle-label">
+              <input
+                type="checkbox"
+                checked={category.enabled || category.required}
+                on:change={() => toggleCategory(category.id)}
+                disabled={category.required}
+              />
+              <span class="toggle-slider"></span>
+              <span>{category.name}</span>
+              {#if category.required}
+                <span class="required-badge">Requerida</span>
+              {/if}
+            </label>
+            <p class="category-description">{category.description}</p>
+          </div>
+        {/each}
+      </div>
+    </div>
+  {/if}
+  
+  <button on:click={handleSave} class="btn-primary">
+    Guardar cambios
+  </button>
+</div>
 ```
 
 ## 7. Estilos CSS
@@ -1374,17 +1385,30 @@ INSERT INTO stores_config (
 
 ## 9. Testing
 
-### 9.1 Test Cases
+### 9.1 Test Cases (Vitest + @testing-library/svelte)
 
 ```typescript
+// src/lib/__tests__/age-verification.test.ts
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
+import Storefront from '$lib/components/Storefront.svelte';
+import { DEFAULT_STORE_CONFIG } from '$lib/config/default-store-config';
+
 describe('Age Verification', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('should show modal when age verification is enabled', () => {
     const config = {
       ...DEFAULT_STORE_CONFIG,
       ageVerification: { enabled: true, minimumAge: 18 },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
     expect(screen.getByText('Verificación de Edad')).toBeInTheDocument();
   });
@@ -1395,45 +1419,54 @@ describe('Age Verification', () => {
       ageVerification: { enabled: false, minimumAge: 18 },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
     expect(screen.queryByText('Verificación de Edad')).not.toBeInTheDocument();
   });
   
-  it('should verify age correctly', () => {
+  it('should verify age correctly', async () => {
     const config = {
       ...DEFAULT_STORE_CONFIG,
       ageVerification: { enabled: true, minimumAge: 18 },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
     // Ingresar fecha de nacimiento (25 años)
     const birthDateInput = screen.getByLabelText('Fecha de nacimiento:');
-    fireEvent.change(birthDateInput, {
+    await fireEvent.input(birthDateInput, {
       target: { value: '1999-01-01' },
     });
     
-    fireEvent.click(screen.getByText('Verificar'));
+    await fireEvent.click(screen.getByText('Verificar'));
     
     expect(screen.getByText('Store')).toBeInTheDocument();
   });
   
-  it('should reject underage users', () => {
+  it('should reject underage users', async () => {
     const config = {
       ...DEFAULT_STORE_CONFIG,
       ageVerification: { enabled: true, minimumAge: 18 },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
     // Ingresar fecha de nacimiento (15 años)
     const birthDateInput = screen.getByLabelText('Fecha de nacimiento:');
-    fireEvent.change(birthDateInput, {
+    await fireEvent.input(birthDateInput, {
       target: { value: '2009-01-01' },
     });
     
-    fireEvent.click(screen.getByText('Verificar'));
+    await fireEvent.click(screen.getByText('Verificar'));
     
     expect(screen.getByText('Acceso Restringido')).toBeInTheDocument();
   });
@@ -1447,20 +1480,30 @@ describe('Age Verification', () => {
       ageVerification: { enabled: true, minimumAge: 18 },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
     expect(screen.queryByText('Verificación de Edad')).not.toBeInTheDocument();
   });
 });
 
 describe('Cookie Consent', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('should show banner when consent is required', () => {
     const config = {
       ...DEFAULT_STORE_CONFIG,
       cookieConsent: { enabled: true, required: true },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
     expect(screen.getByText(/cookies/i)).toBeInTheDocument();
   });
@@ -1471,27 +1514,33 @@ describe('Cookie Consent', () => {
       cookieConsent: { enabled: false, required: false },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
     expect(screen.queryByText(/cookies/i)).not.toBeInTheDocument();
   });
   
-  it('should save consent to localStorage', () => {
+  it('should save consent to localStorage', async () => {
     const config = {
       ...DEFAULT_STORE_CONFIG,
       cookieConsent: { enabled: true, required: true },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
-    fireEvent.click(screen.getByText('Aceptar todas'));
+    await fireEvent.click(screen.getByText('Aceptar todas'));
     
     const consent = JSON.parse(localStorage.getItem('cookie_consent') || '{}');
     expect(consent.categories).toContain('technical');
     expect(consent.categories).toContain('analytics');
   });
   
-  it('should load scripts based on consent', () => {
+  it('should load scripts based on consent', async () => {
     const config = {
       ...DEFAULT_STORE_CONFIG,
       cookieConsent: {
@@ -1504,9 +1553,12 @@ describe('Cookie Consent', () => {
       },
     };
     
-    render(<Storefront storeConfig={config}><div>Store</div></Storefront>);
+    render(Storefront, { 
+      props: { storeConfig: config },
+      slots: { default: '<div>Store</div>' }
+    });
     
-    fireEvent.click(screen.getByText('Aceptar todas'));
+    await fireEvent.click(screen.getByText('Aceptar todas'));
     
     // Verificar que el script de Google Analytics se cargó
     const gaScript = document.getElementById('script-google-analytics');
@@ -1585,11 +1637,13 @@ function trackComplianceEvent(event: ComplianceAnalytics) {
 
 ## 13. Dependencias
 
-- Sistema de configuración de tiendas
-- Base de datos (Supabase)
+- Sistema de configuración de tiendas (NestJS)
+- Base de datos (Supabase/PostgreSQL)
 - Sistema de autenticación (para panel admin)
 - Google Analytics / herramientas de tracking
 - Componentes UI (botones, modales, toggles)
+- Svelte 5, SvelteKit
+- Vitest, @testing-library/svelte
 
 ## 14. Riesgos y Mitigaciones
 

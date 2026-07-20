@@ -186,62 +186,76 @@ const PLAN_CONFIGS: Record<string, PlanConfig> = {
 };
 ```
 
-### 5.3 Componente de Menú
+### 5.3 Componente de Menú (SvelteKit)
 
-```typescript
-// MenuSidebar.tsx
-interface MenuSidebarProps {
-  userPlan: 'starter' | 'commerce' | 'enterprise';
-  currentPath: string;
-}
-
-function MenuSidebar({ userPlan, currentPath }: MenuSidebarProps) {
+```svelte
+<!-- src/lib/components/MenuSidebar.svelte -->
+<script lang="ts">
+  import { PLAN_CONFIGS, isPlanAllowed } from '$lib/config/plan-config';
+  import MenuItem from './MenuItem.svelte';
+  
+  interface Props {
+    userPlan: 'starter' | 'commerce' | 'enterprise';
+    currentPath: string;
+  }
+  
+  let { userPlan, currentPath }: Props = $props();
+  
   const config = PLAN_CONFIGS[userPlan];
-  const availableItems = config.menuItems.filter(item => 
+  
+  $: availableItems = config.menuItems.filter(item => 
     isPlanAllowed(item.requiredPlan, userPlan)
   );
+</script>
 
-  return (
-    <nav>
-      {availableItems.map(item => (
-        <MenuItem 
-          key={item.id}
-          item={item}
-          isActive={currentPath === item.path}
-        />
-      ))}
-    </nav>
-  );
-}
+<nav>
+  {#each availableItems as item}
+    <MenuItem {item} isActive={currentPath === item.path} />
+  {/each}
+</nav>
+```
 
-function isPlanAllowed(requiredPlan: string, userPlan: string): boolean {
+```typescript
+// src/lib/config/plan-config.ts
+export function isPlanAllowed(requiredPlan: string, userPlan: string): boolean {
   const planOrder = ['starter', 'commerce', 'enterprise'];
   return planOrder.indexOf(userPlan) >= planOrder.indexOf(requiredPlan);
 }
 ```
 
-### 5.4 Indicadores de Features Bloqueadas
+### 5.4 Indicadores de Features Bloqueadas (SvelteKit)
 
 Para guiar al usuario hacia upgrades, mostrar features de planes superiores con indicador visual:
 
-```typescript
-interface LockedFeature {
-  label: string;
-  icon: string;
-  requiredPlan: string;
-  upgradePath: string;
-}
+```svelte
+<!-- src/lib/components/LockedFeatureBadge.svelte -->
+<script lang="ts">
+  import { navigate } from '$app/navigation';
+  
+  interface Props {
+    feature: {
+      label: string;
+      icon: string;
+      requiredPlan: string;
+      upgradePath: string;
+    };
+  }
+  
+  let { feature }: Props = $props();
+  
+  function handleUpgrade() {
+    navigate(feature.upgradePath);
+  }
+</script>
 
-function LockedFeatureBadge({ feature }: { feature: LockedFeature }) {
-  return (
-    <div class="opacity-50 cursor-pointer hover:opacity-100 transition-opacity"
-         onclick={() => navigateToUpgrade(feature.requiredPlan)}>
-      <Icon name={feature.icon} />
-      <span>{feature.label}</span>
-      <Badge type="locked">🔒 {feature.requiredPlan}</Badge>
-    </div>
-  );
-}
+<div 
+  class="opacity-50 cursor-pointer hover:opacity-100 transition-opacity"
+  on:click={handleUpgrade}
+>
+  <Icon name={feature.icon} />
+  <span>{feature.label}</span>
+  <Badge type="locked">🔒 {feature.requiredPlan}</Badge>
+</div>
 ```
 
 ## 6. Flujo de Usuario
