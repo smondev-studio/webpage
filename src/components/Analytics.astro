@@ -1,7 +1,14 @@
 ---
 const GA_ID = import.meta.env.PUBLIC_GA_ID;
+const GSC_VERIFICATION = import.meta.env.PUBLIC_GSC_VERIFICATION;
 ---
 
+<!-- Google Search Console Verification -->
+{GSC_VERIFICATION && (
+  <meta name="google-site-verification" content={GSC_VERIFICATION} />
+)}
+
+<!-- Google Analytics -->
 {GA_ID && (
   <script is:inline>
     window.dataLayer = window.dataLayer || [];

@@ -5,12 +5,14 @@ interface Props {
 }
 
 const {
-  title = 'SmonDev Studio — Unleashing Web Excellence',
-  description = 'Plataforma de e-commerce multi-tenant para tu negocio. Tienda online profesional, pagos integrados y gestión completa.',
+  title = 'SmonDev Studio — Desarrollo de Tiendas Online Profesionales',
+  description = 'Plataforma de e-commerce multi-tenant para tu negocio. Tienda online profesional, pagos con Mercado Pago, catálogo y gestión completa. Desarrollo web en Argentina.',
 } = Astro.props;
 
 import '../styles/global.css';
 import Analytics from '../components/Analytics.astro';
+
+const SITE_URL = 'https://smondevstudio.com';
 ---
 
 <!doctype html>
@@ -19,6 +21,10 @@ import Analytics from '../components/Analytics.astro';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="keywords" content="tiendas online, e-commerce, desarrollo web, Argentina, Mercado Pago, plataformas de venta, tiendas virtuales, SmonDev Studio" />
+    <meta name="author" content="SmonDev Studio" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -38,21 +44,54 @@ import Analytics from '../components/Analytics.astro';
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://smondevstudio.com/" />
+    <meta property="og:url" content={SITE_URL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://smondevstudio.com/images/og-image.png" />
+    <meta property="og:image" content={`${SITE_URL}/images/og-image.png`} />
     <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content="SmonDev Studio" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://smondevstudio.com/" />
+    <meta property="twitter:url" content={SITE_URL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content="https://smondevstudio.com/images/og-image.png" />
+    <meta property="twitter:image" content={`${SITE_URL}/images/og-image.png`} />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://smondevstudio.com/" />
+    <link rel="canonical" href={SITE_URL} />
+
+    <!-- Structured Data - Organization -->
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "SmonDev Studio",
+        "url": SITE_URL,
+        "logo": `${SITE_URL}/images/logo.png`,
+        "description": "Desarrollo de plataformas e-commerce a medida para negocios en Argentina",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "AR"
+        },
+        "sameAs": []
+      }
+    </script>
+
+    <!-- Structured Data - WebSite -->
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "SmonDev Studio",
+        "url": SITE_URL,
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": `${SITE_URL}/#contact`,
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
 
     <!-- Analytics -->
     <Analytics />

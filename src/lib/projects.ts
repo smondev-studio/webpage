@@ -4,6 +4,7 @@ export interface Store {
   url: string;
   image: string;
   description?: string;
+  category?: string;
 }
 
 const API_URL = import.meta.env.PUBLIC_API_URL;
@@ -16,6 +17,9 @@ interface BackendStore {
   logo: string | null;
   heroImage: string | null;
   description: string | null;
+  category?: string | null;
+  rubro?: string | null;
+  industry?: string | null;
 }
 
 function mapStore(s: BackendStore): Store {
@@ -25,6 +29,7 @@ function mapStore(s: BackendStore): Store {
     url: s.url,
     image: s.logo || s.heroImage || '/images/hero-light.png',
     description: s.description || undefined,
+    category: s.category || s.rubro || s.industry || undefined,
   };
 }
 

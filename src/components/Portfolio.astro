@@ -39,6 +39,11 @@ const stores = await getStores();
               </div>
               <h3 class="text-xl font-black mb-2 group-hover:text-orange-500 transition-colors"
                 style="color: var(--text-primary);">{store.name}</h3>
+              {store.category && (
+                <div class="inline-flex items-center gap-1.5 bg-violet-500/15 border border-violet-500/30 text-violet-400 text-xs font-medium px-2.5 py-1 rounded-full mb-3">
+                  <span class="text-violet-400">{store.category}</span>
+                </div>
+              )}
               {store.description && (
                 <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
                   {store.description}
