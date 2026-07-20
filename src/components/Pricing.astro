@@ -32,6 +32,7 @@ const tiers = [
     setup: '50.000',
     description: 'Ideal para comercios con facturación media, integraciones de ventas',
     productLimit: 'Hasta 1.000 productos',
+    comingSoon: true,
     features: [
       'Todo lo de Starter',
       'Importación masiva CSV/Excel',
@@ -91,13 +92,13 @@ const tiers = [
             tier.popular 
               ? 'border-orange-500/50 shadow-xl shadow-orange-500/20 scale-105 z-10' 
               : 'border overflow-hidden'
-          }`}
+          } ${tier.comingSoon ? 'opacity-75' : ''}`}
           style={`background: linear-gradient(135deg, var(--bg-card) 0%, ${tier.popular ? 'rgba(249,115,22,0.06)' : 'rgba(139,92,246,0.04)'} 100%); border-color: ${tier.popular ? 'var(--border-hover)' : 'var(--border)'};`}
         >
           {tier.popular && (
             <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span class="bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">
-                Más Popular
+              <span class={`text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide ${tier.comingSoon ? 'bg-gray-500' : 'bg-orange-500'}`}>
+                {tier.comingSoon ? 'Próximamente' : 'Más Popular'}
               </span>
             </div>
           )}
@@ -132,17 +133,26 @@ const tiers = [
             ))}
           </ul>
 
-          <a
-            href="#contact"
-            class={`block w-full text-center font-bold py-3.5 rounded-xl transition-all transform hover:scale-105 ${
-              tier.popular
-                ? 'bg-orange-500 hover:bg-orange-400 text-white shadow-lg shadow-orange-500/30'
-                : 'border hover:border-orange-500/40'
-            }`}
-            style="border-color: var(--border); color: ${tier.popular ? 'white' : 'var(--text-muted)'};"
-          >
-            {tier.popular ? 'Comenzar ahora' : 'Consultar'}
-          </a>
+          {tier.comingSoon ? (
+            <button
+              disabled
+              class="block w-full text-center font-bold py-3.5 rounded-xl bg-gray-500 cursor-not-allowed opacity-60 text-white"
+            >
+              Próximamente
+            </button>
+          ) : (
+            <a
+              href="#contact"
+              class={`block w-full text-center font-bold py-3.5 rounded-xl transition-all transform hover:scale-105 ${
+                tier.popular
+                  ? 'bg-orange-500 hover:bg-orange-400 text-white shadow-lg shadow-orange-500/30'
+                  : 'border hover:border-orange-500/40'
+              }`}
+              style="border-color: var(--border); color: ${tier.popular ? 'white' : 'var(--text-muted)'};"
+            >
+              {tier.popular ? 'Comenzar ahora' : 'Consultar'}
+            </a>
+          )}
         </div>
       ))}
     </div>
