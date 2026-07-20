@@ -1,19 +1,20 @@
 ---
 ---
 
-<section id="contact" class="py-24 transition-colors duration-300" style="background-color: var(--bg-primary);">
-  <div class="max-w-2xl mx-auto px-6">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-black mb-4" style="color: var(--text-primary);">¿Listo para empezar?</h2>
-      <p class="text-lg" style="color: var(--text-muted);">Contame sobre tu proyecto y te respondo en menos de 24 horas.</p>
+<section id="contact" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-primary);">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-violet-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-8 sm:mb-12">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4" style="color: var(--text-primary);">¿Listo para empezar?</h2>
+      <p class="text-base sm:text-lg" style="color: var(--text-muted);">Contame sobre tu proyecto y te respondo en menos de 24 horas.</p>
     </div>
 
     <form
       id="contact-form"
-      class="rounded-3xl p-8 flex flex-col gap-5 border transition-colors"
-      style="background-color: var(--bg-card); border-color: var(--border);"
+      class="rounded-3xl p-6 sm:p-8 flex flex-col gap-4 sm:gap-5 border transition-colors backdrop-blur-sm relative overflow-hidden"
+      style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(139,92,246,0.04) 100%); border-color: var(--border);"
     >
-      <div class="grid sm:grid-cols-2 gap-5">
+      <div class="grid sm:grid-cols-2 gap-4 sm:gap-5">
         <div>
           <label class="text-sm font-medium block mb-2" style="color: var(--text-muted);">Nombre *</label>
           <input type="text" name="name" required placeholder="Tu nombre"

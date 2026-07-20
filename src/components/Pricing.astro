@@ -66,26 +66,28 @@ const tiers = [
 ];
 ---
 
-<section id="pricing" class="py-24 transition-colors duration-300" style="background-color: var(--bg-secondary);">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-black mb-4 transition-colors" style="color: var(--text-primary);">
+<section id="pricing" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-secondary);">
+  <div class="absolute top-10 left-10 w-80 h-80 bg-fuchsia-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="absolute bottom-20 right-0 w-96 h-96 bg-violet-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 transition-colors" style="color: var(--text-primary);">
         Planes para cada etapa de tu negocio
       </h2>
-      <p class="text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
+      <p class="text-base sm:text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
         Precios en pesos argentinos. Setup único + mensual recurrente. Sin contratos forzados, mínimo recomendado 3 meses.
       </p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
       {tiers.map((tier) => (
         <div
-          class={`rounded-3xl p-8 border transition-all relative ${
+          class={`rounded-3xl p-8 border transition-all relative backdrop-blur-sm ${
             tier.popular 
-              ? 'border-orange-500/50 shadow-xl shadow-orange-500/10 scale-105 z-10' 
-              : 'border'
+              ? 'border-orange-500/50 shadow-xl shadow-orange-500/20 scale-105 z-10' 
+              : 'border overflow-hidden'
           }`}
-          style="background-color: var(--bg-card); border-color: ${tier.popular ? 'var(--border-hover)' : 'var(--border)'};"
+          style={`background: linear-gradient(135deg, var(--bg-card) 0%, ${tier.popular ? 'rgba(249,115,22,0.06)' : 'rgba(139,92,246,0.04)'} 100%); border-color: ${tier.popular ? 'var(--border-hover)' : 'var(--border)'};`}
         >
           {tier.popular && (
             <div class="absolute -top-4 left-1/2 -translate-x-1/2">

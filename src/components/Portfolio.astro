@@ -4,31 +4,37 @@ import { getStores } from '../lib/projects';
 const stores = await getStores();
 ---
 
-<section id="portfolio" class="py-24 transition-colors duration-300" style="background-color: var(--bg-secondary);">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-black mb-4" style="color: var(--text-primary);">
+<section id="clientes" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-secondary);">
+  <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-0 left-10 w-80 h-80 bg-fuchsia-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4" style="color: var(--text-primary);">
         Tiendas de nuestros clientes
       </h2>
-      <p class="text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
+      <p class="text-base sm:text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
         Proyectos desarrollados sobre la misma plataforma, cada uno con su identidad propia.
       </p>
     </div>
 
     {stores.length > 0 ? (
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {stores.map((store) => (
           <a href={store.url} target="_blank" rel="noopener noreferrer"
-            class="rounded-3xl overflow-hidden border transition-all hover:border-orange-500/40 group block"
-            style="background-color: var(--bg-card); border-color: var(--border);">
+            class="rounded-3xl overflow-hidden border transition-all duration-300 hover:border-orange-500/40 group block backdrop-blur-sm relative"
+            style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(139,92,246,0.04) 100%); border-color: var(--border);">
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style="background: radial-gradient(circle at 50% 0%, rgba(249,115,22,0.08) 0%, transparent 60%);">
+            </div>
+            <div class="relative z-10">
             <div class="relative h-48 overflow-hidden"
               style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);">
               <img src={store.image} alt={store.name} loading="lazy"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             </div>
             <div class="p-6">
-              <div class="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 text-green-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+              <div class="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
                 En producción
               </div>
               <h3 class="text-xl font-black mb-2 group-hover:text-orange-500 transition-colors"
@@ -39,16 +45,17 @@ const stores = await getStores();
                 </p>
               )}
             </div>
+            </div>
           </a>
         ))}
       </div>
     ) : (
-      <div class="rounded-3xl overflow-hidden border transition-colors"
-        style="background-color: var(--bg-card); border-color: var(--border);">
+      <div class="rounded-3xl overflow-hidden border transition-colors backdrop-blur-sm"
+        style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(139,92,246,0.04) 100%); border-color: var(--border);">
         <div class="grid md:grid-cols-2 gap-0">
           <div class="p-10 flex flex-col justify-center">
-            <div class="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 text-green-600 text-xs font-semibold px-3 py-1 rounded-full mb-6 w-fit">
-              <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+            <div class="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full mb-6 w-fit">
+              <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
               En producción
             </div>
             <h3 class="text-2xl font-black mb-3" style="color: var(--text-primary);">Quina</h3>

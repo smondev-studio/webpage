@@ -9,52 +9,68 @@ const steps = [
     number: '01', 
     title: 'Me contás tu negocio', 
     description: 'Hablamos sobre tu rubro, productos, necesidades y cómo querés que se vea tu tienda.',
-    Icon: Zap
+    Icon: Zap,
+    accent: 'violet'
   },
   { 
     number: '02', 
     title: 'Diseño y desarrollo', 
     description: 'Construyo tu tienda personalizada con tu marca, colores y catálogo de productos.',
-    Icon: Code
+    Icon: Code,
+    accent: 'cyan'
   },
   { 
     number: '03', 
     title: 'Integración de pagos', 
     description: 'Conecto tu cuenta de Mercado Pago para recibir pagos directamente en tu cuenta.',
-    Icon: CreditCard
+    Icon: CreditCard,
+    accent: 'fuchsia'
   },
   { 
     number: '04', 
     title: 'Lanzamiento y soporte', 
     description: 'Tu tienda sale al aire en tu dominio y te acompaño en el proceso de adaptación.',
-    Icon: Rocket
+    Icon: Rocket,
+    accent: 'emerald'
   },
 ];
+
+const accentColors: Record<string, string> = {
+  violet: 'rgba(139,92,246,',
+  cyan: 'rgba(6,182,212,',
+  fuchsia: 'rgba(217,70,239,',
+  emerald: 'rgba(16,185,129,',
+  orange: 'rgba(249,115,22,',
+};
 ---
 
-<section id="how-it-works" class="py-24 transition-colors duration-300" style="background-color: var(--bg-primary);">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-black mb-4" style="color: var(--text-primary);">¿Cómo funciona?</h2>
-      <p class="text-lg" style="color: var(--text-muted);">Del primer contacto al lanzamiento en 4 pasos simples.</p>
+<section id="how-it-works" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-primary);">
+  <div class="absolute top-0 right-0 w-96 h-96 bg-violet-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4" style="color: var(--text-primary);">¿Cómo funciona?</h2>
+      <p class="text-base sm:text-lg" style="color: var(--text-muted);">Del primer contacto al lanzamiento en 4 pasos simples.</p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {steps.map((step, i) => (
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+      {steps.map((step, i) => {
+        const a = accentColors[step.accent];
+        return (
         <div class="relative">
           {i < steps.length - 1 && (
             <div class="hidden lg:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-orange-500/40 to-transparent z-0"></div>
           )}
-          <div class="relative z-10">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 border border-orange-500/40 transition-colors group-hover:bg-orange-500/20"
-              style="background-color: rgba(249,115,22,0.15);">
-              <step.Icon class="w-8 h-8 text-orange-500" />
+          <div class="relative z-10 group">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 border transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+              style={`background: ${a}0.15); border-color: ${a}0.3); box-shadow: 0 0 20px ${a}0.1);`}>
+              <step.Icon class="w-8 h-8" style={`color: ${a}1);`} />
             </div>
             <h3 class="font-bold text-lg mb-2" style="color: var(--text-primary);">{step.title}</h3>
             <p class="text-sm leading-relaxed" style="color: var(--text-muted);">{step.description}</p>
           </div>
         </div>
-      ))}
+      )})}
     </div>
 
     <div class="mt-20 text-center">
