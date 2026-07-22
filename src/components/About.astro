@@ -1,0 +1,100 @@
+---
+import MapPin from '@lucide/astro/icons/map-pin';
+import Globe from '@lucide/astro/icons/globe';
+---
+
+<section id="about" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-primary);">
+  <div class="absolute top-10 right-10 w-96 h-96 bg-orange-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-0 left-1/3 w-80 h-80 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <!-- Photo -->
+      <div class="relative flex justify-center md:justify-end">
+        <div class="relative w-72 sm:w-80">
+          <div class="absolute -inset-4 rounded-3xl opacity-30 blur-xl"
+            style="background: linear-gradient(135deg, rgba(249,115,22,0.3), rgba(139,92,246,0.3));">
+          </div>
+          <div class="relative rounded-3xl overflow-hidden border-2 transition-colors"
+            style="border-color: var(--border); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(249,115,22,0.06) 100%);">
+            <img
+              id="about-img"
+              src="/images/hero-dark.png"
+              alt="SmonDev Studio"
+              class="w-full h-auto object-contain"
+            />
+          </div>
+          <!-- Location badge -->
+          <div class="absolute -bottom-4 -right-4 rounded-2xl px-5 py-3 border backdrop-blur-md shadow-lg transition-colors"
+            style="background-color: var(--bg-card); border-color: var(--border);">
+            <div class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary);">
+              <MapPin class="w-4 h-4 text-orange-500" />
+              Cipolletti, Río Negro
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div>
+        <div class="inline-flex items-center gap-2 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
+          <Globe class="w-3.5 h-3.5" />
+          De Argentina al mundo
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-6 transition-colors" style="color: var(--text-primary);">
+          Detrás de <span class="text-orange-500">SmonDev Studio</span>
+        </h2>
+
+        <div class="space-y-4 text-base leading-relaxed" style="color: var(--text-muted);">
+          <p>
+            SmonDev Studio es una startup de desarrollo web ubicada en 
+            Cipolletti, Río Negro, Argentina. Creamos plataformas e-commerce 
+            para negocios que quieren vender online sin depender de soluciones genéricas.
+          </p>
+          <p>
+            Nuestro sistema se adapta a la identidad de tu marca. Sin partir de cero: 
+            elegís colores, logo, banners y contenido desde un panel de administración 
+            pensado para que cualquiera pueda usarlo. Nos encargamos de la 
+            integración de pagos, dominio y puesta en producción.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3 mt-8">
+          {[
+            { label: 'Cipolletti, RN', accent: 'orange' },
+            { label: 'Argentina', accent: 'violet' },
+            { label: 'Latinoamérica', accent: 'cyan' },
+          ].map(({ label, accent }) => {
+            const a = accent === 'orange' ? 'rgba(249,115,22,' : accent === 'violet' ? 'rgba(139,92,246,' : 'rgba(6,182,212,';
+            return (
+              <span
+                class="text-sm px-4 py-1.5 rounded-full font-medium border transition-colors hover:scale-105"
+                style={`background: ${a}0.15); border-color: ${a}0.3); color: var(--text-muted);`}
+              >
+                {label}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Sync About image with theme (same logic as Navbar)
+  function syncAboutImage() {
+    const html = document.documentElement;
+    const aboutImg = document.getElementById('about-img') as HTMLImageElement | null;
+    if (!aboutImg) return;
+    const isLight = html.classList.contains('light');
+    aboutImg.src = isLight ? '/images/hero-light.png' : '/images/hero-dark.png';
+  }
+
+  // Run on load
+  syncAboutImage();
+
+  // Watch for theme changes (the Navbar script toggles the class)
+  const observer = new MutationObserver(() => syncAboutImage());
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+</script>

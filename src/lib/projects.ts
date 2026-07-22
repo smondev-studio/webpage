@@ -43,7 +43,7 @@ export async function getStores(): Promise<Store[]> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-    const response = await fetch(`${API_URL}/stores/public`, {
+    const response = await fetch(`${API_URL}/api/stores/public`, {
       signal: controller.signal,
     });
     clearTimeout(timer);

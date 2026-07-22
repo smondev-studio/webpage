@@ -1,6 +1,8 @@
 ---
+import MapPin from '@lucide/astro/icons/map-pin';
 const currentYear = new Date().getFullYear();
 const links = [
+  { href: '#about', label: 'Sobre mí' },
   { href: '#features', label: 'Características' },
   { href: '#how-it-works', label: 'Cómo funciona' },
   { href: '#clientes', label: 'Clientes' },
@@ -38,7 +40,10 @@ const links = [
       <div>
         <h4 class="text-sm font-semibold uppercase tracking-widest mb-4" style="color: var(--text-faint);">Contacto</h4>
         <ul class="flex flex-col gap-2 text-sm" style="color: var(--text-muted);">
-          <li>Argentina</li>
+          <li class="flex items-center gap-1.5">
+            <MapPin class="w-3.5 h-3.5 text-orange-500" />
+            Cipolletti, Río Negro, Argentina
+          </li>
           <li>
             <a href="#contact" class="hover:text-orange-500 transition-colors">
               Formulario de contacto →
@@ -52,7 +57,7 @@ const links = [
     <div class="pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-sm"
       style="border-color: var(--border); color: var(--text-faint);">
       <span>© {currentYear} SmonDev Studio. Todos los derechos reservados.</span>
-      <span>Desarrollo web profesional · Argentina</span>
+      <span>Desarrollo web desde Argentina al mundo</span>
     </div>
   </div>
 </footer>
