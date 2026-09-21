@@ -9,7 +9,9 @@ export default [
   ...astroPlugin.configs.recommended,
   prettierConfig,
   {
-    ignores: ['dist/', '.astro/', 'node_modules/'],
+    // .claude/.github/.opencode: assets vendorizados de skills de agentes de
+    // IA (ej. impeccable) -- no es código propio, no debe lintearse.
+    ignores: ['dist/', '.astro/', 'node_modules/', '.claude/', '.github/', '.opencode/'],
   },
   {
     rules: {
