@@ -1,53 +1,113 @@
 ---
 ---
 
-<section id="contact" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-primary);">
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-violet-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+<section
+  id="contact"
+  class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden"
+  style="background-color: var(--bg-primary);"
+>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-orange-500/[0.04] rounded-full blur-[150px] pointer-events-none"></div>
   <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-8 sm:mb-12">
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4" style="color: var(--text-primary);">¿Listo para empezar?</h2>
-      <p class="text-base sm:text-lg" style="color: var(--text-muted);">Contame sobre tu proyecto y te respondo en menos de 24 horas.</p>
+      <h2
+        class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4"
+        style="color: var(--text-primary);"
+      >
+        ¿Listo para empezar?
+      </h2>
+      <p class="text-base sm:text-lg" style="color: var(--text-muted);">
+        Contame sobre tu proyecto y te respondo en menos de 24 horas.
+      </p>
     </div>
 
     <form
       id="contact-form"
       class="rounded-3xl p-6 sm:p-8 flex flex-col gap-4 sm:gap-5 border transition-colors backdrop-blur-sm relative overflow-hidden"
-      style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(139,92,246,0.04) 100%); border-color: var(--border);"
+      style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(249,115,22,0.04) 100%); border-color: var(--border);"
     >
       <div class="grid sm:grid-cols-2 gap-4 sm:gap-5">
         <div>
-          <label class="text-sm font-medium block mb-2" style="color: var(--text-muted);">Nombre *</label>
-          <input type="text" name="name" required placeholder="Tu nombre"
+          <label
+            class="text-sm font-medium block mb-2"
+            style="color: var(--text-muted);"
+          >
+            Nombre *
+          </label>
+          <input
+            type="text"
+            name="name"
+            required
+            placeholder="Tu nombre"
             class="w-full rounded-xl px-4 py-3 outline-none transition-colors border"
-            style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);" />
+            style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"
+          />
         </div>
         <div>
-          <label class="text-sm font-medium block mb-2" style="color: var(--text-muted);">Email *</label>
-          <input type="email" name="email" required placeholder="tu@email.com"
+          <label
+            class="text-sm font-medium block mb-2"
+            style="color: var(--text-muted);"
+          >
+            Email *
+          </label>
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="tu@email.com"
             class="w-full rounded-xl px-4 py-3 outline-none transition-colors border"
-            style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);" />
-          <p id="email-error" class="hidden text-xs text-red-400 mt-1">Ingresá un email válido.</p>
+            style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"
+          />
+          <p id="email-error" class="hidden text-xs text-red-400 mt-1">
+            Ingresá un email válido.
+          </p>
         </div>
       </div>
 
       <div>
-        <label class="text-sm font-medium block mb-2" style="color: var(--text-muted);">¿A qué se dedica tu negocio?</label>
-        <input type="text" name="business" placeholder="Ej: Ropa, electrónica, artesanías..."
+        <label
+          class="text-sm font-medium block mb-2"
+          style="color: var(--text-muted);"
+        >
+          ¿A qué se dedica tu negocio?
+        </label>
+        <input
+          type="text"
+          name="business"
+          placeholder="Ej: Ropa, electrónica, artesanías..."
           class="w-full rounded-xl px-4 py-3 outline-none transition-colors border"
-          style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);" />
+          style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"
+        />
       </div>
 
       <div>
-        <label class="text-sm font-medium block mb-2" style="color: var(--text-muted);">Contame más *</label>
-        <textarea name="message" rows="4" required placeholder="¿Qué necesitás? ¿Tenés alguna tienda actualmente?"
+        <label
+          class="text-sm font-medium block mb-2"
+          style="color: var(--text-muted);"
+        >
+          Contame más *
+        </label>
+        <textarea
+          name="message"
+          rows="4"
+          required
+          placeholder="¿Qué necesitás? ¿Tenés alguna tienda actualmente?"
           class="w-full rounded-xl px-4 py-3 outline-none transition-colors resize-none border"
-          style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"></textarea>
+          style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"
+        ></textarea>
       </div>
 
-      <div id="form-error" class="hidden text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-        <span id="error-message">Ocurrió un error al enviar. Intentá de nuevo más tarde.</span>
+      <div
+        id="form-error"
+        class="hidden text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"
+      >
+        <span id="error-message">
+          Ocurrió un error al enviar. Intentá de nuevo más tarde.
+        </span>
       </div>
-      <div id="form-success" class="hidden text-sm text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 text-center">
+      <div
+        id="form-success"
+        class="hidden text-sm text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 text-center"
+      >
         ✅ ¡Mensaje enviado! Te respondo en menos de 24 horas.
       </div>
 
@@ -57,9 +117,26 @@
         class="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-orange-500/30 text-lg disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100 flex items-center justify-center gap-2"
       >
         <span id="btn-text">Enviar mensaje →</span>
-        <svg id="btn-spinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        <svg
+          id="btn-spinner"
+          class="hidden animate-spin h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
         </svg>
       </button>
     </form>
@@ -67,38 +144,46 @@
 </section>
 
 <script>
-  import { collectMetadata, isValidEmail, checkRateLimit, recordSubmission } from '../lib/contact';
+  import {
+    collectMetadata,
+    isValidEmail,
+    checkRateLimit,
+    recordSubmission,
+  } from "../lib/contact";
 
-  const form = document.getElementById('contact-form') as HTMLFormElement;
-  const btn = document.getElementById('submit-btn') as HTMLButtonElement;
-  const btnText = document.getElementById('btn-text')!;
-  const btnSpinner = document.getElementById('btn-spinner')!;
-  const errorBox = document.getElementById('form-error')!;
-  const errorMessage = document.getElementById('error-message')!;
-  const successBox = document.getElementById('form-success')!;
-  const emailError = document.getElementById('email-error')!;
+  const form = document.getElementById("contact-form") as HTMLFormElement;
+  const btn = document.getElementById("submit-btn") as HTMLButtonElement;
+  const btnText = document.getElementById("btn-text")!;
+  const btnSpinner = document.getElementById("btn-spinner")!;
+  const errorBox = document.getElementById("form-error")!;
+  const errorMessage = document.getElementById("error-message")!;
+  const successBox = document.getElementById("form-success")!;
+  const emailError = document.getElementById("email-error")!;
   const emailInput = form.querySelector<HTMLInputElement>('[name="email"]')!;
 
   // Inline email validation on blur
-  emailInput.addEventListener('blur', () => {
+  emailInput.addEventListener("blur", () => {
     if (emailInput.value && !isValidEmail(emailInput.value)) {
-      emailError.classList.remove('hidden');
-      emailInput.style.borderColor = 'rgb(248 113 113)';
+      emailError.classList.remove("hidden");
+      emailInput.style.borderColor = "rgb(248 113 113)";
     } else {
-      emailError.classList.add('hidden');
-      emailInput.style.borderColor = '';
+      emailError.classList.add("hidden");
+      emailInput.style.borderColor = "";
     }
   });
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    errorBox.classList.add('hidden');
-    successBox.classList.add('hidden');
+    errorBox.classList.add("hidden");
+    successBox.classList.add("hidden");
 
-    const raw = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    const raw = Object.fromEntries(new FormData(form)) as Record<
+      string,
+      string
+    >;
 
     if (!isValidEmail(raw.email)) {
-      emailError.classList.remove('hidden');
+      emailError.classList.remove("hidden");
       emailInput.focus();
       return;
     }
@@ -107,13 +192,13 @@
     const rateLimit = checkRateLimit();
     if (!rateLimit.allowed) {
       errorMessage.textContent = `Demasiados intentos. Esperá ${rateLimit.remainingTime} minutos antes de intentar de nuevo.`;
-      errorBox.classList.remove('hidden');
+      errorBox.classList.remove("hidden");
       return;
     }
 
     btn.disabled = true;
-    btnText.textContent = 'Enviando...';
-    btnSpinner.classList.remove('hidden');
+    btnText.textContent = "Enviando...";
+    btnSpinner.classList.remove("hidden");
 
     try {
       const meta = await collectMetadata();
@@ -134,40 +219,43 @@
       const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
       if (!supabaseUrl || !supabaseKey) {
-        errorMessage.textContent = 'Error de configuración del servidor.';
-        errorBox.classList.remove('hidden');
+        errorMessage.textContent = "Error de configuración del servidor.";
+        errorBox.classList.remove("hidden");
         return;
       }
 
-      const supabaseResponse = await fetch(`${supabaseUrl}/rest/v1/contact_requests`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
-          Prefer: 'return=minimal',
+      const supabaseResponse = await fetch(
+        `${supabaseUrl}/rest/v1/contact_requests`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`,
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify({
+            ...sanitizedPayload,
+            created_at: new Date().toISOString(),
+          }),
         },
-        body: JSON.stringify({
-          ...sanitizedPayload,
-          created_at: new Date().toISOString(),
-        }),
-      });
+      );
 
       if (supabaseResponse.ok) {
         form.reset();
-        successBox.classList.remove('hidden');
+        successBox.classList.remove("hidden");
         recordSubmission();
       } else {
-        errorMessage.textContent = 'Error al enviar. Intentá de nuevo.';
-        errorBox.classList.remove('hidden');
+        errorMessage.textContent = "Error al enviar. Intentá de nuevo.";
+        errorBox.classList.remove("hidden");
       }
-    } catch (error) {
-      errorMessage.textContent = 'Error de conexión. Verificá tu internet.';
-      errorBox.classList.remove('hidden');
+    } catch {
+      errorMessage.textContent = "Error de conexión. Verificá tu internet.";
+      errorBox.classList.remove("hidden");
     }
 
     btn.disabled = false;
-    btnText.textContent = 'Enviar mensaje →';
-    btnSpinner.classList.add('hidden');
+    btnText.textContent = "Enviar mensaje →";
+    btnSpinner.classList.add("hidden");
   });
 </script>
