@@ -1,70 +1,72 @@
 ---
-import Check from '@lucide/astro/icons/check';
-import X from '@lucide/astro/icons/x';
+import Check from "@lucide/astro/icons/check";
+import X from "@lucide/astro/icons/x";
 
 const tiers = [
   {
-    name: 'Starter',
-    price: '50.000',
-    setup: '35.000',
-    description: 'Ideal para comercios pequeños que quieren presencia online rápida',
-    productLimit: 'Hasta 100 productos',
+    name: "Starter",
+    price: "50.000",
+    setup: "35.000",
+    description:
+      "Ideal para comercios pequeños que quieren presencia online rápida",
+    productLimit: "Hasta 100 productos",
     features: [
-      'Catálogo básico (productos, variantes, fotos)',
-      'Carga manual de productos (uno por uno)',
-      'Checkout con Mercado Pago',
-      'Subdominio temporal / dominio propio (opcional)',
-      'Panel admin básico: productos, pedidos, clientes',
-      'Soporte por mensaje (respuesta 48h)',
+      "Catálogo básico (productos, variantes, fotos)",
+      "Carga manual de productos (uno por uno)",
+      "Checkout con Mercado Pago",
+      "Subdominio temporal / dominio propio (opcional)",
+      "Panel admin básico: productos, pedidos, clientes",
+      "Soporte por mensaje (respuesta 48h)",
     ],
     excluded: [
-      'Importación masiva CSV/Excel',
-      'Dominio propio configurado',
-      'WhatsApp integrado',
-      'Reportes mensuales',
-      'SEO avanzado',
+      "Importación masiva CSV/Excel",
+      "Dominio propio configurado",
+      "WhatsApp integrado",
+      "Reportes mensuales",
+      "SEO avanzado",
     ],
     popular: false,
   },
   {
-    name: 'Commerce',
-    price: '70.000',
-    setup: '50.000',
-    description: 'Ideal para comercios con facturación media, integraciones de ventas',
-    productLimit: 'Hasta 1.000 productos',
+    name: "Commerce",
+    price: "70.000",
+    setup: "50.000",
+    description:
+      "Ideal para comercios con facturación media, integraciones de ventas",
+    productLimit: "Hasta 1.000 productos",
     features: [
-      'Todo lo de Starter',
-      'Importación masiva CSV/Excel',
-      'Dominio propio y configuración DNS',
-      'WhatsApp integrado (botón + plantillas)',
-      'Métodos de pago adicionales',
-      'Reportes mensuales básicos',
-      'Mejora de SEO y optimización',
-      'SLA de soporte (respuesta <24h)',
-      'Exportación/backup mensual',
+      "Todo lo de Starter",
+      "Importación masiva CSV/Excel",
+      "Dominio propio y configuración DNS",
+      "WhatsApp integrado (botón + plantillas)",
+      "Métodos de pago adicionales",
+      "Reportes mensuales básicos",
+      "Mejora de SEO y optimización",
+      "SLA de soporte (respuesta <24h)",
+      "Exportación/backup mensual",
     ],
     excluded: [
-      'Multi-sucursal',
-      'Analytics avanzado',
-      'Integración con marketplaces',
+      "Multi-sucursal",
+      "Analytics avanzado",
+      "Integración con marketplaces",
     ],
     popular: true,
   },
   {
-    name: 'Enterprise',
-    price: 'Consultar',
-    setup: '',
-    description: 'Ideal para cadenas, multi-sucursal, integración avanzada',
-    productLimit: 'Productos ilimitados',
+    name: "Enterprise",
+    price: "Consultar",
+    setup: "",
+    description: "Ideal para cadenas, multi-sucursal, integración avanzada",
+    productLimit: "Productos ilimitados",
     comingSoon: true,
     features: [
-      'Todo lo de Commerce',
-      'Multi-sucursal / multi-ubicación',
-      'Productos ilimitados',
-      'Analytics avanzado (dashboards, cohortes, funnels)',
-      'Soporte prioritario (teléfono / reunión semanal)',
-      'Integración con marketplaces y redes sociales',
-      'Opciones de white-label',
+      "Todo lo de Commerce",
+      "Multi-sucursal / multi-ubicación",
+      "Productos ilimitados",
+      "Analytics avanzado (dashboards, cohortes, funnels)",
+      "Soporte prioritario (teléfono / reunión semanal)",
+      "Integración con marketplaces y redes sociales",
+      "Opciones de white-label",
     ],
     excluded: [],
     popular: false,
@@ -72,16 +74,27 @@ const tiers = [
 ];
 ---
 
-<section id="pricing" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-secondary);">
-  <div class="absolute top-10 left-10 w-80 h-80 bg-fuchsia-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-  <div class="absolute bottom-20 right-0 w-96 h-96 bg-violet-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+<section
+  id="pricing"
+  class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden"
+  style="background-color: var(--bg-secondary);"
+>
+  <div class="absolute top-10 left-10 w-80 h-80 bg-orange-500/[0.04] rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="absolute bottom-20 right-0 w-96 h-96 bg-orange-500/[0.03] rounded-full blur-[120px] pointer-events-none"></div>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12 sm:mb-16">
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 transition-colors" style="color: var(--text-primary);">
+      <h2
+        class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 transition-colors"
+        style="color: var(--text-primary);"
+      >
         Planes para cada etapa de tu negocio
       </h2>
-      <p class="text-base sm:text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
-        Precios en pesos argentinos. Setup único + mensual recurrente. Sin contratos forzados, mínimo recomendado 3 meses.
+      <p
+        class="text-base sm:text-lg max-w-xl mx-auto"
+        style="color: var(--text-muted);"
+      >
+        Precios en pesos argentinos. Setup único + mensual recurrente. Sin
+        contratos forzados, mínimo recomendado 3 meses.
       </p>
     </div>
 
@@ -89,32 +102,48 @@ const tiers = [
       {tiers.map((tier) => (
         <div
           class={`rounded-3xl p-8 border transition-all relative backdrop-blur-sm ${
-            tier.popular 
-              ? 'border-orange-500/50 shadow-xl shadow-orange-500/20 scale-105 z-10' 
-              : 'border overflow-hidden'
-          } ${tier.comingSoon ? 'opacity-75' : ''}`}
-          style={`background: linear-gradient(135deg, var(--bg-card) 0%, ${tier.popular ? 'rgba(249,115,22,0.06)' : 'rgba(139,92,246,0.04)'} 100%); border-color: ${tier.popular ? 'var(--border-hover)' : 'var(--border)'};`}
+            tier.popular
+              ? "border-orange-500/50 shadow-xl shadow-orange-500/20 scale-105 z-10"
+              : "border overflow-hidden"
+          } ${tier.comingSoon ? "opacity-75" : ""}`}
+          style={`background: linear-gradient(135deg, var(--bg-card) 0%, ${tier.popular ? "rgba(249,115,22,0.06)" : "transparent"} 100%); border-color: ${tier.popular ? "var(--border-hover)" : "var(--border)"};`}
         >
           {tier.popular && (
             <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span class={`text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide ${tier.comingSoon ? 'bg-gray-500' : 'bg-orange-500'}`}>
-                {tier.comingSoon ? 'Próximamente' : 'Más Popular'}
+              <span
+                class={`text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide ${tier.comingSoon ? "bg-gray-500" : "bg-orange-500"}`}
+              >
+                {tier.comingSoon ? "Próximamente" : "Más Popular"}
               </span>
             </div>
           )}
 
           <div class="text-center mb-8">
-            <h3 class="text-2xl font-black mb-2" style="color: var(--text-primary);">{tier.name}</h3>
-            <p class="text-sm mb-4" style="color: var(--text-muted);">{tier.description}</p>
+            <h3
+              class="text-2xl font-black mb-2"
+              style="color: var(--text-primary);"
+            >
+              {tier.name}
+            </h3>
+            <p class="text-sm mb-4" style="color: var(--text-muted);">
+              {tier.description}
+            </p>
             <div class="flex items-baseline justify-center gap-1">
-              <span class="text-4xl md:text-5xl font-black text-orange-500">ARS {tier.price}</span>
-              <span class="text-sm" style="color: var(--text-muted);">/mes</span>
+              <span class="text-4xl md:text-5xl font-black text-orange-500">
+                ARS {tier.price}
+              </span>
+              <span class="text-sm" style="color: var(--text-muted);">
+                /mes
+              </span>
             </div>
             <div class="text-sm mt-1" style="color: var(--text-faint);">
-              {tier.setup ? `Setup único: ARS ${tier.setup}` : ''}
+              {tier.setup ? `Setup único: ARS ${tier.setup}` : ""}
             </div>
-            <div class="mt-4 inline-flex items-center gap-2 bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-3 py-1.5 rounded-full">
-              <span class="text-cyan-400">{tier.productLimit}</span>
+            <div
+              class="mt-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold"
+              style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);"
+            >
+              <span>{tier.productLimit}</span>
             </div>
           </div>
 
@@ -122,13 +151,17 @@ const tiers = [
             {tier.features.map((feature) => (
               <li class="flex items-start gap-3">
                 <Check class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span class="text-sm" style="color: var(--text-muted);">{feature}</span>
+                <span class="text-sm" style="color: var(--text-muted);">
+                  {feature}
+                </span>
               </li>
             ))}
             {tier.excluded.map((feature) => (
               <li class="flex items-start gap-3 opacity-50">
                 <X class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <span class="text-sm" style="color: var(--text-muted);">{feature}</span>
+                <span class="text-sm" style="color: var(--text-muted);">
+                  {feature}
+                </span>
               </li>
             ))}
           </ul>
@@ -145,12 +178,12 @@ const tiers = [
               href="#contact"
               class={`block w-full text-center font-bold py-3.5 rounded-xl transition-all transform hover:scale-105 ${
                 tier.popular
-                  ? 'bg-orange-500 hover:bg-orange-400 text-white shadow-lg shadow-orange-500/30'
-                  : 'border hover:border-orange-500/40'
+                  ? "bg-orange-500 hover:bg-orange-400 text-white shadow-lg shadow-orange-500/30"
+                  : "border hover:border-orange-500/40"
               }`}
               style="border-color: var(--border); color: ${tier.popular ? 'white' : 'var(--text-muted)'};"
             >
-              {tier.popular ? 'Comenzar ahora' : 'Consultar'}
+              {tier.popular ? "Comenzar ahora" : "Consultar"}
             </a>
           )}
         </div>
@@ -159,8 +192,13 @@ const tiers = [
 
     <div class="mt-12 text-center">
       <p class="text-sm" style="color: var(--text-faint);">
-        ¿Necesitas una solución personalizada? 
-        <a href="#contact" class="text-orange-500 hover:text-orange-400 font-semibold ml-1">Hablemos →</a>
+        ¿Necesitas una solución personalizada?
+        <a
+          href="#contact"
+          class="text-orange-500 hover:text-orange-400 font-semibold ml-1"
+        >
+          Hablemos →
+        </a>
       </p>
     </div>
   </div>

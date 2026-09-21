@@ -1,66 +1,126 @@
 ---
-import ShoppingBag from '@lucide/astro/icons/shopping-bag';
-import CreditCard from '@lucide/astro/icons/credit-card';
-import Store from '@lucide/astro/icons/store';
-import PackageOpen from '@lucide/astro/icons/package-open';
-import ShieldCheck from '@lucide/astro/icons/shield-check';
-import Smartphone from '@lucide/astro/icons/smartphone';
-import LayoutDashboard from '@lucide/astro/icons/layout-dashboard';
-import SearchCheck from '@lucide/astro/icons/search-check';
+import ShoppingBag from "@lucide/astro/icons/shopping-bag";
+import CreditCard from "@lucide/astro/icons/credit-card";
+import Store from "@lucide/astro/icons/store";
+import PackageOpen from "@lucide/astro/icons/package-open";
+import ShieldCheck from "@lucide/astro/icons/shield-check";
+import Smartphone from "@lucide/astro/icons/smartphone";
+import LayoutDashboard from "@lucide/astro/icons/layout-dashboard";
+import SearchCheck from "@lucide/astro/icons/search-check";
 
 const features = [
-  { Icon: ShoppingBag,     title: 'Catálogo completo',       description: 'Productos con variantes (talla, color), imágenes múltiples, categorías y stock en tiempo real.', accent: 'violet' },
-  { Icon: CreditCard,      title: 'Mercado Pago integrado',  description: 'Checkout nativo con MP, webhooks automáticos y actualización de órdenes sin intervención manual.', accent: 'cyan' },
-  { Icon: Store,           title: 'Multi-tienda',            description: 'Una plataforma, múltiples tiendas. Cada cliente tiene su subdominio y panel propio.', accent: 'fuchsia' },
-  { Icon: PackageOpen,     title: 'Importación masiva',      description: 'Cargá cientos de productos desde Excel/CSV con detección automática de imágenes.', accent: 'emerald' },
-  { Icon: ShieldCheck,     title: 'Auth con Google',         description: 'Login con Google OAuth2, roles de usuario y sesiones seguras con JWT.', accent: 'orange' },
-  { Icon: Smartphone,      title: 'Responsive',              description: 'Diseño adaptado a mobile, tablet y desktop. Experiencia de compra fluida en cualquier dispositivo.', accent: 'cyan' },
-  { Icon: LayoutDashboard, title: 'Panel de admin',          description: 'Personalizá tu tienda: colores, logo, banners y datos del negocio, sin tocar código.', accent: 'violet' },
-  { Icon: SearchCheck,     title: 'SEO ready',               description: 'Metadatos optimizados, URLs amigables y estructura semántica para posicionar en Google.', accent: 'fuchsia' },
+  {
+    Icon: ShoppingBag,
+    title: "Catálogo completo",
+    description:
+      "Cada producto puede tener variantes de talla y color con su propio stock. Se agota una talla y seguís vendiendo las demás — no hay que sacar todo el producto de la vidriera.",
+  },
+  {
+    Icon: CreditCard,
+    title: "Mercado Pago integrado",
+    description:
+      "El comprador paga con MP y la orden se actualiza sola. No tenés que entrar a revisar a mano si el pago se acreditó.",
+  },
+  {
+    Icon: Store,
+    title: "Multi-tienda",
+    description:
+      "Compartís la plataforma con otros comercios, pero tu tienda tiene su propio subdominio, su propio panel y sus propios datos. Nadie ve lo tuyo.",
+  },
+  {
+    Icon: PackageOpen,
+    title: "Importación masiva",
+    description:
+      "Si ya tenés el catálogo armado en un Excel, lo subís entero de una — no hace falta cargar producto por producto a mano.",
+  },
+  {
+    Icon: ShieldCheck,
+    title: "Login con Google",
+    description:
+      "Tus clientes entran con su cuenta de Google en un click, sin tener que crear ni recordar otra contraseña más.",
+  },
+  {
+    Icon: Smartphone,
+    title: "Se ve bien en el celular",
+    description:
+      "La mayoría de tus clientes va a mirar el catálogo desde el celular, no desde una computadora — la tienda está pensada para eso primero.",
+  },
+  {
+    Icon: LayoutDashboard,
+    title: "Panel de admin",
+    description:
+      "Cambiás el logo, los colores o una foto del banner vos mismo, cuando quieras. No hace falta escribirme por un cambio chico.",
+  },
+  {
+    Icon: SearchCheck,
+    title: "Aparece en Google",
+    description:
+      "Cuando alguien busca el nombre de tu marca, tu tienda aparece con título y descripción propios — no como un catálogo sin nombre.",
+  },
 ];
 
-const accentColors: Record<string, string> = {
-  violet: 'rgba(139,92,246,',
-  cyan: 'rgba(6,182,212,',
-  fuchsia: 'rgba(217,70,239,',
-  emerald: 'rgba(16,185,129,',
-  orange: 'rgba(249,115,22,',
-};
+// Un solo acento (el naranja de marca) para las 8 tarjetas -- antes cada
+// una tenía un color distinto (violeta/cian/fucsia/esmeralda) sin que esa
+// variación significara nada; quedaba "arcoíris" en vez de considerado.
+const accent = "rgba(249,115,22,";
 ---
 
-<section id="features" class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden" style="background-color: var(--bg-secondary);">
+<section
+  id="features"
+  class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden"
+  style="background-color: var(--bg-secondary);"
+>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12 sm:mb-16">
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 transition-colors" style="color: var(--text-primary);">
+      <h2
+        class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 transition-colors"
+        style="color: var(--text-primary);"
+      >
         Todo lo que tu tienda necesita
       </h2>
-      <p class="text-base sm:text-lg max-w-xl mx-auto" style="color: var(--text-muted);">
-        Una plataforma construida con tecnología moderna y pensada para el mercado argentino.
+      <p
+        class="text-base sm:text-lg max-w-xl mx-auto"
+        style="color: var(--text-muted);"
+      >
+        Nada de esto es una promesa a futuro: ya está construido y funcionando.
       </p>
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-      {features.map(({ Icon, title, description, accent }) => {
-        const a = accentColors[accent];
+      {features.map(({ Icon, title, description }) => {
+        const a = accent;
         return (
-        <div
-          class="rounded-2xl p-6 transition-all duration-300 group cursor-default border backdrop-blur-sm relative overflow-hidden"
-          style={`background: linear-gradient(135deg, var(--bg-card) 0%, ${a}0.06) 100%); border-color: var(--border);`}
-        >
-          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-            style={`background: radial-gradient(circle at 50% 0%, ${a}0.12) 0%, transparent 70%);`}>
-          </div>
-          <div class="relative z-10">
-            <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
-              style={`background: ${a}0.15); border-color: ${a}0.3); box-shadow: 0 0 20px ${a}0.1);`}>
-              <Icon class="w-6 h-6" style={`color: ${a}1);`} />
+          <div
+            class="rounded-2xl p-6 transition-all duration-300 group cursor-default border backdrop-blur-sm relative overflow-hidden"
+            style={`background: linear-gradient(135deg, var(--bg-card) 0%, ${a}0.06) 100%); border-color: var(--border);`}
+          >
+            <div
+              class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={`background: radial-gradient(circle at 50% 0%, ${a}0.12) 0%, transparent 70%);`}
+            ></div>
+            <div class="relative z-10">
+              <div
+                class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                style={`background: ${a}0.15); border-color: ${a}0.3); box-shadow: 0 0 20px ${a}0.1);`}
+              >
+                <Icon class="w-6 h-6" style={`color: ${a}1);`} />
+              </div>
+              <h3
+                class="font-bold text-lg mb-2 group-hover:text-orange-500 transition-colors"
+                style="color: var(--text-primary);"
+              >
+                {title}
+              </h3>
+              <p
+                class="text-sm leading-relaxed"
+                style="color: var(--text-muted);"
+              >
+                {description}
+              </p>
             </div>
-            <h3 class="font-bold text-lg mb-2 group-hover:text-orange-500 transition-colors"
-              style="color: var(--text-primary);">{title}</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--text-muted);">{description}</p>
           </div>
-        </div>
-      )})}
+        );
+      })}
     </div>
   </div>
 </section>
