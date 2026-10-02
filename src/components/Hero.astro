@@ -24,17 +24,17 @@
         >
           Tu tienda online,
           <br />
-          <span class="text-orange-500">profesional</span>
-          <br />
-          desde el día uno.
+          <span class="text-orange-500">hecha a medida</span>
+          <br />y lista para vender.
         </h1>
 
         <p
           class="text-base sm:text-lg leading-relaxed mb-8 max-w-md transition-colors duration-300"
           style="color: var(--text-muted);"
         >
-          Desarrollo plataformas de e-commerce completas: catálogo, carrito,
-          pagos con Mercado Pago y panel de administración.
+          Te armo la tienda con tu logo, tus colores y tu catálogo. Mercado Pago
+          ya viene conectado y vos la manejás desde tu propio panel. Nada de
+          plantillas compartidas.
         </p>
 
         <div class="flex flex-wrap gap-4">
@@ -49,63 +49,70 @@
             class="font-semibold px-8 py-3.5 rounded-full transition-all border"
             style="border-color: var(--border); color: var(--text-muted);"
           >
-            Ver características
+            Ver qué incluye
           </a>
         </div>
 
         <!-- Stats -->
-        <div class="flex gap-6 sm:gap-8 mt-10">
+        <div class="flex gap-4 sm:gap-6 mt-10">
           <div>
             <div
-              class="text-2xl sm:text-3xl font-black"
+              class="text-base sm:text-lg font-black whitespace-nowrap"
               style="color: var(--text-primary);"
             >
-              Diseño
+              Tu marca
             </div>
             <div
-              class="text-xs sm:text-sm mt-1"
+              class="text-xs mt-1 whitespace-nowrap"
               style="color: var(--text-faint);"
             >
-              Personalizado
+              no una plantilla
             </div>
           </div>
           <div class="w-px" style="background-color: var(--border);"></div>
           <div>
-            <div class="text-2xl sm:text-3xl font-black text-orange-500">
-              Soporte
+            <div class="text-base sm:text-lg font-black whitespace-nowrap text-orange-500">
+              Mercado Pago
             </div>
             <div
-              class="text-xs sm:text-sm mt-1"
+              class="text-xs mt-1 whitespace-nowrap"
               style="color: var(--text-faint);"
             >
-              Incluido
+              ya conectado
             </div>
           </div>
           <div class="w-px" style="background-color: var(--border);"></div>
           <div>
             <div
-              class="text-2xl sm:text-3xl font-black"
+              class="text-base sm:text-lg font-black whitespace-nowrap"
               style="color: var(--text-primary);"
             >
-              Multi
+              Panel propio
             </div>
             <div
-              class="text-xs sm:text-sm mt-1"
+              class="text-xs mt-1 whitespace-nowrap"
               style="color: var(--text-faint);"
             >
-              Escalable
+              lo manejás vos
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Hero image — swaps on theme toggle -->
+      <!-- Hero image — CSS swaps on theme (sin parpadeo) -->
       <div class="relative flex justify-center items-center order-1 lg:order-2">
         <img
-          id="hero-img"
           src="/images/hero-dark.png"
           alt="SmonDev Studio"
-          class="relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
+          fetchpriority="high"
+          class="theme-img-dark relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
+          style="max-height: 850px;"
+        />
+        <img
+          src="/images/hero-light.png"
+          alt="SmonDev Studio"
+          fetchpriority="high"
+          class="theme-img-light relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
           style="max-height: 850px;"
         />
       </div>

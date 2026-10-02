@@ -72,3 +72,15 @@ body {
     background-color 0.3s ease,
     color 0.3s ease;
 }
+
+/* Imagen que cambia con el tema: ambas versiones en el HTML, CSS elige.
+   La clase .light la pone el script inline del <head> antes del primer paint. */
+.theme-img-light {
+  display: none;
+}
+html.light .theme-img-light {
+  display: block;
+}
+html.light .theme-img-dark {
+  display: none;
+}

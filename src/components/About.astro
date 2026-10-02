@@ -24,10 +24,16 @@ import Globe from "@lucide/astro/icons/globe";
             style="border-color: var(--border); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(249,115,22,0.06) 100%);"
           >
             <img
-              id="about-img"
               src="/images/hero-dark.png"
               alt="SmonDev Studio"
-              class="w-full h-auto object-contain"
+              loading="lazy"
+              class="theme-img-dark w-full h-auto object-contain"
+            />
+            <img
+              src="/images/hero-light.png"
+              alt="SmonDev Studio"
+              loading="lazy"
+              class="theme-img-light w-full h-auto object-contain"
             />
           </div>
           <!-- Location badge -->
@@ -93,26 +99,3 @@ import Globe from "@lucide/astro/icons/globe";
     </div>
   </div>
 </section>
-
-<script>
-  // Sync About image with theme (same logic as Navbar)
-  function syncAboutImage() {
-    const html = document.documentElement;
-    const aboutImg = document.getElementById(
-      "about-img",
-    ) as HTMLImageElement | null;
-    if (!aboutImg) return;
-    const isLight = html.classList.contains("light");
-    aboutImg.src = isLight ? "/images/hero-light.png" : "/images/hero-dark.png";
-  }
-
-  // Run on load
-  syncAboutImage();
-
-  // Watch for theme changes (the Navbar script toggles the class)
-  const observer = new MutationObserver(() => syncAboutImage());
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-</script>
