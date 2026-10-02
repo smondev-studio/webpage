@@ -13,18 +13,19 @@ Este documento describe el diseño del sistema de navegación y menú del panel 
 
 ## 3. Planes y Límites
 
-| Característica | Starter | Commerce | Enterprise |
-|---------------|---------|----------|------------|
-| **Precio mensual** | $50.000 | $70.000 | A consultar |
-| **Límite de productos** | 100 | 1.000 | Ilimitado |
-| **Carga de productos** | Manual (uno por uno) | Manual + CSV/Excel | Manual + CSV/Excel |
-| **Estado** | ✅ Activo | ⏳ Próximamente | ✅ Activo |
+| Característica          | Starter              | Commerce           | Enterprise         |
+| ----------------------- | -------------------- | ------------------ | ------------------ |
+| **Precio mensual**      | $50.000              | $70.000            | A consultar        |
+| **Límite de productos** | 100                  | 1.000              | Ilimitado          |
+| **Carga de productos**  | Manual (uno por uno) | Manual + CSV/Excel | Manual + CSV/Excel |
+| **Estado**              | ✅ Activo            | ✅ Activo          | ⏳ Próximamente    |
 
 ## 4. Estructura del Menú
 
 ### 4.1 Menú Principal (Sidebar)
 
 #### Starter Plan
+
 ```
 📊 Dashboard
  Productos
@@ -40,7 +41,8 @@ Este documento describe el diseño del sistema de navegación y menú del panel 
 👤 Mi cuenta
 ```
 
-#### Commerce Plan (Próximamente)
+#### Commerce Plan
+
 ```
 📊 Dashboard
 📦 Productos
@@ -68,6 +70,7 @@ Este documento describe el diseño del sistema de navegación y menú del panel 
 ```
 
 #### Enterprise Plan
+
 ```
 📊 Dashboard
 📦 Productos
@@ -109,6 +112,7 @@ Este documento describe el diseño del sistema de navegación y menú del panel 
 ### 4.2 Menú Superior (Top Bar)
 
 Común a todos los planes:
+
 ```
 [Logo]  [Notificaciones]  [Usuario ▼]
                               ├── Mi cuenta
@@ -127,11 +131,11 @@ interface MenuItem {
   label: string;
   icon: string;
   path: string;
-  requiredPlan: 'starter' | 'commerce' | 'enterprise';
+  requiredPlan: "starter" | "commerce" | "enterprise";
   children?: MenuItem[];
   badge?: {
     text: string;
-    type: 'new' | 'beta' | 'locked';
+    type: "new" | "beta" | "locked";
   };
 }
 
@@ -148,39 +152,135 @@ interface PlanConfig {
 ```typescript
 const PLAN_CONFIGS: Record<string, PlanConfig> = {
   starter: {
-    name: 'Starter',
+    name: "Starter",
     maxProducts: 100,
-    features: ['basic_catalog', 'mp_checkout', 'manual_upload'],
+    features: ["basic_catalog", "mp_checkout", "manual_upload"],
     menuItems: [
-      { id: 'dashboard', label: 'Dashboard', icon: 'chart', path: '/dashboard', requiredPlan: 'starter' },
-      { id: 'products', label: 'Productos', icon: 'package', path: '/products', requiredPlan: 'starter' },
-      { id: 'orders', label: 'Pedidos', icon: 'shopping-cart', path: '/orders', requiredPlan: 'starter' },
-      { id: 'customers', label: 'Clientes', icon: 'users', path: '/customers', requiredPlan: 'starter' },
-      { id: 'settings', label: 'Configuración', icon: 'settings', path: '/settings', requiredPlan: 'starter' },
+      {
+        id: "dashboard",
+        label: "Dashboard",
+        icon: "chart",
+        path: "/dashboard",
+        requiredPlan: "starter",
+      },
+      {
+        id: "products",
+        label: "Productos",
+        icon: "package",
+        path: "/products",
+        requiredPlan: "starter",
+      },
+      {
+        id: "orders",
+        label: "Pedidos",
+        icon: "shopping-cart",
+        path: "/orders",
+        requiredPlan: "starter",
+      },
+      {
+        id: "customers",
+        label: "Clientes",
+        icon: "users",
+        path: "/customers",
+        requiredPlan: "starter",
+      },
+      {
+        id: "settings",
+        label: "Configuración",
+        icon: "settings",
+        path: "/settings",
+        requiredPlan: "starter",
+      },
     ],
   },
   commerce: {
-    name: 'Commerce',
+    name: "Commerce",
     maxProducts: 1000,
-    features: ['basic_catalog', 'mp_checkout', 'csv_import', 'whatsapp', 'reports', 'seo'],
+    features: [
+      "basic_catalog",
+      "mp_checkout",
+      "csv_import",
+      "whatsapp",
+      "reports",
+      "seo",
+    ],
     menuItems: [
       // ... todos los de starter +
-      { id: 'bulk-import', label: 'Importar CSV', icon: 'upload', path: '/products/import', requiredPlan: 'commerce' },
-      { id: 'whatsapp', label: 'WhatsApp', icon: 'message-circle', path: '/whatsapp', requiredPlan: 'commerce' },
-      { id: 'reports', label: 'Reportes', icon: 'bar-chart', path: '/reports', requiredPlan: 'commerce' },
-      { id: 'seo', label: 'SEO', icon: 'search', path: '/seo', requiredPlan: 'commerce' },
+      {
+        id: "bulk-import",
+        label: "Importar CSV",
+        icon: "upload",
+        path: "/products/import",
+        requiredPlan: "commerce",
+      },
+      {
+        id: "whatsapp",
+        label: "WhatsApp",
+        icon: "message-circle",
+        path: "/whatsapp",
+        requiredPlan: "commerce",
+      },
+      {
+        id: "reports",
+        label: "Reportes",
+        icon: "bar-chart",
+        path: "/reports",
+        requiredPlan: "commerce",
+      },
+      {
+        id: "seo",
+        label: "SEO",
+        icon: "search",
+        path: "/seo",
+        requiredPlan: "commerce",
+      },
     ],
   },
   enterprise: {
-    name: 'Enterprise',
+    name: "Enterprise",
     maxProducts: -1, // ilimitado
-    features: ['basic_catalog', 'mp_checkout', 'csv_import', 'whatsapp', 'reports', 'seo', 'multi_location', 'analytics', 'marketplaces', 'white_label'],
+    features: [
+      "basic_catalog",
+      "mp_checkout",
+      "csv_import",
+      "whatsapp",
+      "reports",
+      "seo",
+      "multi_location",
+      "analytics",
+      "marketplaces",
+      "white_label",
+    ],
     menuItems: [
       // ... todos los de commerce +
-      { id: 'multi-location', label: 'Multi-sucursal', icon: 'map-pin', path: '/locations', requiredPlan: 'enterprise' },
-      { id: 'analytics', label: 'Analytics', icon: 'trending-up', path: '/analytics', requiredPlan: 'enterprise' },
-      { id: 'marketplaces', label: 'Marketplaces', icon: 'globe', path: '/marketplaces', requiredPlan: 'enterprise' },
-      { id: 'white-label', label: 'White-label', icon: 'palette', path: '/branding', requiredPlan: 'enterprise' },
+      {
+        id: "multi-location",
+        label: "Multi-sucursal",
+        icon: "map-pin",
+        path: "/locations",
+        requiredPlan: "enterprise",
+      },
+      {
+        id: "analytics",
+        label: "Analytics",
+        icon: "trending-up",
+        path: "/analytics",
+        requiredPlan: "enterprise",
+      },
+      {
+        id: "marketplaces",
+        label: "Marketplaces",
+        icon: "globe",
+        path: "/marketplaces",
+        requiredPlan: "enterprise",
+      },
+      {
+        id: "white-label",
+        label: "White-label",
+        icon: "palette",
+        path: "/branding",
+        requiredPlan: "enterprise",
+      },
     ],
   },
 };
@@ -193,17 +293,17 @@ const PLAN_CONFIGS: Record<string, PlanConfig> = {
 <script lang="ts">
   import { PLAN_CONFIGS, isPlanAllowed } from '$lib/config/plan-config';
   import MenuItem from './MenuItem.svelte';
-  
+
   interface Props {
     userPlan: 'starter' | 'commerce' | 'enterprise';
     currentPath: string;
   }
-  
+
   let { userPlan, currentPath }: Props = $props();
-  
+
   const config = PLAN_CONFIGS[userPlan];
-  
-  $: availableItems = config.menuItems.filter(item => 
+
+  $: availableItems = config.menuItems.filter(item =>
     isPlanAllowed(item.requiredPlan, userPlan)
   );
 </script>
@@ -218,7 +318,7 @@ const PLAN_CONFIGS: Record<string, PlanConfig> = {
 ```typescript
 // src/lib/config/plan-config.ts
 export function isPlanAllowed(requiredPlan: string, userPlan: string): boolean {
-  const planOrder = ['starter', 'commerce', 'enterprise'];
+  const planOrder = ["starter", "commerce", "enterprise"];
   return planOrder.indexOf(userPlan) >= planOrder.indexOf(requiredPlan);
 }
 ```
@@ -231,7 +331,7 @@ Para guiar al usuario hacia upgrades, mostrar features de planes superiores con 
 <!-- src/lib/components/LockedFeatureBadge.svelte -->
 <script lang="ts">
   import { navigate } from '$app/navigation';
-  
+
   interface Props {
     feature: {
       label: string;
@@ -240,15 +340,15 @@ Para guiar al usuario hacia upgrades, mostrar features de planes superiores con 
       upgradePath: string;
     };
   }
-  
+
   let { feature }: Props = $props();
-  
+
   function handleUpgrade() {
     navigate(feature.upgradePath);
   }
 </script>
 
-<div 
+<div
   class="opacity-50 cursor-pointer hover:opacity-100 transition-opacity"
   on:click={handleUpgrade}
 >
@@ -287,14 +387,17 @@ Para guiar al usuario hacia upgrades, mostrar features de planes superiores con 
 ## 7. Consideraciones Futuras
 
 ### 7.1 Add-ons
+
 - Permitir compra de módulos adicionales sin cambiar de plan
 - Ej: "Agregar WhatsApp" por $X/mes en plan Starter
 
 ### 7.2 Períodos de prueba
+
 - Trial de 7 días de Commerce para usuarios Starter
 - Acceso temporal a features premium
 
 ### 7.3 Personalización
+
 - Menú configurable por el admin de la tienda
 - Ocultar/mostrar secciones según uso
 
@@ -314,12 +417,12 @@ Para guiar al usuario hacia upgrades, mostrar features de planes superiores con 
 
 ## 10. Timeline Estimado
 
-| Fase | Descripción | Duración |
-|------|-------------|----------|
-| 1 | Estructura base de menú por plan | 1 semana |
-| 2 | Implementación de indicadores visuales | 3 días |
-| 3 | Sistema de límites y notificaciones | 1 semana |
-| 4 | Modales de upgrade y tracking | 4 días |
-| 5 | Testing y ajustes | 3 días |
+| Fase | Descripción                            | Duración |
+| ---- | -------------------------------------- | -------- |
+| 1    | Estructura base de menú por plan       | 1 semana |
+| 2    | Implementación de indicadores visuales | 3 días   |
+| 3    | Sistema de límites y notificaciones    | 1 semana |
+| 4    | Modales de upgrade y tracking          | 4 días   |
+| 5    | Testing y ajustes                      | 3 días   |
 
 **Total estimado: 3-4 semanas**
