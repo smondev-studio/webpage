@@ -1,10 +1,11 @@
 # webpage — smondev-studio landing
 
 Landing/marketing de **SmonDev Studio** (smondevstudio.com), el servicio de
-desarrollo de e-commerce multi-tenant. Sitio estático — **no consume el
-backend** de la plataforma (`../smondev-backend`): el formulario de contacto
-pega directo a Supabase, y `src/lib/projects.ts` usa `PUBLIC_API_URL` (una
-API externa de portfolio, no el backend de smondev).
+desarrollo de e-commerce multi-tenant. Sitio estático que usa solo la API
+**pública** del backend (`../smondev-backend`, vía `PUBLIC_API_URL`):
+`POST /api/contact` (formulario de contacto, guarda el mensaje y avisa por
+email) y `GET /api/stores/public` (tiendas del portfolio). No usa nada
+autenticado ni multi-tenant.
 
 ## Stack
 
@@ -26,8 +27,8 @@ pnpm lint
 ## Estructura
 
 - `src/components/` — Hero, Features, Pricing, etc. (componentes Astro)
-- `src/lib/contact.ts` — form de contacto → Supabase
-- `src/lib/projects.ts` — portfolio dinámico, API externa
+- `src/lib/contact.ts` — form de contacto → `POST {PUBLIC_API_URL}/api/contact` (smondev-backend)
+- `src/lib/projects.ts` — portfolio dinámico (`GET /api/stores/public`)
 - `docs/SDD-*.md` — spec docs: edad/cookies, SEO/accesibilidad, dashboard y
   menú por planes
 - `PRICING_TIERS.md` — planes y modelo de negocio (fuente de verdad de
@@ -37,12 +38,12 @@ pnpm lint
 
 Parte de **smondev-studio**. Repos relacionados, en el mismo nivel (`../`):
 
-- **`../smondev-backend`** — NestJS + Prisma, la API real del SaaS (no la
-  usa este sitio directamente).
+- **`../smondev-backend`** — NestJS + Prisma, la API real del SaaS. Este sitio
+  usa solo sus endpoints públicos (contacto y tiendas).
 - **`../smondev-frontend`** — SvelteKit 5, la app multi-tenant que este
   landing promociona y vende.
 
 Cambios en `PRICING_TIERS.md` deben mantenerse consistentes con los planes
-definidos en el backend (`Store.plan`: `FREE`/`BASIC`/`PRO`) y su UI en el
-frontend. Para tareas que cruzan los 3 repos, usar la skill
+definidos en el backend (`Store.plan`: `STARTER`/`COMMERCE`/`ENTERPRISE`, más
+`FREE` interno) y su UI en el frontend. Para tareas que cruzan los 3 repos, usar la skill
 `/smondev-context`.

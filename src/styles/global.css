@@ -92,6 +92,17 @@ html.light .text-orange-500,
 html.light .text-orange-400 {
   color: var(--orange-text);
 }
+/* Los tonos 400 (verde, esmeralda, rojo) están pensados para fondo oscuro:
+   sobre el fondo claro no llegan a AA. Versiones oscuras solo para modo claro. */
+html.light .text-green-400 {
+  color: #15803d;
+}
+html.light .text-emerald-400 {
+  color: #047857;
+}
+html.light .text-red-400 {
+  color: #b91c1c;
+}
 html.light .hover\:text-orange-500:hover,
 html.light .hover\:text-orange-400:hover,
 html.light .group:hover .group-hover\:text-orange-500 {
