@@ -1,6 +1,6 @@
 ---
 import MapPin from "@lucide/astro/icons/map-pin";
-import Globe from "@lucide/astro/icons/globe";
+import GraduationCap from "@lucide/astro/icons/graduation-cap";
 ---
 
 <section
@@ -55,8 +55,8 @@ import Globe from "@lucide/astro/icons/globe";
       <!-- Text -->
       <div>
         <div class="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-500 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
-          <Globe class="w-3.5 h-3.5" />
-          De Argentina al mundo
+          <GraduationCap class="w-3.5 h-3.5" />
+          Universidad Nacional del Comahue
         </div>
 
         <h2
@@ -71,20 +71,18 @@ import Globe from "@lucide/astro/icons/globe";
           style="color: var(--text-muted);"
         >
           <p>
-            Soy desarrollador y trabajo desde Cipolletti, Río Negro, Argentina.
-            Con SmonDev Studio armo tiendas online a medida para negocios que
-            quieren vender sin depender de soluciones genéricas.
+            Soy desarrollador de software, graduado de la Universidad Nacional
+            del Comahue. Trabajo desde Cipolletti, en la Patagonia argentina.
           </p>
           <p>
-            Tu tienda se adapta a la identidad de tu marca. No partís de cero:
-            elegís colores, logo, banners y contenido desde un panel pensado
-            para que cualquiera pueda usarlo. Yo me encargo de la integración de
-            pagos, el dominio y la puesta en producción.
+            SmonDev Studio es mi estudio: desarrollo software a medida y me
+            ocupo yo mismo de cada proyecto, desde la idea hasta que está
+            funcionando en producción.
           </p>
         </div>
 
         <div class="flex flex-wrap gap-3 mt-8">
-          {["Cipolletti, RN", "Argentina", "Latinoamérica"].map((label) => (
+          {["Desarrollo de software", "Patagonia", "Argentina"].map((label) => (
             <span
               class="text-sm px-4 py-1.5 rounded-full font-medium border transition-colors hover:scale-105"
               style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);"
