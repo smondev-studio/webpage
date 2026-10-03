@@ -274,9 +274,24 @@ html::after {
   }
 }
 
+/* Indicador de scroll: un empujoncito suave hacia abajo, sin rebote. */
+.nudge {
+  animation: nudge 2.4s ease-in-out infinite;
+}
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 6px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   body::after,
   .fade-up,
+  .nudge,
   .float-slow {
     animation: none;
   }

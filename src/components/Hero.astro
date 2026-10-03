@@ -12,7 +12,7 @@
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
     <div class="grid lg:grid-cols-[0.7fr_1.3fr] gap-6 lg:gap-10 items-center">
       <!-- Text -->
-      <div class="order-2 lg:order-1">
+      <div class="order-1">
         <div
           class="fade-up inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-500 text-xs font-semibold px-4 py-1.5 rounded-full mb-6"
           style="animation-delay: 0ms;"
@@ -110,18 +110,18 @@
 
       <!-- Hero image — CSS swaps on theme (sin parpadeo) -->
       <div
-        class="fade-up relative flex justify-center items-center order-1 lg:order-2"
+        class="fade-up relative flex justify-center items-center order-2"
         style="animation-delay: 150ms;"
       >
         <img
-          src="/images/hero-dark.png"
+          src="/images/hero-dark.webp"
           alt="SmonDev Studio"
           fetchpriority="high"
           class="theme-img-dark float-slow relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
           style="max-height: 850px;"
         />
         <img
-          src="/images/hero-light.png"
+          src="/images/hero-light.webp"
           alt="SmonDev Studio"
           fetchpriority="high"
           class="theme-img-light float-slow relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
@@ -133,7 +133,7 @@
 
   <!-- Scroll indicator -->
   <div
-    class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce"
+    class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 nudge"
     style="color: var(--text-faint);"
   >
     <svg
@@ -147,7 +147,7 @@
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="19 9l-7 7-7-7"
+        d="M19 9l-7 7-7-7"
       />
     </svg>
   </div>
