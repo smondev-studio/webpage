@@ -23,3 +23,6 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .env.local
+
+# Metadata de descargas de Windows/WSL: tiene ":" en el nombre, rompe el CI y se publicaría en el sitio
+*:Zone.Identifier
