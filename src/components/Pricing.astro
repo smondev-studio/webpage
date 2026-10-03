@@ -9,6 +9,7 @@ const tiers = [
   {
     name: "Starter",
     price: "50.000",
+    priced: true,
     setup: "35.000",
     description:
       "Para empezar a vender online con un catálogo chico y manejarlo a mano",
@@ -35,6 +36,7 @@ const tiers = [
   {
     name: "Commerce",
     price: "70.000",
+    priced: true,
     setup: "50.000",
     description:
       "Para comercios que venden en serio: más productos y todas las herramientas de venta",
@@ -55,7 +57,8 @@ const tiers = [
   },
   {
     name: "Enterprise",
-    price: "Consultar",
+    price: "A consultar",
+    priced: false,
     setup: "",
     description: "Para cadenas y negocios con varias sucursales",
     productLimit: "Productos ilimitados",
@@ -128,14 +131,21 @@ const tiers = [
             <p class="text-sm mb-4" style="color: var(--text-muted);">
               {tier.description}
             </p>
-            <div class="flex items-baseline justify-center gap-1">
-              <span class="text-4xl md:text-5xl font-black text-orange-500">
-                ARS {tier.price}
-              </span>
-              <span class="text-sm" style="color: var(--text-muted);">
-                /mes
-              </span>
-            </div>
+            {tier.priced ? (
+              <div class="flex items-baseline justify-center gap-1.5">
+                <span class="text-lg font-bold text-orange-500">ARS</span>
+                <span class="text-4xl md:text-5xl font-black text-orange-500 whitespace-nowrap">
+                  {tier.price}
+                </span>
+                <span class="text-sm" style="color: var(--text-muted);">
+                  /mes
+                </span>
+              </div>
+            ) : (
+              <div class="text-3xl md:text-4xl font-black text-orange-500 py-1">
+                {tier.price}
+              </div>
+            )}
             <div class="text-sm mt-1" style="color: var(--text-faint);">
               {tier.setup ? `Setup único: ARS ${tier.setup}` : ""}
             </div>
