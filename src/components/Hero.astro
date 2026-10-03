@@ -12,15 +12,18 @@
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
     <div class="grid lg:grid-cols-[0.7fr_1.3fr] gap-6 lg:gap-10 items-center">
       <!-- Text -->
-      <div class="order-2 lg:order-1">
-        <div class="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 text-orange-500 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
+      <div class="order-1">
+        <div
+          class="fade-up inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-500 text-xs font-semibold px-4 py-1.5 rounded-full mb-6"
+          style="animation-delay: 0ms;"
+        >
           <span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
           Disponible para nuevos proyectos
         </div>
 
         <h1
-          class="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-6 transition-colors duration-300"
-          style="color: var(--text-primary);"
+          class="fade-up text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-6 transition-colors duration-300"
+          style="animation-delay: 90ms; color: var(--text-primary);"
         >
           Tu tienda online,
           <br />
@@ -29,15 +32,18 @@
         </h1>
 
         <p
-          class="text-base sm:text-lg leading-relaxed mb-8 max-w-md transition-colors duration-300"
-          style="color: var(--text-muted);"
+          class="fade-up text-base sm:text-lg leading-relaxed mb-8 max-w-md transition-colors duration-300"
+          style="animation-delay: 180ms; color: var(--text-muted);"
         >
           Te armo la tienda con tu logo, tus colores y tu catálogo. Mercado Pago
           ya viene conectado y vos la manejás desde tu propio panel. Nada de
           plantillas compartidas.
         </p>
 
-        <div class="flex flex-wrap gap-4">
+        <div
+          class="fade-up flex flex-wrap gap-4"
+          style="animation-delay: 270ms;"
+        >
           <a
             href="#contact"
             class="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-3.5 rounded-full transition-all transform hover:scale-105 shadow-lg shadow-orange-500/30"
@@ -54,7 +60,10 @@
         </div>
 
         <!-- Stats -->
-        <div class="flex gap-4 sm:gap-6 mt-10">
+        <div
+          class="fade-up flex gap-4 sm:gap-6 mt-10"
+          style="animation-delay: 360ms;"
+        >
           <div>
             <div
               class="text-base sm:text-lg font-black whitespace-nowrap"
@@ -100,19 +109,22 @@
       </div>
 
       <!-- Hero image — CSS swaps on theme (sin parpadeo) -->
-      <div class="relative flex justify-center items-center order-1 lg:order-2">
+      <div
+        class="fade-up relative flex justify-center items-center order-2"
+        style="animation-delay: 150ms;"
+      >
         <img
-          src="/images/hero-dark.png"
+          src="/images/hero-dark.webp"
           alt="SmonDev Studio"
           fetchpriority="high"
-          class="theme-img-dark relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
+          class="theme-img-dark float-slow relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
           style="max-height: 850px;"
         />
         <img
-          src="/images/hero-light.png"
+          src="/images/hero-light.webp"
           alt="SmonDev Studio"
           fetchpriority="high"
-          class="theme-img-light relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
+          class="theme-img-light float-slow relative z-0 w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
           style="max-height: 850px;"
         />
       </div>
@@ -121,7 +133,7 @@
 
   <!-- Scroll indicator -->
   <div
-    class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce"
+    class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 nudge"
     style="color: var(--text-faint);"
   >
     <svg
@@ -135,7 +147,7 @@
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="19 9l-7 7-7-7"
+        d="M19 9l-7 7-7-7"
       />
     </svg>
   </div>

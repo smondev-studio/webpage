@@ -5,14 +5,14 @@ interface Props {
 }
 
 const {
-  title = 'SmonDev Studio — Desarrollo de Tiendas Online Profesionales',
-  description = 'Plataforma de e-commerce multi-tenant para tu negocio. Tienda online profesional, pagos con Mercado Pago, catálogo y gestión completa. Desarrollo web en Argentina.',
+  title = "SmonDev Studio — Desarrollo de Tiendas Online Profesionales",
+  description = "Plataforma de e-commerce multi-tenant para tu negocio. Tienda online profesional, pagos con Mercado Pago, catálogo y gestión completa. Desarrollo web en Argentina.",
 } = Astro.props;
 
-import '../styles/global.css';
-import Analytics from '../components/Analytics.astro';
+import "../styles/global.css";
+import Analytics from "../components/Analytics.astro";
 
-const SITE_URL = 'https://smondevstudio.com';
+const SITE_URL = "https://smondevstudio.com";
 ---
 
 <!doctype html>
@@ -21,11 +21,14 @@ const SITE_URL = 'https://smondevstudio.com';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="keywords" content="tiendas online, e-commerce, desarrollo web, Argentina, Mercado Pago, plataformas de venta, tiendas virtuales, SmonDev Studio" />
+    <meta
+      name="keywords"
+      content="tiendas online, e-commerce, desarrollo web, Argentina, Mercado Pago, plataformas de venta, tiendas virtuales, SmonDev Studio"
+    />
     <meta name="author" content="SmonDev Studio" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -33,7 +36,7 @@ const SITE_URL = 'https://smondevstudio.com';
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -56,12 +59,16 @@ const SITE_URL = 'https://smondevstudio.com';
     <meta property="twitter:url" content={SITE_URL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={`${SITE_URL}/images/og-image.png`} />
+    <meta
+      property="twitter:image"
+      content={`${SITE_URL}/images/og-image.png`}
+    />
 
     <!-- Canonical URL -->
     <link rel="canonical" href={SITE_URL} />
 
     <!-- Structured Data - Organization -->
+    <!-- prettier-ignore -->
     <script type="application/ld+json" is:inline>
       {
         "@context": "https://schema.org",
@@ -77,8 +84,8 @@ const SITE_URL = 'https://smondevstudio.com';
         "sameAs": []
       }
     </script>
-
     <!-- Structured Data - WebSite -->
+    <!-- prettier-ignore -->
     <script type="application/ld+json" is:inline>
       {
         "@context": "https://schema.org",
@@ -92,23 +99,27 @@ const SITE_URL = 'https://smondevstudio.com';
         }
       }
     </script>
-
     <!-- Analytics -->
     <Analytics />
 
     <!-- Inline script to prevent flash of wrong theme -->
     <script is:inline>
-      (function() {
-        const saved = localStorage.getItem('theme');
+      (function () {
+        const saved = localStorage.getItem("theme");
         if (saved) {
-          if (saved === 'light') document.documentElement.classList.add('light');
-        } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-          document.documentElement.classList.add('light');
+          if (saved === "light")
+            document.documentElement.classList.add("light");
+        } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+          document.documentElement.classList.add("light");
         }
       })();
     </script>
   </head>
   <body>
     <slot />
+
+    <script>
+      import "../scripts/reveal.ts";
+    </script>
   </body>
 </html>

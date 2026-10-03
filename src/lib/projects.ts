@@ -27,7 +27,7 @@ function mapStore(s: BackendStore): Store {
     id: s.id,
     name: s.name,
     url: s.url,
-    image: s.logo || s.heroImage || '/images/hero-light.png',
+    image: s.logo || s.heroImage || "/images/hero-light.webp",
     description: s.description || undefined,
     category: s.category || s.rubro || s.industry || undefined,
   };
@@ -35,7 +35,7 @@ function mapStore(s: BackendStore): Store {
 
 export async function getStores(): Promise<Store[]> {
   if (!API_URL) {
-    console.warn('PUBLIC_API_URL not configured, skipping store fetch');
+    console.warn("PUBLIC_API_URL not configured, skipping store fetch");
     return [];
   }
 
@@ -54,10 +54,13 @@ export async function getStores(): Promise<Store[]> {
     const data: BackendStore[] = await response.json();
     return data.map(mapStore);
   } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') {
+    if (error instanceof Error && error.name === "AbortError") {
       console.warn(`Stores API request timed out after ${FETCH_TIMEOUT_MS}ms`);
     } else {
-      console.warn('Failed to fetch stores, showing static fallback:', (error as Error).message || error);
+      console.warn(
+        "Failed to fetch stores, showing static fallback:",
+        (error as Error).message || error,
+      );
     }
     return [];
   }
