@@ -38,7 +38,7 @@ tenga que armar nada por su cuenta ni depender de una plantilla compartida.
 ## Operating Context
 
 - Landing de una sola página (Astro), sin backend propio salvo el
-  formulario de contacto (hace `POST /api/contact` a smondev-backend, que guarda
+  formulario de contacto (hace `POST /api/landing-contact` (vía el frontend de la plataforma) a smondev-backend, que guarda
   el mensaje y avisa por email).
 - Consume `GET /stores/public` de `smondev-backend` (opcional, con
   fallback) para listar tiendas reales en la sección "Clientes" — ver

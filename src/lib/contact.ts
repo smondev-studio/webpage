@@ -83,7 +83,11 @@ export function collectMetadata(): Pick<
   };
 }
 
-/** Envía el contacto a `POST {apiUrl}/api/contact` (smondev-backend). */
+/**
+ * Envía el contacto a `POST {apiUrl}/api/landing-contact`.
+ * Ojo: NO es /api/contact (ese es el contacto de las tiendas). api.smondevstudio.com
+ * enruta /api/* al frontend de la plataforma, que reenvía esto al backend.
+ */
 export async function submitContact(
   payload: ContactPayload,
   apiUrl: string,
@@ -104,7 +108,7 @@ export async function submitContact(
     };
 
   try {
-    const res = await fetch(`${apiUrl}/api/contact`, {
+    const res = await fetch(`${apiUrl}/api/landing-contact`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

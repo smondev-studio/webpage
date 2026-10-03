@@ -70,12 +70,13 @@ describe("submitContact", () => {
   });
 
   // --- Llamada HTTP ---
-  it("envía POST JSON a {api}/api/contact", async () => {
+  it("envía POST JSON a {api}/api/landing-contact", async () => {
     const mockFetch = vi.fn().mockResolvedValue({ ok: true, status: 201 });
     vi.stubGlobal("fetch", mockFetch);
     await submitContact(validPayload, API);
     const [url, opts] = mockFetch.mock.calls[0];
-    expect(url).toBe(`${API}/api/contact`);
+    expect(url).toBe(`${API}/api/landing-contact`);
+    expect(url).not.toMatch(/\/api\/contact$/); // esa ruta es el contacto de las tiendas
     expect(opts.method).toBe("POST");
     expect(opts.headers).toMatchObject({ "Content-Type": "application/json" });
   });

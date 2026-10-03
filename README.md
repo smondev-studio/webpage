@@ -9,7 +9,7 @@ Landing page para SmonDev Studio, servicio de desarrollo de e-commerce multi-ten
 - **Lenguaje**: TypeScript
 - **Testing**: Vitest
 - **Icons**: Lucide Astro
-- **Contacto**: `POST /api/contact` de smondev-backend (guarda el mensaje y avisa por email)
+- **Contacto**: `POST /api/landing-contact` (smondev-backend) (guarda el mensaje y avisa por email)
 - **Gestor de paquetes**: pnpm
 
 ## 📁 Estructura del Proyecto

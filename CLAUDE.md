@@ -3,7 +3,7 @@
 Landing/marketing de **SmonDev Studio** (smondevstudio.com), el servicio de
 desarrollo de e-commerce multi-tenant. Sitio estático que usa solo la API
 **pública** del backend (`../smondev-backend`, vía `PUBLIC_API_URL`):
-`POST /api/contact` (formulario de contacto, guarda el mensaje y avisa por
+`POST /api/landing-contact` (formulario de contacto, guarda el mensaje y avisa por
 email) y `GET /api/stores/public` (tiendas del portfolio). No usa nada
 autenticado ni multi-tenant.
 
@@ -27,7 +27,7 @@ pnpm lint
 ## Estructura
 
 - `src/components/` — Hero, Features, Pricing, etc. (componentes Astro)
-- `src/lib/contact.ts` — form de contacto → `POST {PUBLIC_API_URL}/api/contact` (smondev-backend)
+- `src/lib/contact.ts` — form de contacto → `POST {PUBLIC_API_URL}/api/landing-contact`
 - `src/lib/projects.ts` — portfolio dinámico (`GET /api/stores/public`)
 - `docs/SDD-*.md` — spec docs: edad/cookies, SEO/accesibilidad, dashboard y
   menú por planes
