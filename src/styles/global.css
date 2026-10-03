@@ -41,7 +41,7 @@ html {
   --border-hover: rgba(249, 115, 22, 0.35);
   --text-primary: #f0f0f9;
   --text-muted: rgba(240, 240, 249, 0.55);
-  --text-faint: rgba(240, 240, 249, 0.25);
+  --text-faint: rgba(240, 240, 249, 0.5);
   --navbar-bg: rgba(10, 10, 19, 0.88);
   --input-bg: rgba(255, 255, 255, 0.06);
   --blue-rgb: 96, 165, 250;
@@ -78,7 +78,7 @@ html.light {
   --border-hover: rgba(249, 115, 22, 0.45);
   --text-primary: #0f1f3d;
   --text-muted: rgba(15, 31, 61, 0.68);
-  --text-faint: rgba(15, 31, 61, 0.4);
+  --text-faint: rgba(15, 31, 61, 0.65);
   --navbar-bg: rgba(238, 244, 255, 0.9);
   --input-bg: rgba(30, 64, 175, 0.05);
   --blue-rgb: 37, 99, 235;
