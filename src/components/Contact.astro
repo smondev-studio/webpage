@@ -101,7 +101,7 @@
         class="hidden text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"
       >
         <span id="error-message">
-          Ocurrió un error al enviar. Intentá de nuevo más tarde.
+          No pude enviar tu mensaje. Probá de nuevo en unos minutos.
         </span>
       </div>
       <div
@@ -219,7 +219,8 @@
       const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
       if (!supabaseUrl || !supabaseKey) {
-        errorMessage.textContent = "Error de configuración del servidor.";
+        errorMessage.textContent =
+          "No pude enviar tu mensaje. Probá de nuevo en unos minutos.";
         errorBox.classList.remove("hidden");
         return;
       }
@@ -246,11 +247,13 @@
         successBox.classList.remove("hidden");
         recordSubmission();
       } else {
-        errorMessage.textContent = "Error al enviar. Intentá de nuevo.";
+        errorMessage.textContent =
+          "No pude enviar tu mensaje. Probá de nuevo en unos minutos.";
         errorBox.classList.remove("hidden");
       }
     } catch {
-      errorMessage.textContent = "Error de conexión. Verificá tu internet.";
+      errorMessage.textContent =
+        "No pude enviar tu mensaje. Probá de nuevo en unos minutos.";
       errorBox.classList.remove("hidden");
     }
 
