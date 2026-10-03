@@ -13,10 +13,10 @@
         class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4"
         style="color: var(--text-primary);"
       >
-        ¿Listo para empezar?
+        Contame sobre tu negocio
       </h2>
       <p class="text-base sm:text-lg" style="color: var(--text-muted);">
-        Contame sobre tu proyecto y te respondo en menos de 24 horas.
+        Contame qué vendés y qué necesitás, y te respondo en menos de 24 horas.
       </p>
     </div>
 
@@ -28,6 +28,7 @@
       <div class="grid sm:grid-cols-2 gap-4 sm:gap-5">
         <div>
           <label
+            for="contact-name"
             class="text-sm font-medium block mb-2"
             style="color: var(--text-muted);"
           >
@@ -35,7 +36,10 @@
           </label>
           <input
             type="text"
+            id="contact-name"
             name="name"
+            autocomplete="name"
+            maxlength="100"
             required
             placeholder="Tu nombre"
             class="w-full rounded-xl px-4 py-3 outline-none transition-colors border"
@@ -44,6 +48,7 @@
         </div>
         <div>
           <label
+            for="contact-email"
             class="text-sm font-medium block mb-2"
             style="color: var(--text-muted);"
           >
@@ -51,13 +56,21 @@
           </label>
           <input
             type="email"
+            id="contact-email"
             name="email"
+            autocomplete="email"
+            maxlength="100"
+            aria-describedby="email-error"
             required
             placeholder="tu@email.com"
             class="w-full rounded-xl px-4 py-3 outline-none transition-colors border"
             style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"
           />
-          <p id="email-error" class="hidden text-xs text-red-400 mt-1">
+          <p
+            id="email-error"
+            role="alert"
+            class="hidden text-xs text-red-400 mt-1"
+          >
             Ingresá un email válido.
           </p>
         </div>
@@ -65,6 +78,7 @@
 
       <div>
         <label
+          for="contact-business"
           class="text-sm font-medium block mb-2"
           style="color: var(--text-muted);"
         >
@@ -72,7 +86,9 @@
         </label>
         <input
           type="text"
+          id="contact-business"
           name="business"
+          maxlength="100"
           placeholder="Ej: Ropa, electrónica, artesanías..."
           class="w-full rounded-xl px-4 py-3 outline-none transition-colors border"
           style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"
@@ -81,23 +97,49 @@
 
       <div>
         <label
+          for="contact-message"
           class="text-sm font-medium block mb-2"
           style="color: var(--text-muted);"
         >
           Contame más *
         </label>
         <textarea
+          id="contact-message"
           name="message"
           rows="4"
+          maxlength="1000"
           required
           placeholder="¿Qué necesitás? ¿Tenés alguna tienda actualmente?"
           class="w-full rounded-xl px-4 py-3 outline-none transition-colors resize-none border"
           style="background-color: var(--input-bg); border-color: var(--border); color: var(--text-primary);"
         ></textarea>
+        <p
+          id="message-count"
+          class="text-xs text-right mt-1"
+          style="color: var(--text-muted);"
+        >
+          0/1000
+        </p>
+      </div>
+
+      <!-- Honeypot anti-spam: invisible para personas; un bot lo completa y el backend descarta el mensaje. -->
+      <div
+        class="absolute -left-[9999px] top-auto w-px h-px overflow-hidden"
+        aria-hidden="true"
+      >
+        <label for="contact-website">No completar este campo</label>
+        <input
+          type="text"
+          id="contact-website"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+        />
       </div>
 
       <div
         id="form-error"
+        role="alert"
         class="hidden text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"
       >
         <span id="error-message">
@@ -106,9 +148,10 @@
       </div>
       <div
         id="form-success"
+        role="status"
         class="hidden text-sm text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 text-center"
       >
-        ✅ ¡Mensaje enviado! Te respondo en menos de 24 horas.
+        ✅ ¡Listo! Recibí tu mensaje y te respondo en menos de 24 horas.
       </div>
 
       <button
@@ -139,6 +182,10 @@
           ></path>
         </svg>
       </button>
+
+      <p class="text-xs text-center" style="color: var(--text-muted);">
+        Uso tu nombre, email y mensaje solo para responderte.
+      </p>
     </form>
   </div>
 </section>
@@ -147,9 +194,23 @@
   import {
     collectMetadata,
     isValidEmail,
-    checkRateLimit,
-    recordSubmission,
+    submitContact,
+    type ContactErrorCode,
   } from "../lib/contact";
+
+  const ERROR_MESSAGES: Record<ContactErrorCode, string> = {
+    name_required: "Escribí tu nombre.",
+    email_required: "Ingresá tu email.",
+    email_invalid: "Ingresá un email válido.",
+    message_required: "Contame qué necesitás.",
+    rate_limited:
+      "Enviaste varios mensajes seguidos. Probá de nuevo en un rato.",
+    invalid: "Revisá los datos e intentá de nuevo.",
+    config_missing:
+      "No pude enviar tu mensaje. Probá de nuevo en unos minutos.",
+    server_error: "No pude enviar tu mensaje. Probá de nuevo en unos minutos.",
+    network_error: "No pude enviar tu mensaje. Probá de nuevo en unos minutos.",
+  };
 
   const form = document.getElementById("contact-form") as HTMLFormElement;
   const btn = document.getElementById("submit-btn") as HTMLButtonElement;
@@ -160,16 +221,28 @@
   const successBox = document.getElementById("form-success")!;
   const emailError = document.getElementById("email-error")!;
   const emailInput = form.querySelector<HTMLInputElement>('[name="email"]')!;
+  const messageInput =
+    form.querySelector<HTMLTextAreaElement>('[name="message"]')!;
+  const messageCount = document.getElementById("message-count")!;
 
-  // Inline email validation on blur
+  function showError(code: ContactErrorCode, retryInMinutes?: number) {
+    errorMessage.textContent =
+      code === "rate_limited" && retryInMinutes
+        ? `Enviaste varios mensajes seguidos. Probá de nuevo en ${retryInMinutes} minutos.`
+        : ERROR_MESSAGES[code];
+    errorBox.classList.remove("hidden");
+  }
+
+  messageInput.addEventListener("input", () => {
+    messageCount.textContent = `${messageInput.value.length}/${messageInput.maxLength}`;
+  });
+
+  // Validación del email al salir del campo
   emailInput.addEventListener("blur", () => {
-    if (emailInput.value && !isValidEmail(emailInput.value)) {
-      emailError.classList.remove("hidden");
-      emailInput.style.borderColor = "rgb(248 113 113)";
-    } else {
-      emailError.classList.add("hidden");
-      emailInput.style.borderColor = "";
-    }
+    const invalid = emailInput.value !== "" && !isValidEmail(emailInput.value);
+    emailError.classList.toggle("hidden", !invalid);
+    emailInput.setAttribute("aria-invalid", String(invalid));
+    emailInput.style.borderColor = invalid ? "rgb(248 113 113)" : "";
   });
 
   form.addEventListener("submit", async (e) => {
@@ -177,22 +250,13 @@
     errorBox.classList.add("hidden");
     successBox.classList.add("hidden");
 
-    const raw = Object.fromEntries(new FormData(form)) as Record<
-      string,
-      string
-    >;
+    const data = new FormData(form);
+    const field = (name: string) => String(data.get(name) ?? "");
 
-    if (!isValidEmail(raw.email)) {
+    if (!isValidEmail(field("email"))) {
       emailError.classList.remove("hidden");
+      emailInput.setAttribute("aria-invalid", "true");
       emailInput.focus();
-      return;
-    }
-
-    // Rate limiting del lado del cliente
-    const rateLimit = checkRateLimit();
-    if (!rateLimit.allowed) {
-      errorMessage.textContent = `Demasiados intentos. Esperá ${rateLimit.remainingTime} minutos antes de intentar de nuevo.`;
-      errorBox.classList.remove("hidden");
       return;
     }
 
@@ -200,61 +264,24 @@
     btnText.textContent = "Enviando...";
     btnSpinner.classList.remove("hidden");
 
-    try {
-      const meta = await collectMetadata();
-      const payload = { ...raw, ...meta };
+    const result = await submitContact(
+      {
+        name: field("name").trim(),
+        email: field("email").trim(),
+        business: field("business").trim() || undefined,
+        message: field("message").trim(),
+        website: field("website"),
+        ...collectMetadata(),
+      },
+      import.meta.env.PUBLIC_API_URL,
+    );
 
-      const sanitizedPayload = {
-        name: payload.name?.trim().slice(0, 100),
-        email: payload.email?.trim().slice(0, 100),
-        business: payload.business?.trim().slice(0, 100),
-        message: payload.message?.trim().slice(0, 500),
-        country: payload.country,
-        city: payload.city,
-        timezone: payload.timezone,
-        language: payload.language,
-      };
-
-      const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-      const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-
-      if (!supabaseUrl || !supabaseKey) {
-        errorMessage.textContent =
-          "No pude enviar tu mensaje. Probá de nuevo en unos minutos.";
-        errorBox.classList.remove("hidden");
-        return;
-      }
-
-      const supabaseResponse = await fetch(
-        `${supabaseUrl}/rest/v1/contact_requests`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: supabaseKey,
-            Authorization: `Bearer ${supabaseKey}`,
-            Prefer: "return=minimal",
-          },
-          body: JSON.stringify({
-            ...sanitizedPayload,
-            created_at: new Date().toISOString(),
-          }),
-        },
-      );
-
-      if (supabaseResponse.ok) {
-        form.reset();
-        successBox.classList.remove("hidden");
-        recordSubmission();
-      } else {
-        errorMessage.textContent =
-          "No pude enviar tu mensaje. Probá de nuevo en unos minutos.";
-        errorBox.classList.remove("hidden");
-      }
-    } catch {
-      errorMessage.textContent =
-        "No pude enviar tu mensaje. Probá de nuevo en unos minutos.";
-      errorBox.classList.remove("hidden");
+    if (result.ok) {
+      form.reset();
+      messageCount.textContent = `0/${messageInput.maxLength}`;
+      successBox.classList.remove("hidden");
+    } else {
+      showError(result.error, result.retryInMinutes);
     }
 
     btn.disabled = false;

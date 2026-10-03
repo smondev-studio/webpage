@@ -38,7 +38,8 @@ tenga que armar nada por su cuenta ni depender de una plantilla compartida.
 ## Operating Context
 
 - Landing de una sola página (Astro), sin backend propio salvo el
-  formulario de contacto (pega directo a Supabase).
+  formulario de contacto (hace `POST /api/landing-contact` (vía el frontend de la plataforma) a smondev-backend, que guarda
+  el mensaje y avisa por email).
 - Consume `GET /stores/public` de `smondev-backend` (opcional, con
   fallback) para listar tiendas reales en la sección "Clientes" — ver
   `src/lib/projects.ts`.
@@ -53,8 +54,8 @@ tenga que armar nada por su cuenta ni depender de una plantilla compartida.
 - Facturación electrónica (AFIP/TusFacturas) existe en la plataforma Store
   pero **no está validada contra una cuenta real de producción todavía** —
   no presentarla como algo probado end-to-end.
-- Stack de esta landing: Astro + TailwindCSS v4 + TypeScript + Supabase
-  (contacto) — proyecto existente, no greenfield.
+- Stack de esta landing: Astro + TailwindCSS v4 + TypeScript — proyecto
+  existente, no greenfield.
 
 ## Brand Commitments
 

@@ -3,19 +3,28 @@ export interface ContactPayload {
   email: string;
   business?: string;
   message: string;
-  country?: string;
-  city?: string;
+  /** Honeypot: el formulario lo deja vacío; un bot lo llena y el backend descarta el mensaje. */
+  website?: string;
   timezone?: string;
   language?: string;
 }
 
-export interface SubmitResult {
-  ok: boolean;
-  error?: string;
-  errorType?: 'rate_limit' | 'validation' | 'network' | 'server';
-}
+export type ContactErrorCode =
+  | "name_required"
+  | "email_required"
+  | "email_invalid"
+  | "message_required"
+  | "config_missing"
+  | "rate_limited"
+  | "invalid"
+  | "server_error"
+  | "network_error";
 
-const RATE_LIMIT_KEY = 'contact_rate_limit';
+export type SubmitResult =
+  | { ok: true }
+  | { ok: false; error: ContactErrorCode; retryInMinutes?: number };
+
+const RATE_LIMIT_KEY = "contact_rate_limit";
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hora en ms
 const MAX_SUBMISSIONS = 3;
 
@@ -23,36 +32,32 @@ export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
+/** Límite del lado del cliente (comodidad); el que cuenta es el del backend. */
 export function checkRateLimit(): { allowed: boolean; remainingTime?: number } {
   try {
     const stored = localStorage.getItem(RATE_LIMIT_KEY);
-    if (!stored) {
-      return { allowed: true };
-    }
+    if (!stored) return { allowed: true };
 
-    const data = JSON.parse(stored);
     const now = Date.now();
-
-    // Limpiar entradas viejas
-    const recentSubmissions = data.submissions.filter(
-      (timestamp: number) => now - timestamp < RATE_LIMIT_WINDOW
+    const recent: number[] = JSON.parse(stored).submissions.filter(
+      (timestamp: number) => now - timestamp < RATE_LIMIT_WINDOW,
     );
 
-    if (recentSubmissions.length >= MAX_SUBMISSIONS) {
-      const oldestSubmission = Math.min(...recentSubmissions);
-      const remainingTime = RATE_LIMIT_WINDOW - (now - oldestSubmission);
-      return { 
-        allowed: false, 
-        remainingTime: Math.ceil(remainingTime / 1000 / 60) // minutos restantes
+    if (recent.length >= MAX_SUBMISSIONS) {
+      const remaining = RATE_LIMIT_WINDOW - (now - Math.min(...recent));
+      return {
+        allowed: false,
+        remainingTime: Math.ceil(remaining / 1000 / 60),
       };
     }
 
-    // Actualizar localStorage con solo las entradas recientes
-    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ submissions: recentSubmissions }));
+    localStorage.setItem(
+      RATE_LIMIT_KEY,
+      JSON.stringify({ submissions: recent }),
+    );
     return { allowed: true };
   } catch {
-    // Si falla localStorage, permitir el envío
-    return { allowed: true };
+    return { allowed: true }; // sin localStorage, se permite
   }
 }
 
@@ -63,77 +68,60 @@ export function recordSubmission(): void {
     submissions.push(Date.now());
     localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ submissions }));
   } catch {
-    // Silenciosamente fallar si localStorage no está disponible
+    // sin localStorage: no se registra
   }
 }
 
-export async function collectMetadata(): Promise<Pick<ContactPayload, 'country' | 'city' | 'timezone' | 'language'>> {
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const language = navigator.language;
-
-  try {
-    const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
-    if (res.ok) {
-      const geo = await res.json();
-      return {
-        country: geo.country_name ?? undefined,
-        city: geo.city ?? undefined,
-        timezone,
-        language,
-      };
-    }
-  } catch {
-    // silently ignore — geolocation is best-effort
-  }
-
-  return { timezone, language };
+/** Zona horaria e idioma del navegador. No consulta ningún servicio externo. */
+export function collectMetadata(): Pick<
+  ContactPayload,
+  "timezone" | "language"
+> {
+  return {
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    language: navigator.language,
+  };
 }
 
+/**
+ * Envía el contacto a `POST {apiUrl}/api/landing-contact`.
+ * Ojo: NO es /api/contact (ese es el contacto de las tiendas). api.smondevstudio.com
+ * enruta /api/* al frontend de la plataforma, que reenvía esto al backend.
+ */
 export async function submitContact(
   payload: ContactPayload,
-  supabaseUrl: string,
-  supabaseKey: string,
+  apiUrl: string,
 ): Promise<SubmitResult> {
-  // Rate limiting
-  const rateLimit = checkRateLimit();
-  if (!rateLimit.allowed) {
-    return { 
-      ok: false, 
-      error: `Demasiados intentos. Esperá ${rateLimit.remainingTime} minutos antes de intentar de nuevo.`,
-      errorType: 'rate_limit'
-    };
-  }
+  if (!payload.name?.trim()) return { ok: false, error: "name_required" };
+  if (!payload.email?.trim()) return { ok: false, error: "email_required" };
+  if (!isValidEmail(payload.email))
+    return { ok: false, error: "email_invalid" };
+  if (!payload.message?.trim()) return { ok: false, error: "message_required" };
+  if (!apiUrl) return { ok: false, error: "config_missing" };
 
-  // Validaciones
-  if (!payload.name?.trim()) return { ok: false, error: 'El nombre es requerido', errorType: 'validation' };
-  if (!payload.email?.trim()) return { ok: false, error: 'El email es requerido', errorType: 'validation' };
-  if (!isValidEmail(payload.email)) return { ok: false, error: 'Email inválido', errorType: 'validation' };
-  if (!payload.message?.trim()) return { ok: false, error: 'El mensaje es requerido', errorType: 'validation' };
-  if (!supabaseUrl || !supabaseKey) return { ok: false, error: 'Configuración faltante', errorType: 'server' };
+  const limit = checkRateLimit();
+  if (!limit.allowed)
+    return {
+      ok: false,
+      error: "rate_limited",
+      retryInMinutes: limit.remainingTime,
+    };
 
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/contact_requests`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`,
-        Prefer: 'return=minimal',
-      },
+    const res = await fetch(`${apiUrl}/api/landing-contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-      if (res.status === 429) {
-        return { ok: false, error: 'Demasiadas solicitudes. Intentá más tarde.', errorType: 'rate_limit' };
-      }
-      return { ok: false, error: `Error del servidor (${res.status})`, errorType: 'server' };
+    if (res.ok) {
+      recordSubmission();
+      return { ok: true };
     }
-
-    // Registrar el envío exitoso
-    recordSubmission();
-    return { ok: true };
-  } catch (error) {
-    return { ok: false, error: 'Error de conexión. Verificá tu internet.', errorType: 'network' };
+    if (res.status === 429) return { ok: false, error: "rate_limited" };
+    if (res.status === 400) return { ok: false, error: "invalid" };
+    return { ok: false, error: "server_error" };
+  } catch {
+    return { ok: false, error: "network_error" };
   }
 }

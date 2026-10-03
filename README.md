@@ -9,7 +9,7 @@ Landing page para SmonDev Studio, servicio de desarrollo de e-commerce multi-ten
 - **Lenguaje**: TypeScript
 - **Testing**: Vitest
 - **Icons**: Lucide Astro
-- **Base de datos**: Supabase (formularios de contacto)
+- **Contacto**: `POST /api/landing-contact` (smondev-backend) (guarda el mensaje y avisa por email)
 - **Gestor de paquetes**: pnpm
 
 ## 📁 Estructura del Proyecto
@@ -38,11 +38,7 @@ Landing page para SmonDev Studio, servicio de desarrollo de e-commerce multi-ten
 Crea un archivo `.env.local` basándote en `.env.example`:
 
 ```bash
-# Supabase (para formulario de contacto)
-PUBLIC_SUPABASE_URL=tu_url_de_supabase
-PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
-
-# API de portfolio (opcional)
+# Backend (tiendas del portfolio y formulario de contacto)
 PUBLIC_API_URL=tu_api_url
 ```
 
@@ -56,20 +52,20 @@ pnpm install
 
 Todos los comandos se ejecutan desde la raíz del proyecto:
 
-| Comando                | Acción                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm dev`             | Inicia servidor de desarrollo en `localhost:4321` |
-| `pnpm build`           | Build para producción en `./dist/`              |
-| `pnpm preview`         | Previsualiza el build localmente                |
-| `pnpm test`            | Ejecuta tests unitarios                         |
-| `pnpm test:watch`      | Ejecuta tests en modo watch                      |
+| Comando           | Acción                                            |
+| :---------------- | :------------------------------------------------ |
+| `pnpm dev`        | Inicia servidor de desarrollo en `localhost:4321` |
+| `pnpm build`      | Build para producción en `./dist/`                |
+| `pnpm preview`    | Previsualiza el build localmente                  |
+| `pnpm test`       | Ejecuta tests unitarios                           |
+| `pnpm test:watch` | Ejecuta tests en modo watch                       |
 
 ## 🎨 Características
 
 - **Tema Dark/Light**: Toggle de tema con persistencia en localStorage
 - **Responsive**: Diseño adaptado a mobile, tablet y desktop
 - **SEO Optimizado**: Meta tags, URLs amigables
-- **Formulario de Contacto**: Validación, geolocalización, integración con Supabase
+- **Formulario de Contacto**: validación, anti-spam (honeypot y límite) y aviso por email vía smondev-backend
 - **Portfolio Dinámico**: Carga de tiendas desde API externa
 - **Componentes Modulares**: Arquitectura de componentes reutilizables
 
@@ -89,4 +85,3 @@ El sitio está configurado para desplegarse en `https://smondevstudio.com`. Para
 
 - [Documentación de Astro](https://docs.astro.build)
 - [Documentación de TailwindCSS](https://tailwindcss.com)
-- [Documentación de Supabase](https://supabase.com/docs)
