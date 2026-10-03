@@ -37,7 +37,7 @@ const steps = [
 
 // Un solo acento (naranja de marca) para los 4 pasos -- ídem Features,
 // antes cada paso tenía un color distinto sin ningún significado real.
-const accent = "rgba(249,115,22,";
+const accent = "rgba(var(--blue-rgb),";
 ---
 
 <section
@@ -45,7 +45,7 @@ const accent = "rgba(249,115,22,";
   class="py-16 sm:py-20 lg:py-24 transition-colors duration-300 relative overflow-hidden"
   style="background-color: var(--bg-primary);"
 >
-  <div class="absolute top-0 right-0 w-96 h-96 bg-orange-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute top-0 right-0 w-96 h-96 bg-[rgba(var(--blue-rgb),0.07)] rounded-full blur-[120px] pointer-events-none"></div>
   <div class="absolute bottom-0 left-0 w-80 h-80 bg-orange-500/[0.04] rounded-full blur-[100px] pointer-events-none"></div>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12 sm:mb-16">
@@ -66,7 +66,7 @@ const accent = "rgba(249,115,22,";
         return (
           <div class="relative">
             {i < steps.length - 1 && (
-              <div class="hidden lg:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-orange-500/40 to-transparent z-0"></div>
+              <div class="hidden lg:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-[rgba(var(--blue-rgb),0.4)] to-transparent z-0"></div>
             )}
             <div class="relative z-10 group">
               <div
@@ -91,32 +91,6 @@ const accent = "rgba(249,115,22,";
           </div>
         );
       })}
-    </div>
-
-    <div class="mt-20 text-center">
-      <p
-        class="text-sm mb-6 uppercase tracking-widest font-semibold"
-        style="color: var(--text-faint);"
-      >
-        Stack tecnológico
-      </p>
-      <div class="flex flex-wrap justify-center gap-3">
-        {[
-          "Astro",
-          "TailwindCSS",
-          "TypeScript",
-          "Supabase",
-          "Mercado Pago API",
-          "Vitest",
-        ].map((tech) => (
-          <span
-            class="text-sm px-4 py-1.5 rounded-full font-medium border transition-colors hover:border-orange-500/40"
-            style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
     </div>
   </div>
 </section>

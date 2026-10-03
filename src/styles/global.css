@@ -11,6 +11,7 @@
   --color-fuchsia-400: #e879f9;
   --color-emerald-500: #10b981;
   --color-emerald-400: #34d399;
+  --color-brand-blue: #2563eb;
   --font-family-sans: "Inter", system-ui, sans-serif;
 }
 
@@ -18,10 +19,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/*
+  Colores:
+  - Naranja (#f97316) = acción y marca (CTAs, badges, hover).
+  - Azul (--blue-rgb)  = estructura (iconos, pasos, brillos de fondo).
+  Las secciones usan fondos translúcidos (--bg-primary / --bg-secondary) para
+  que se vea la capa de fondo fija (body::before / ::after, ver abajo).
+  --page-bg es el color sólido de la página.
+*/
+
 /* ---- DARK MODE (default) ---- */
 :root {
-  --bg-primary: #0a0a13;
-  --bg-secondary: #0f0f1d;
+  --page-bg: #0a0a13;
+  --bg-primary: transparent;
+  --bg-secondary: rgba(15, 15, 29, 0.55);
   --bg-card: rgba(255, 255, 255, 0.04);
   --bg-card-hover: rgba(255, 255, 255, 0.08);
   --border: rgba(255, 255, 255, 0.08);
@@ -31,44 +42,274 @@ html {
   --text-faint: rgba(240, 240, 249, 0.25);
   --navbar-bg: rgba(10, 10, 19, 0.88);
   --input-bg: rgba(255, 255, 255, 0.06);
+  --blue-rgb: 96, 165, 250;
+  --orange-text: #f97316;
+  --orange-text-hover: #fb923c;
+  --blob-blue: rgba(59, 130, 246, 0.2);
+  --blob-cyan: rgba(34, 211, 238, 0.1);
+  --blob-orange: rgba(249, 115, 22, 0.13);
+  --grid-line: rgba(147, 197, 253, 0.07);
   --hero-gradient: linear-gradient(
     160deg,
-    #0a0a13 0%,
-    #13102a 30%,
-    #0f0a1e 60%,
-    #0a0a13 100%
+    rgba(19, 16, 42, 0.55) 0%,
+    rgba(15, 10, 30, 0.3) 60%,
+    transparent 100%
   );
 }
 
 /* ---- LIGHT MODE ---- */
-/* Neutral base (gris/blanco cálido) en vez del violeta anterior -- el
-   naranja de marca queda como único acento, visible en border-hover, no
-   teñido en el fondo/borde por defecto. */
+/* Base azul muy claro con texto azul marino ("cielo"). */
 html.light {
-  --bg-primary: #fafaf9;
-  --bg-secondary: #f4f3f1;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: rgba(255, 255, 255, 1);
-  --border: rgba(24, 24, 27, 0.09);
+  --page-bg: #eef4ff;
+  --bg-primary: transparent;
+  --bg-secondary: rgba(214, 228, 252, 0.45);
+  --bg-card: rgba(255, 255, 255, 0.72);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --border: rgba(30, 64, 175, 0.12);
   --border-hover: rgba(249, 115, 22, 0.45);
-  --text-primary: #18181b;
-  --text-muted: rgba(24, 24, 27, 0.6);
-  --text-faint: rgba(24, 24, 27, 0.32);
-  --navbar-bg: rgba(250, 250, 249, 0.92);
-  --input-bg: rgba(24, 24, 27, 0.04);
+  --text-primary: #0f1f3d;
+  --text-muted: rgba(15, 31, 61, 0.68);
+  --text-faint: rgba(15, 31, 61, 0.4);
+  --navbar-bg: rgba(238, 244, 255, 0.9);
+  --input-bg: rgba(30, 64, 175, 0.05);
+  --blue-rgb: 37, 99, 235;
+  /* Naranja para TEXTO sobre fondo claro: #f97316 da ~2,5:1; este da ~4,7:1 (AA). */
+  --orange-text: #c2410c;
+  --orange-text-hover: #9a3412;
+  --blob-blue: rgba(59, 130, 246, 0.26);
+  --blob-cyan: rgba(14, 165, 233, 0.16);
+  --blob-orange: rgba(249, 115, 22, 0.15);
+  --grid-line: rgba(30, 64, 175, 0.08);
   --hero-gradient: linear-gradient(
     160deg,
-    #fdfcfb 0%,
-    #f5f3f0 40%,
-    #fafaf8 100%
+    rgba(219, 234, 254, 0.7) 0%,
+    rgba(238, 244, 255, 0) 65%
   );
 }
 
+/* Texto naranja legible en modo claro (ver --orange-text). */
+html.light .text-orange-500,
+html.light .text-orange-400 {
+  color: var(--orange-text);
+}
+html.light .hover\:text-orange-500:hover,
+html.light .hover\:text-orange-400:hover,
+html.light .group:hover .group-hover\:text-orange-500 {
+  color: var(--orange-text-hover);
+}
+
 body {
-  background-color: var(--bg-primary);
+  background-color: var(--page-bg);
   color: var(--text-primary);
   font-family: var(--font-family-sans);
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+}
+
+/* ---- FONDO: cielo día/noche + grilla ---- */
+/* El fondo sigue el tema, igual que las ilustraciones (DAY TIME / NIGHT TIME).
+   Oscuro = noche con estrellas; claro = cielo de día con sol difuso y nubes.
+   Encima de ambos, una grilla fina que se desvanece hacia los bordes. */
+body::before,
+body::after,
+html::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::before {
+  inset: 0;
+  background:
+    radial-gradient(
+      55% 40% at 86% -4%,
+      rgba(147, 197, 253, 0.2) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #0b1030 0%, #0a0a13 55%);
+}
+/* Estrellas: mosaico de puntos que titila (solo opacity). */
+body::after {
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(
+      1px 1px at 90px 80px,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    ),
+    radial-gradient(1.5px 1.5px at 150px 20px, #cfe3ff, transparent),
+    radial-gradient(1px 1px at 60px 140px, #fff, transparent),
+    radial-gradient(
+      1px 1px at 180px 110px,
+      rgba(255, 255, 255, 0.7),
+      transparent
+    );
+  background-size: 200px 180px;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(#000 0%, transparent 80%);
+  mask-image: linear-gradient(#000 0%, transparent 80%);
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+
+html.light body::before {
+  background:
+    radial-gradient(
+      48% 36% at 90% -4%,
+      rgba(253, 186, 116, 0.38) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 40% at 8% 0%,
+      rgba(125, 180, 255, 0.5) 0%,
+      transparent 72%
+    ),
+    linear-gradient(180deg, #cfe3ff 0%, #e4eeff 38%, #eef4ff 72%);
+}
+/* Nubes: manchas blancas difusas que se desplazan muy despacio (solo transform). */
+html.light body::after {
+  inset: 0 -30%;
+  background:
+    radial-gradient(
+      22% 9% at 20% 18%,
+      rgba(255, 255, 255, 0.75) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      26% 10% at 62% 30%,
+      rgba(255, 255, 255, 0.6) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      20% 8% at 85% 12%,
+      rgba(255, 255, 255, 0.7) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      24% 9% at 38% 62%,
+      rgba(255, 255, 255, 0.5) 0%,
+      transparent 100%
+    );
+  background-size: auto;
+  -webkit-mask-image: none;
+  mask-image: none;
+  opacity: 1;
+  animation: clouds-drift 70s ease-in-out infinite alternate;
+}
+
+/* Grilla: va sobre el cielo (html::after se pinta último en la capa de fondo). */
+html::after {
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse at 50% 25%,
+    #000 15%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(ellipse at 50% 25%, #000 15%, transparent 78%);
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+@keyframes clouds-drift {
+  from {
+    transform: translate3d(-4%, 0, 0);
+  }
+  to {
+    transform: translate3d(4%, 1.5%, 0);
+  }
+}
+
+/* ---- ANIMACIONES BÁSICAS ---- */
+/* Entrada del hero al cargar. */
+.fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Aparición al hacer scroll (las clases las pone src/scripts/reveal.ts). */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* El mono del hero flota apenas. */
+.float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Indicador de scroll: un empujoncito suave hacia abajo, sin rebote. */
+.nudge {
+  animation: nudge 2.4s ease-in-out infinite;
+}
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after,
+  .fade-up,
+  .nudge,
+  .float-slow {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Imagen que cambia con el tema: ambas versiones en el HTML, CSS elige.
+   La clase .light la pone el script inline del <head> antes del primer paint. */
+.theme-img-light {
+  display: none;
+}
+html.light .theme-img-light {
+  display: block;
+}
+html.light .theme-img-dark {
+  display: none;
 }

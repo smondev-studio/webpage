@@ -1,68 +1,44 @@
 ---
-import ShoppingBag from "@lucide/astro/icons/shopping-bag";
-import CreditCard from "@lucide/astro/icons/credit-card";
 import Store from "@lucide/astro/icons/store";
-import PackageOpen from "@lucide/astro/icons/package-open";
-import ShieldCheck from "@lucide/astro/icons/shield-check";
-import Smartphone from "@lucide/astro/icons/smartphone";
+import CreditCard from "@lucide/astro/icons/credit-card";
+import ShoppingBag from "@lucide/astro/icons/shopping-bag";
 import LayoutDashboard from "@lucide/astro/icons/layout-dashboard";
-import SearchCheck from "@lucide/astro/icons/search-check";
 
 const features = [
   {
-    Icon: ShoppingBag,
-    title: "Catálogo completo",
+    Icon: Store,
+    title: "Una tienda con tu marca",
     description:
-      "Cada producto puede tener variantes de talla y color con su propio stock. Se agota una talla y seguís vendiendo las demás — no hay que sacar todo el producto de la vidriera.",
+      "Tu logo, tus colores y tu banner, en tu propio subdominio o dominio. Tus datos son solo tuyos: nadie más los ve.",
   },
   {
     Icon: CreditCard,
-    title: "Mercado Pago integrado",
+    title: "Cobrás con Mercado Pago",
     description:
-      "El comprador paga con MP y la orden se actualiza sola. No tenés que entrar a revisar a mano si el pago se acreditó.",
+      "Tus clientes pagan con Mercado Pago y la plata va directo a tu cuenta. La orden se actualiza sola, sin que tengas que revisar si el pago se acreditó.",
   },
   {
-    Icon: Store,
-    title: "Multi-tienda",
+    Icon: ShoppingBag,
+    title: "Catálogo con talla y color",
     description:
-      "Compartís la plataforma con otros comercios, pero tu tienda tiene su propio subdominio, su propio panel y sus propios datos. Nadie ve lo tuyo.",
-  },
-  {
-    Icon: PackageOpen,
-    title: "Importación masiva",
-    description:
-      "Si ya tenés el catálogo armado en un Excel, lo subís entero de una — no hace falta cargar producto por producto a mano.",
-  },
-  {
-    Icon: ShieldCheck,
-    title: "Login con Google",
-    description:
-      "Tus clientes entran con su cuenta de Google en un click, sin tener que crear ni recordar otra contraseña más.",
-  },
-  {
-    Icon: Smartphone,
-    title: "Se ve bien en el celular",
-    description:
-      "La mayoría de tus clientes va a mirar el catálogo desde el celular, no desde una computadora — la tienda está pensada para eso primero.",
+      "Cada producto puede tener variantes con su propio stock. Se agota una talla y seguís vendiendo las demás.",
   },
   {
     Icon: LayoutDashboard,
-    title: "Panel de admin",
+    title: "La manejás vos",
     description:
-      "Cambiás el logo, los colores o una foto del banner vos mismo, cuando quieras. No hace falta escribirme por un cambio chico.",
-  },
-  {
-    Icon: SearchCheck,
-    title: "Aparece en Google",
-    description:
-      "Cuando alguien busca el nombre de tu marca, tu tienda aparece con título y descripción propios — no como un catálogo sin nombre.",
+      "Desde tu panel cargás productos, cambiás precios, el logo o el banner cuando quieras. No hace falta escribirme por un cambio chico.",
   },
 ];
 
-// Un solo acento (el naranja de marca) para las 8 tarjetas -- antes cada
-// una tenía un color distinto (violeta/cian/fucsia/esmeralda) sin que esa
-// variación significara nada; quedaba "arcoíris" en vez de considerado.
-const accent = "rgba(249,115,22,";
+const extras = [
+  "Se ve bien en el celular",
+  "Tus clientes entran con Google",
+  "Tu tienda aparece en Google con tu nombre",
+];
+
+// Un solo acento (el naranja de marca) para las tarjetas.
+const accent = "rgba(var(--blue-rgb),";
 ---
 
 <section
@@ -76,17 +52,17 @@ const accent = "rgba(249,115,22,";
         class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 transition-colors"
         style="color: var(--text-primary);"
       >
-        Todo lo que tu tienda necesita
+        Qué incluye tu tienda
       </h2>
       <p
         class="text-base sm:text-lg max-w-xl mx-auto"
         style="color: var(--text-muted);"
       >
-        Nada de esto es una promesa a futuro: ya está construido y funcionando.
+        Todo esto ya está construido y funcionando hoy.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
       {features.map(({ Icon, title, description }) => {
         const a = accent;
         return (
@@ -121,6 +97,17 @@ const accent = "rgba(249,115,22,";
           </div>
         );
       })}
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3 mt-10">
+      {extras.map((label) => (
+        <span
+          class="text-sm px-4 py-1.5 rounded-full font-medium border"
+          style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);"
+        >
+          {label}
+        </span>
+      ))}
     </div>
   </div>
 </section>

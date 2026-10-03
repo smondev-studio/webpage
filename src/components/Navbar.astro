@@ -1,18 +1,25 @@
 ---
 const links = [
-  { href: '#about', label: 'Sobre mí' },
-  { href: '#features', label: 'Características' },
-  { href: '#how-it-works', label: 'Cómo funciona' },
-  { href: '#clientes', label: 'Clientes' },
-  { href: '#contact', label: 'Contacto' },
+  { href: "#about", label: "Sobre mí" },
+  { href: "#features", label: "Características" },
+  { href: "#how-it-works", label: "Cómo funciona" },
+  { href: "#clientes", label: "Clientes" },
+  { href: "#contact", label: "Contacto" },
 ];
 ---
 
-<header id="navbar" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-all duration-300"
-  style="background-color: var(--navbar-bg); border-color: var(--border);">
+<header
+  id="navbar"
+  class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-all duration-300"
+  style="background-color: var(--navbar-bg); border-color: var(--border);"
+>
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
     <a href="#" class="flex items-center gap-2">
-      <img src="/images/logo.png" alt="SmonDev Studio" class="h-11 w-auto rounded-lg" />
+      <img
+        src="/images/logo.webp"
+        alt="SmonDev Studio"
+        class="h-11 w-auto rounded-lg"
+      />
     </a>
 
     <!-- Desktop links -->
@@ -39,12 +46,37 @@ const links = [
         aria-label="Cambiar tema"
       >
         <!-- Sun icon (shown in dark mode) -->
-        <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        <svg
+          id="icon-sun"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-orange-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
+          />
         </svg>
         <!-- Moon icon (shown in light mode) -->
-        <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--text-muted);">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+        <svg
+          id="icon-moon"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          style="color: var(--text-muted);"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+          />
         </svg>
       </button>
 
@@ -64,34 +96,86 @@ const links = [
         style="background-color: var(--bg-card); border: 1px solid var(--border);"
         aria-label="Cambiar tema"
       >
-        <svg id="icon-sun-mobile" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        <svg
+          id="icon-sun-mobile"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 text-orange-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
+          />
         </svg>
-        <svg id="icon-moon-mobile" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--text-muted);">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+        <svg
+          id="icon-moon-mobile"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          style="color: var(--text-muted);"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+          />
         </svg>
       </button>
 
-      <button id="menu-btn" class="transition-colors" style="color: var(--text-muted);" aria-label="Abrir menú">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      <button
+        id="menu-btn"
+        class="transition-colors"
+        style="color: var(--text-muted);"
+        aria-label="Abrir menú"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
         </svg>
       </button>
     </div>
   </nav>
 
   <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-t px-6 py-4" style="background-color: var(--navbar-bg); border-color: var(--border);">
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden border-t px-6 py-4"
+    style="background-color: var(--navbar-bg); border-color: var(--border);"
+  >
     <ul class="flex flex-col gap-4">
       {links.map((link) => (
         <li>
-          <a href={link.href} class="text-sm font-medium block py-1 hover:text-orange-500 transition-colors" style="color: var(--text-muted);">
+          <a
+            href={link.href}
+            class="text-sm font-medium block py-1 hover:text-orange-500 transition-colors"
+            style="color: var(--text-muted);"
+          >
             {link.label}
           </a>
         </li>
       ))}
       <li>
-        <a href="#contact" class="inline-flex bg-orange-500 text-white text-sm font-semibold px-5 py-2 rounded-full mt-2">
+        <a
+          href="#contact"
+          class="inline-flex bg-orange-500 text-white text-sm font-semibold px-5 py-2 rounded-full mt-2"
+        >
           Hablemos
         </a>
       </li>
@@ -102,51 +186,58 @@ const links = [
 <script>
   function applyTheme(theme: string) {
     const html = document.documentElement;
-    const sunIcons = document.querySelectorAll('#icon-sun, #icon-sun-mobile');
-    const moonIcons = document.querySelectorAll('#icon-moon, #icon-moon-mobile');
-    const heroImg = document.getElementById('hero-img') as HTMLImageElement | null;
+    const sunIcons = document.querySelectorAll("#icon-sun, #icon-sun-mobile");
+    const moonIcons = document.querySelectorAll(
+      "#icon-moon, #icon-moon-mobile",
+    );
 
-    if (theme === 'light') {
-      html.classList.add('light');
-      sunIcons.forEach(el => el.classList.add('hidden'));
-      moonIcons.forEach(el => el.classList.remove('hidden'));
-      if (heroImg) heroImg.src = '/images/hero-light.png';
+    if (theme === "light") {
+      html.classList.add("light");
+      sunIcons.forEach((el) => el.classList.add("hidden"));
+      moonIcons.forEach((el) => el.classList.remove("hidden"));
     } else {
-      html.classList.remove('light');
-      sunIcons.forEach(el => el.classList.remove('hidden'));
-      moonIcons.forEach(el => el.classList.add('hidden'));
-      if (heroImg) heroImg.src = '/images/hero-dark.png';
+      html.classList.remove("light");
+      sunIcons.forEach((el) => el.classList.remove("hidden"));
+      moonIcons.forEach((el) => el.classList.add("hidden"));
     }
   }
 
   function getSystemTheme(): string {
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    return window.matchMedia("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark";
   }
 
   function toggleTheme() {
-    const current = localStorage.getItem('theme') || getSystemTheme();
-    const next = current === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('theme', next);
+    const current = localStorage.getItem("theme") || getSystemTheme();
+    const next = current === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", next);
     applyTheme(next);
   }
 
   // Init on load
-  const saved = localStorage.getItem('theme');
+  const saved = localStorage.getItem("theme");
   const initialTheme = saved || getSystemTheme();
   applyTheme(initialTheme);
 
   // Listen for system theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
-  });
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        applyTheme(e.matches ? "dark" : "light");
+      }
+    });
 
-  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
+  document
+    .getElementById("theme-toggle")
+    ?.addEventListener("click", toggleTheme);
+  document
+    .getElementById("theme-toggle-mobile")
+    ?.addEventListener("click", toggleTheme);
 
   // Hamburger
-  const btn = document.getElementById('menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn?.addEventListener("click", () => menu?.classList.toggle("hidden"));
 </script>

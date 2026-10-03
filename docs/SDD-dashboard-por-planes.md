@@ -77,6 +77,7 @@ Este documento describe el diseño del dashboard del panel de administración de
 ```
 
 **Widgets disponibles:**
+
 - ✅ KPIs básicos (productos, pedidos, ingresos)
 - ✅ Lista de pedidos recientes
 - ✅ Alertas de stock y productos incompletos
@@ -85,7 +86,7 @@ Este documento describe el diseño del dashboard del panel de administración de
 - ❌ Análisis de clientes
 - ❌ Reportes exportables
 
-### 4.2 Commerce Plan (Próximamente)
+### 4.2 Commerce Plan
 
 **Enfoque**: Crecimiento, análisis de ventas, marketing
 
@@ -138,6 +139,7 @@ Este documento describe el diseño del dashboard del panel de administración de
 ```
 
 **Widgets disponibles:**
+
 - ✅ Todos los de Starter
 - ✅ KPIs con comparativas (vs mes anterior)
 - ✅ Gráfico de ventas (30 días)
@@ -212,6 +214,7 @@ Este documento describe el diseño del dashboard del panel de administración de
 ```
 
 **Widgets disponibles:**
+
 - ✅ Todos los de Commerce
 - ✅ KPIs consolidados (todas las sucursales)
 - ✅ Gráficos comparativos
@@ -227,26 +230,26 @@ Este documento describe el diseño del dashboard del panel de administración de
 
 ```typescript
 // src/lib/types/dashboard.ts
-import type { Component } from 'svelte';
+import type { Component } from "svelte";
 
 interface DashboardWidget {
   id: string;
-  type: 'kpi' | 'chart' | 'list' | 'alert' | 'action' | 'locked';
+  type: "kpi" | "chart" | "list" | "alert" | "action" | "locked";
   title: string;
-  requiredPlan: 'starter' | 'commerce' | 'enterprise';
+  requiredPlan: "starter" | "commerce" | "enterprise";
   component: Component<any>;
   props?: Record<string, any>;
   order: number;
-  size: 'small' | 'medium' | 'large' | 'full';
+  size: "small" | "medium" | "large" | "full";
 }
 
 interface DashboardConfig {
   widgets: DashboardWidget[];
-  layout: 'single-column' | 'two-column' | 'grid';
+  layout: "single-column" | "two-column" | "grid";
 }
 
 interface UserContext {
-  plan: 'starter' | 'commerce' | 'enterprise';
+  plan: "starter" | "commerce" | "enterprise";
   storeId: string;
   locations?: string[]; // para enterprise
 }
@@ -259,150 +262,150 @@ interface UserContext {
 export const DASHBOARD_WIDGETS: DashboardWidget[] = [
   // KPIs Básicos (todos los planes)
   {
-    id: 'kpi-products',
-    type: 'kpi',
-    title: 'Productos',
-    requiredPlan: 'starter',
+    id: "kpi-products",
+    type: "kpi",
+    title: "Productos",
+    requiredPlan: "starter",
     component: KPIWidget,
-    props: { metric: 'products', showLimit: true },
+    props: { metric: "products", showLimit: true },
     order: 1,
-    size: 'small',
+    size: "small",
   },
   {
-    id: 'kpi-orders',
-    type: 'kpi',
-    title: 'Pedidos',
-    requiredPlan: 'starter',
+    id: "kpi-orders",
+    type: "kpi",
+    title: "Pedidos",
+    requiredPlan: "starter",
     component: KPIWidget,
-    props: { metric: 'orders', period: 'month' },
+    props: { metric: "orders", period: "month" },
     order: 2,
-    size: 'small',
+    size: "small",
   },
   {
-    id: 'kpi-revenue',
-    type: 'kpi',
-    title: 'Ingresos',
-    requiredPlan: 'starter',
+    id: "kpi-revenue",
+    type: "kpi",
+    title: "Ingresos",
+    requiredPlan: "starter",
     component: KPIWidget,
-    props: { metric: 'revenue', period: 'month' },
+    props: { metric: "revenue", period: "month" },
     order: 3,
-    size: 'small',
+    size: "small",
   },
-  
+
   // KPIs Avanzados (Commerce+)
   {
-    id: 'kpi-customers',
-    type: 'kpi',
-    title: 'Clientes',
-    requiredPlan: 'commerce',
+    id: "kpi-customers",
+    type: "kpi",
+    title: "Clientes",
+    requiredPlan: "commerce",
     component: KPIWidget,
-    props: { metric: 'customers', period: 'month', showGrowth: true },
+    props: { metric: "customers", period: "month", showGrowth: true },
     order: 4,
-    size: 'small',
+    size: "small",
   },
-  
+
   // Gráfico de ventas (Commerce+)
   {
-    id: 'chart-sales',
-    type: 'chart',
-    title: 'Ventas últimos 30 días',
-    requiredPlan: 'commerce',
+    id: "chart-sales",
+    type: "chart",
+    title: "Ventas últimos 30 días",
+    requiredPlan: "commerce",
     component: SalesChartWidget,
-    props: { period: '30d', showComparison: false },
+    props: { period: "30d", showComparison: false },
     order: 5,
-    size: 'large',
+    size: "large",
   },
-  
+
   // Lista de pedidos (todos)
   {
-    id: 'list-recent-orders',
-    type: 'list',
-    title: 'Pedidos recientes',
-    requiredPlan: 'starter',
+    id: "list-recent-orders",
+    type: "list",
+    title: "Pedidos recientes",
+    requiredPlan: "starter",
     component: RecentOrdersWidget,
     props: { limit: 5 },
     order: 6,
-    size: 'medium',
+    size: "medium",
   },
-  
+
   // Clientes nuevos (Commerce+)
   {
-    id: 'widget-new-customers',
-    type: 'widget',
-    title: 'Clientes nuevos',
-    requiredPlan: 'commerce',
+    id: "widget-new-customers",
+    type: "widget",
+    title: "Clientes nuevos",
+    requiredPlan: "commerce",
     component: NewCustomersWidget,
-    props: { period: 'week' },
+    props: { period: "week" },
     order: 7,
-    size: 'medium',
+    size: "medium",
   },
-  
+
   // WhatsApp (Commerce+ - Próximamente)
   {
-    id: 'widget-whatsapp',
-    type: 'locked',
-    title: 'WhatsApp',
-    requiredPlan: 'commerce',
+    id: "widget-whatsapp",
+    type: "locked",
+    title: "WhatsApp",
+    requiredPlan: "commerce",
     component: LockedFeatureWidget,
-    props: { feature: 'WhatsApp', upgradePlan: 'commerce' },
+    props: { feature: "WhatsApp", upgradePlan: "commerce" },
     order: 8,
-    size: 'medium',
+    size: "medium",
   },
-  
+
   // Rendimiento por sucursal (Enterprise)
   {
-    id: 'chart-locations',
-    type: 'chart',
-    title: 'Rendimiento por sucursal',
-    requiredPlan: 'enterprise',
+    id: "chart-locations",
+    type: "chart",
+    title: "Rendimiento por sucursal",
+    requiredPlan: "enterprise",
     component: LocationPerformanceWidget,
-    props: { chartType: 'bar' },
+    props: { chartType: "bar" },
     order: 9,
-    size: 'large',
+    size: "large",
   },
-  
+
   // Analytics rápido (Enterprise)
   {
-    id: 'widget-analytics',
-    type: 'widget',
-    title: 'Analytics rápido',
-    requiredPlan: 'enterprise',
+    id: "widget-analytics",
+    type: "widget",
+    title: "Analytics rápido",
+    requiredPlan: "enterprise",
     component: QuickAnalyticsWidget,
-    props: { metrics: ['conversion', 'avg_ticket'] },
+    props: { metrics: ["conversion", "avg_ticket"] },
     order: 10,
-    size: 'medium',
+    size: "medium",
   },
-  
+
   // Marketplaces (Enterprise)
   {
-    id: 'widget-marketplaces',
-    type: 'widget',
-    title: 'Marketplaces',
-    requiredPlan: 'enterprise',
+    id: "widget-marketplaces",
+    type: "widget",
+    title: "Marketplaces",
+    requiredPlan: "enterprise",
     component: MarketplacesWidget,
     props: {},
     order: 11,
-    size: 'full',
+    size: "full",
   },
 ];
 
 export function getDashboardConfig(userPlan: string): DashboardConfig {
-  const planOrder = ['starter', 'commerce', 'enterprise'];
+  const planOrder = ["starter", "commerce", "enterprise"];
   const userPlanIndex = planOrder.indexOf(userPlan);
-  
-  const availableWidgets = DASHBOARD_WIDGETS.filter(widget => {
+
+  const availableWidgets = DASHBOARD_WIDGETS.filter((widget) => {
     const widgetPlanIndex = planOrder.indexOf(widget.requiredPlan);
     return widgetPlanIndex <= userPlanIndex;
   });
-  
+
   // Ordenar por order
   availableWidgets.sort((a, b) => a.order - b.order);
-  
+
   // Determinar layout según cantidad de widgets
-  let layout: 'single-column' | 'two-column' | 'grid' = 'single-column';
-  if (userPlan === 'commerce') layout = 'two-column';
-  if (userPlan === 'enterprise') layout = 'grid';
-  
+  let layout: "single-column" | "two-column" | "grid" = "single-column";
+  if (userPlan === "commerce") layout = "two-column";
+  if (userPlan === "enterprise") layout = "grid";
+
   return {
     widgets: availableWidgets,
     layout,
@@ -419,26 +422,26 @@ export function getDashboardConfig(userPlan: string): DashboardConfig {
   import { loadWidgetData } from '$lib/services/dashboard-api';
   import DashboardHeader from './DashboardHeader.svelte';
   import DashboardWidgetRenderer from './DashboardWidgetRenderer.svelte';
-  
+
   interface Props {
     userPlan: 'starter' | 'commerce' | 'enterprise';
     storeId: string;
   }
-  
+
   let { userPlan, storeId }: Props = $props();
-  
+
   const config = getDashboardConfig(userPlan);
   let widgets: DashboardWidget[] = $state(config.widgets);
-  
+
   // Cargar datos de widgets en paralelo
   async function loadAllData() {
-    const promises = widgets.map(widget => 
+    const promises = widgets.map(widget =>
       loadWidgetData(widget, storeId)
     );
     const results = await Promise.all(promises);
     // Actualizar widgets con datos
   }
-  
+
   $effect(() => {
     loadAllData();
   });
@@ -446,7 +449,7 @@ export function getDashboardConfig(userPlan: string): DashboardConfig {
 
 <div class="dashboard dashboard-{config.layout}">
   <DashboardHeader {userPlan} />
-  
+
   <div class="dashboard-grid">
     {#each widgets as widget}
       <DashboardWidgetRenderer {widget} {storeId} />
@@ -462,30 +465,30 @@ export function getDashboardConfig(userPlan: string): DashboardConfig {
   import LockedFeatureCard from './LockedFeatureCard.svelte';
   import WidgetSkeleton from './WidgetSkeleton.svelte';
   import WidgetHeader from './WidgetHeader.svelte';
-  
+
   interface Props {
     widget: DashboardWidget;
     storeId: string;
   }
-  
+
   let { widget, storeId }: Props = $props();
   let data: any = $state(null);
   let loading: boolean = $state(true);
-  
+
   $effect(() => {
     loadWidgetData(widget, storeId).then(result => {
       data = result;
       loading = false;
     });
   });
-  
+
   if (widget.type === 'locked') {
     // Svelte no permite retornar condicionalmente, usar {#if}
   }
 </script>
 
 {#if widget.type === 'locked'}
-  <LockedFeatureCard 
+  <LockedFeatureCard
     feature={widget.title}
     requiredPlan={widget.requiredPlan}
     upgradePath={`/pricing?plan=${widget.requiredPlan}`}
@@ -547,7 +550,7 @@ export function getDashboardConfig(userPlan: string): DashboardConfig {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .widget-large,
   .widget-full {
     grid-column: span 1;
@@ -559,7 +562,7 @@ export function getDashboardConfig(userPlan: string): DashboardConfig {
 
 ```typescript
 // src/dashboard/services/dashboard-api.service.ts (Frontend - SvelteKit)
-import type { DashboardWidget } from '$lib/types/dashboard';
+import type { DashboardWidget } from "$lib/types/dashboard";
 
 interface WidgetDataRequest {
   widgetId: string;
@@ -569,33 +572,39 @@ interface WidgetDataRequest {
 }
 
 export async function loadWidgetData(
-  widget: DashboardWidget, 
-  storeId: string
+  widget: DashboardWidget,
+  storeId: string,
 ): Promise<any> {
   const endpoint = `/api/dashboard/widgets/${widget.id}`;
-  
+
   const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       storeId,
-      period: widget.props?.period || '30d',
+      period: widget.props?.period || "30d",
       locationId: widget.props?.locationId,
     }),
   });
-  
+
   if (!response.ok) {
     throw new Error(`Failed to load widget ${widget.id}`);
   }
-  
+
   return response.json();
 }
 ```
 
 ```typescript
 // src/dashboard/dashboard.controller.ts (Backend - NestJS)
-import { Controller, Post, Body, Param, ForbiddenException } from '@nestjs/common';
-import { DashboardService } from './dashboard.service';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  ForbiddenException,
+} from "@nestjs/common";
+import { DashboardService } from "./dashboard.service";
 
 interface WidgetDataRequest {
   storeId: string;
@@ -603,33 +612,33 @@ interface WidgetDataRequest {
   locationId?: string;
 }
 
-@Controller('dashboard/widgets')
+@Controller("dashboard/widgets")
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
-  @Post(':widgetId')
+  @Post(":widgetId")
   async getWidgetData(
-    @Param('widgetId') widgetId: string,
+    @Param("widgetId") widgetId: string,
     @Body() body: WidgetDataRequest,
   ) {
     const { storeId, period, locationId } = body;
-    
+
     // Verificar permisos según plan
     const store = await this.dashboardService.getStore(storeId);
     const widget = this.dashboardService.getWidget(widgetId);
-    
+
     if (!this.dashboardService.isPlanAllowed(widget.requiredPlan, store.plan)) {
-      throw new ForbiddenException('Plan not allowed');
+      throw new ForbiddenException("Plan not allowed");
     }
-    
+
     // Cargar datos según tipo de widget
     const data = await this.dashboardService.getWidgetData(
-      widgetId, 
-      storeId, 
-      period, 
-      locationId
+      widgetId,
+      storeId,
+      period,
+      locationId,
     );
-    
+
     return data;
   }
 }
@@ -637,11 +646,11 @@ export class DashboardController {
 
 ```typescript
 // src/dashboard/dashboard.service.ts (Backend - NestJS)
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Store } from '../stores/store.entity';
-import { DASHBOARD_WIDGETS } from './dashboard-widgets.config';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Store } from "../stores/store.entity";
+import { DASHBOARD_WIDGETS } from "./dashboard-widgets.config";
 
 @Injectable()
 export class DashboardService {
@@ -655,7 +664,7 @@ export class DashboardService {
   }
 
   getWidget(widgetId: string) {
-    const widget = DASHBOARD_WIDGETS.find(w => w.id === widgetId);
+    const widget = DASHBOARD_WIDGETS.find((w) => w.id === widgetId);
     if (!widget) {
       throw new Error(`Widget ${widgetId} not found`);
     }
@@ -663,7 +672,7 @@ export class DashboardService {
   }
 
   isPlanAllowed(requiredPlan: string, userPlan: string): boolean {
-    const planOrder = ['starter', 'commerce', 'enterprise'];
+    const planOrder = ["starter", "commerce", "enterprise"];
     return planOrder.indexOf(userPlan) >= planOrder.indexOf(requiredPlan);
   }
 
@@ -719,7 +728,8 @@ export class DashboardService {
 
 ```typescript
 interface DashboardAnalytics {
-  event: 'widget_view' | 'widget_click' | 'widget_locked_view' | 'upgrade_click';
+  event:
+    "widget_view" | "widget_click" | "widget_locked_view" | "upgrade_click";
   widgetId: string;
   userPlan: string;
   timestamp: Date;
@@ -764,11 +774,11 @@ function trackWidgetInteraction(event: DashboardAnalytics) {
 <script lang="ts">
   import { VirtualList } from 'svelte-virtual-list';
   import OrderRow from './OrderRow.svelte';
-  
+
   interface Props {
     data: Order[];
   }
-  
+
   let { data }: Props = $props();
 </script>
 
@@ -787,13 +797,13 @@ function trackWidgetInteraction(event: DashboardAnalytics) {
 <!-- Memoización de gráficos (Svelte) -->
 <script lang="ts">
   import { LineChart } from './charts/LineChart.svelte';
-  
+
   interface Props {
     data: SalesData[];
   }
-  
+
   let { data }: Props = $props();
-  
+
   // Svelte 5: $derived para memoización
   $: chartData = data; // Se recalcula solo cuando data cambia
 </script>
@@ -806,6 +816,7 @@ function trackWidgetInteraction(event: DashboardAnalytics) {
 ### 9.1 Widgets Configurables
 
 Permitir al usuario:
+
 - Reordenar widgets (drag & drop)
 - Ocultar widgets no relevantes
 - Cambiar tamaño de widgets
@@ -816,7 +827,7 @@ interface UserDashboardPreferences {
   userId: string;
   widgetOrder: string[];
   hiddenWidgets: string[];
-  widgetSizes: Record<string, 'small' | 'medium' | 'large'>;
+  widgetSizes: Record<string, "small" | "medium" | "large">;
 }
 ```
 
@@ -838,38 +849,42 @@ interface UserDashboardPreferences {
 
 ```typescript
 // src/lib/__tests__/dashboard.test.ts
-import { describe, it, expect, vi } from 'vitest';
-import { render, waitFor } from '@testing-library/svelte';
-import Dashboard from '$lib/components/Dashboard.svelte';
-import { getDashboardConfig } from '$lib/config/dashboard-widgets';
+import { describe, it, expect, vi } from "vitest";
+import { render, waitFor } from "@testing-library/svelte";
+import Dashboard from "$lib/components/Dashboard.svelte";
+import { getDashboardConfig } from "$lib/config/dashboard-widgets";
 
-describe('Dashboard', () => {
-  it('should show only starter widgets for starter plan', () => {
-    const config = getDashboardConfig('starter');
+describe("Dashboard", () => {
+  it("should show only starter widgets for starter plan", () => {
+    const config = getDashboardConfig("starter");
     expect(config.widgets).toHaveLength(4); // KPIs + pedidos
-    expect(config.widgets.every(w => w.requiredPlan === 'starter')).toBe(true);
+    expect(config.widgets.every((w) => w.requiredPlan === "starter")).toBe(
+      true,
+    );
   });
-  
-  it('should show commerce widgets for commerce plan', () => {
-    const config = getDashboardConfig('commerce');
-    expect(config.widgets.some(w => w.id === 'chart-sales')).toBe(true);
-    expect(config.widgets.some(w => w.id === 'kpi-customers')).toBe(true);
+
+  it("should show commerce widgets for commerce plan", () => {
+    const config = getDashboardConfig("commerce");
+    expect(config.widgets.some((w) => w.id === "chart-sales")).toBe(true);
+    expect(config.widgets.some((w) => w.id === "kpi-customers")).toBe(true);
   });
-  
-  it('should show locked widget for unavailable feature', () => {
-    const config = getDashboardConfig('starter');
-    const whatsappWidget = config.widgets.find(w => w.id === 'widget-whatsapp');
-    expect(whatsappWidget?.type).toBe('locked');
+
+  it("should show locked widget for unavailable feature", () => {
+    const config = getDashboardConfig("starter");
+    const whatsappWidget = config.widgets.find(
+      (w) => w.id === "widget-whatsapp",
+    );
+    expect(whatsappWidget?.type).toBe("locked");
   });
-  
-  it('should load widget data in parallel', async () => {
+
+  it("should load widget data in parallel", async () => {
     const mockFetch = vi.fn().mockResolvedValue({ data: [] });
     global.fetch = mockFetch;
-    
-    render(Dashboard, { 
-      props: { userPlan: 'commerce', storeId: '123' } 
+
+    render(Dashboard, {
+      props: { userPlan: "commerce", storeId: "123" },
     });
-    
+
     // Esperar a que todos los widgets carguen
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledTimes(6); // 6 widgets de commerce
@@ -880,15 +895,15 @@ describe('Dashboard', () => {
 
 ## 11. Timeline Estimado
 
-| Fase | Descripción | Duración |
-|------|-------------|----------|
-| 1 | Estructura base y configuración de widgets | 1 semana |
-| 2 | Implementación de widgets Starter | 1 semana |
-| 3 | Implementación de widgets Commerce | 1.5 semanas |
-| 4 | Implementación de widgets Enterprise | 1.5 semanas |
-| 5 | Sistema de locked features y CTAs | 3 días |
-| 6 | Testing y optimización de performance | 1 semana |
-| 7 | Analytics y tracking | 2 días |
+| Fase | Descripción                                | Duración    |
+| ---- | ------------------------------------------ | ----------- |
+| 1    | Estructura base y configuración de widgets | 1 semana    |
+| 2    | Implementación de widgets Starter          | 1 semana    |
+| 3    | Implementación de widgets Commerce         | 1.5 semanas |
+| 4    | Implementación de widgets Enterprise       | 1.5 semanas |
+| 5    | Sistema de locked features y CTAs          | 3 días      |
+| 6    | Testing y optimización de performance      | 1 semana    |
+| 7    | Analytics y tracking                       | 2 días      |
 
 **Total estimado: 6-7 semanas**
 
@@ -905,22 +920,24 @@ describe('Dashboard', () => {
 
 ## 13. Riesgos y Mitigaciones
 
-| Riesgo | Impacto | Mitigación |
-|--------|---------|------------|
-| Carga lenta con muchos widgets | Alto | Lazy loading, caching, parallel fetching |
-| Complejidad de mantenimiento | Medio | Configuración declarativa, tests |
-| Usuarios confundidos con features bloqueadas | Medio | UX clara, CTAs prominentes |
-| Performance en mobile | Alto | Responsive design, virtualización |
+| Riesgo                                       | Impacto | Mitigación                               |
+| -------------------------------------------- | ------- | ---------------------------------------- |
+| Carga lenta con muchos widgets               | Alto    | Lazy loading, caching, parallel fetching |
+| Complejidad de mantenimiento                 | Medio   | Configuración declarativa, tests         |
+| Usuarios confundidos con features bloqueadas | Medio   | UX clara, CTAs prominentes               |
+| Performance en mobile                        | Alto    | Responsive design, virtualización        |
 
 ## 14. Éxito del Proyecto
 
 ### Métricas de éxito:
+
 - 80% de usuarios interactúan con al menos 3 widgets por sesión
 - 15% de usuarios que ven widgets bloqueados hacen upgrade en 30 días
 - Tiempo de carga del dashboard < 2 segundos
 - 90% de usuarios no reportan confusión sobre features disponibles
 
 ### KPIs de negocio:
+
 - Aumento de 20% en upgrades desde Starter a Commerce
 - Reducción de 30% en tickets de soporte sobre "cómo hacer X"
 - Aumento de 25% en engagement (sesiones por semana)
