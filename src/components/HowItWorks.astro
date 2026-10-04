@@ -1,37 +1,39 @@
 ---
 import Zap from "@lucide/astro/icons/zap";
 import Code from "@lucide/astro/icons/code";
-import Server from "@lucide/astro/icons/server";
-import LifeBuoy from "@lucide/astro/icons/life-buoy";
+import CreditCard from "@lucide/astro/icons/credit-card";
+import Rocket from "@lucide/astro/icons/rocket";
 
+// Proceso de Store (la tienda). El desarrollo a medida no sigue 4 pasos fijos:
+// cada proyecto se conversa y se planifica a su medida.
 const steps = [
   {
     number: "01",
-    title: "Me contás qué necesitás",
+    title: "Me contactás",
     description:
-      "Hablamos por mensaje o llamada: qué problema tenés, cómo lo resolvés hoy y qué te gustaría que haga el sistema.",
+      "Me contás tu negocio: qué vendés, cuántos productos tenés hoy y qué te gustaría que se vea distinto de una tienda genérica.",
     Icon: Zap,
   },
   {
     number: "02",
-    title: "Lo diseño y desarrollo",
+    title: "Diseño y desarrollo",
     description:
-      "Armo la solución a tu medida, con tu marca y tus reglas de negocio — no una herramienta genérica adaptada a la fuerza.",
+      "Armo tu tienda con tu marca real — tu logo, tus colores, tu catálogo — no una plantilla con tu nombre pegado encima.",
     Icon: Code,
   },
   {
     number: "03",
-    title: "Lo pongo en producción",
+    title: "Integración de pagos",
     description:
-      "Lo publico y lo dejo funcionando, con tu dominio si lo necesitás. Del desarrollo a que esté en uso, sin pasos en el medio.",
-    Icon: Server,
+      "Conecto tu propia cuenta de Mercado Pago: el dinero de cada venta va directo a la tuya, yo no toco un peso en el medio.",
+    Icon: CreditCard,
   },
   {
     number: "04",
-    title: "Te acompaño después",
+    title: "Lanzamiento y soporte",
     description:
-      "Seguimos en contacto mientras te acostumbrás a usarlo — no te dejo solo el primer día.",
-    Icon: LifeBuoy,
+      "La tienda sale al aire en tu dominio y seguimos en contacto mientras te acostumbrás a manejarla — no te dejo solo el primer día.",
+    Icon: Rocket,
   },
 ];
 
@@ -51,10 +53,10 @@ const accent = "rgba(var(--blue-rgb),";
         class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4"
         style="color: var(--text-primary);"
       >
-        ¿Cómo trabajo?
+        ¿Cómo funciona Store?
       </h2>
       <p class="text-base sm:text-lg" style="color: var(--text-muted);">
-        De la primera charla a tenerlo funcionando, en 4 pasos.
+        Del primer contacto al lanzamiento de tu tienda, en 4 pasos.
       </p>
     </div>
 
