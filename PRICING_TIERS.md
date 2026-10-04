@@ -1,4 +1,4 @@
-# Pricing — SmonDev Studio
+# Pricing de Store — SmonDev Studio
 
 Fuente de verdad del pricing público. **Los tres repos deben coincidir con este
 archivo**: la landing (`src/components/Pricing.astro`), el backend
@@ -7,6 +7,10 @@ frontend (`smondev-frontend/src/lib/services/api/stores.ts` + `requiredPlan`
 en `routes/admin/+layout.svelte`).
 
 Los precios viven **solo acá y en la landing**. El backend no guarda precios.
+
+> **Alcance:** estos precios son **solo de Store** (la plataforma de tiendas
+> online). El desarrollo de software a medida del estudio **no tiene precio de
+> lista**: se cotiza según el proyecto. La landing lo aclara bajo los planes.
 
 ## Planes y códigos
 

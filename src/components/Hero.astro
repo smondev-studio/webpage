@@ -1,4 +1,9 @@
 ---
+const stats = [
+  { value: "A medida", label: "para tu negocio", accent: false },
+  { value: "Sin intermediarios", label: "hablás conmigo", accent: true },
+  { value: "Store", label: "tu tienda online", accent: false },
+];
 ---
 
 <section
@@ -10,9 +15,9 @@
   <div class="absolute bottom-10 right-10 w-72 h-72 bg-orange-500/8 dark:bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-    <div class="grid lg:grid-cols-[0.7fr_1.3fr] gap-6 lg:gap-10 items-center">
+    <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-6 lg:gap-10 items-center">
       <!-- Text -->
-      <div class="order-1">
+      <div class="order-1 min-w-0">
         <div
           class="fade-up inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-500 text-xs font-semibold px-4 py-1.5 rounded-full mb-6"
           style="animation-delay: 0ms;"
@@ -25,19 +30,19 @@
           class="fade-up text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-6 transition-colors duration-300"
           style="animation-delay: 90ms; color: var(--text-primary);"
         >
-          Tu tienda online,
+          Software a medida,
           <br />
-          <span class="text-orange-500">hecha a medida</span>
-          <br />y lista para vender.
+          <span class="text-orange-500">de la idea</span>
+          <br />a producción.
         </h1>
 
         <p
           class="fade-up text-base sm:text-lg leading-relaxed mb-8 max-w-md transition-colors duration-300"
           style="animation-delay: 180ms; color: var(--text-muted);"
         >
-          Te armo la tienda con tu logo, tus colores y tu catálogo. Mercado Pago
-          ya viene conectado y vos la manejás desde tu propio panel. Nada de
-          plantillas compartidas.
+          Soy desarrollador de software y construyo lo que tu negocio necesita,
+          de principio a fin. También tengo Store, mi plataforma para que tengas
+          tu tienda online lista para vender.
         </p>
 
         <div
@@ -48,63 +53,38 @@
             href="#contact"
             class="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-3.5 rounded-full transition-all transform hover:scale-105 shadow-lg shadow-orange-500/30"
           >
-            Quiero mi tienda →
+            Contame tu proyecto →
           </a>
           <a
-            href="#features"
+            href="#store"
             class="font-semibold px-8 py-3.5 rounded-full transition-all border"
             style="border-color: var(--border); color: var(--text-muted);"
           >
-            Ver qué incluye
+            Conocer Store
           </a>
         </div>
 
         <!-- Stats -->
         <div
-          class="fade-up flex gap-4 sm:gap-6 mt-10"
+          class="fade-up flex flex-wrap gap-x-6 gap-y-4 mt-10"
           style="animation-delay: 360ms;"
         >
-          <div>
+          {stats.map((item, i) => (
             <div
-              class="text-base sm:text-lg font-black whitespace-nowrap"
-              style="color: var(--text-primary);"
+              class={i > 0 ? "sm:border-l sm:pl-6" : ""}
+              style="border-color: var(--border);"
             >
-              Tu marca
+              <div
+                class={`text-base sm:text-lg font-black ${item.accent ? "text-orange-500" : ""}`}
+                style={item.accent ? "" : "color: var(--text-primary);"}
+              >
+                {item.value}
+              </div>
+              <div class="text-xs mt-1" style="color: var(--text-faint);">
+                {item.label}
+              </div>
             </div>
-            <div
-              class="text-xs mt-1 whitespace-nowrap"
-              style="color: var(--text-faint);"
-            >
-              no una plantilla
-            </div>
-          </div>
-          <div class="w-px" style="background-color: var(--border);"></div>
-          <div>
-            <div class="text-base sm:text-lg font-black whitespace-nowrap text-orange-500">
-              Mercado Pago
-            </div>
-            <div
-              class="text-xs mt-1 whitespace-nowrap"
-              style="color: var(--text-faint);"
-            >
-              ya conectado
-            </div>
-          </div>
-          <div class="w-px" style="background-color: var(--border);"></div>
-          <div>
-            <div
-              class="text-base sm:text-lg font-black whitespace-nowrap"
-              style="color: var(--text-primary);"
-            >
-              Panel propio
-            </div>
-            <div
-              class="text-xs mt-1 whitespace-nowrap"
-              style="color: var(--text-faint);"
-            >
-              lo manejás vos
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
