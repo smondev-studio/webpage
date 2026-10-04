@@ -22,18 +22,38 @@ interface BackendStore {
   industry?: string | null;
 }
 
-function mapStore(s: BackendStore): Store {
+/**
+ * Las imágenes originales (a veces base64 de 100-500 KB) se guardan acá y NO se
+ * incrustan en el HTML: src/pages/stores/[id].webp.ts las optimiza y las sirve
+ * como archivo. Antes el 92 % del HTML de la portada era base64 (~860 KB).
+ */
+const rawImages = new Map<string, string>();
+
+export function getRawStoreImage(id: string): string | undefined {
+  return rawImages.get(id);
+}
+
+export function mapStore(s: BackendStore): Store {
+  const raw = s.logo || s.heroImage;
+  if (raw) rawImages.set(s.id, raw);
   return {
     id: s.id,
     name: s.name,
     url: s.url,
-    image: s.logo || s.heroImage || "/images/hero-light.webp",
+    image: raw ? `/stores/${s.id}.webp` : "/images/hero-light.webp",
     description: s.description || undefined,
     category: s.category || s.rubro || s.industry || undefined,
   };
 }
 
-export async function getStores(): Promise<Store[]> {
+let storesPromise: Promise<Store[]> | undefined;
+
+export function getStores(): Promise<Store[]> {
+  storesPromise ??= fetchStores();
+  return storesPromise;
+}
+
+async function fetchStores(): Promise<Store[]> {
   if (!API_URL) {
     console.warn("PUBLIC_API_URL not configured, skipping store fetch");
     return [];
