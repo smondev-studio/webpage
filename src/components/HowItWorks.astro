@@ -1,42 +1,40 @@
 ---
 import Zap from "@lucide/astro/icons/zap";
 import Code from "@lucide/astro/icons/code";
-import CreditCard from "@lucide/astro/icons/credit-card";
-import Rocket from "@lucide/astro/icons/rocket";
+import Server from "@lucide/astro/icons/server";
+import LifeBuoy from "@lucide/astro/icons/life-buoy";
 
 const steps = [
   {
     number: "01",
-    title: "Me contás tu negocio",
+    title: "Me contás qué necesitás",
     description:
-      "Hablamos por mensaje o llamada: qué vendés, cuántos productos tenés hoy, y qué te gustaría que se vea distinto de una tienda genérica.",
+      "Hablamos por mensaje o llamada: qué problema tenés, cómo lo resolvés hoy y qué te gustaría que haga el sistema.",
     Icon: Zap,
   },
   {
     number: "02",
-    title: "Diseño y desarrollo",
+    title: "Lo diseño y desarrollo",
     description:
-      "Armo tu tienda con tu marca real — tu logo, tus colores, tu catálogo — no una plantilla con tu nombre pegado encima.",
+      "Armo la solución a tu medida, con tu marca y tus reglas de negocio — no una herramienta genérica adaptada a la fuerza.",
     Icon: Code,
   },
   {
     number: "03",
-    title: "Integración de pagos",
+    title: "Lo pongo en producción",
     description:
-      "Conectamos tu propia cuenta de Mercado Pago: el dinero de cada venta va directo a la tuya, yo no toco un peso en el medio.",
-    Icon: CreditCard,
+      "Lo publico y lo dejo funcionando, con tu dominio si lo necesitás. Del desarrollo a que esté en uso, sin pasos en el medio.",
+    Icon: Server,
   },
   {
     number: "04",
-    title: "Lanzamiento y soporte",
+    title: "Te acompaño después",
     description:
-      "La tienda sale al aire en tu dominio y seguimos en contacto mientras te acostumbrás a manejarla — no te dejo solo el primer día.",
-    Icon: Rocket,
+      "Seguimos en contacto mientras te acostumbrás a usarlo — no te dejo solo el primer día.",
+    Icon: LifeBuoy,
   },
 ];
 
-// Un solo acento (naranja de marca) para los 4 pasos -- ídem Features,
-// antes cada paso tenía un color distinto sin ningún significado real.
 const accent = "rgba(var(--blue-rgb),";
 ---
 
@@ -53,10 +51,10 @@ const accent = "rgba(var(--blue-rgb),";
         class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4"
         style="color: var(--text-primary);"
       >
-        ¿Cómo funciona?
+        ¿Cómo trabajo?
       </h2>
       <p class="text-base sm:text-lg" style="color: var(--text-muted);">
-        Del primer contacto al lanzamiento en 4 pasos simples.
+        De la primera charla a tenerlo funcionando, en 4 pasos.
       </p>
     </div>
 

@@ -1,0 +1,46 @@
+---
+import Store from "@lucide/astro/icons/store";
+
+const links = [
+  { href: "#features", label: "Qué incluye" },
+  { href: "#pricing", label: "Planes" },
+  { href: "#clientes", label: "Tiendas" },
+];
+---
+
+<section
+  id="store"
+  class="pt-16 sm:pt-20 lg:pt-24 pb-4 relative overflow-hidden"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-500 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
+      <Store class="w-3.5 h-3.5" />
+      Un producto de SmonDev Studio
+    </div>
+
+    <h2
+      class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4"
+      style="color: var(--text-primary);"
+    >
+      Store: tu tienda online,{" "}
+      <span class="text-orange-500">hecha a medida</span>
+    </h2>
+    <p class="text-base sm:text-lg" style="color: var(--text-muted);">
+      Además del desarrollo a medida, tengo Store: una plataforma para que
+      tengas tu propia tienda online, con tu marca, tu panel de administración y
+      Mercado Pago ya conectado. Lo que sigue es solo de Store.
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-3 mt-8">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class="text-sm px-4 py-1.5 rounded-full font-medium border transition-colors hover:border-orange-500/40"
+          style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);"
+        >
+          {l.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

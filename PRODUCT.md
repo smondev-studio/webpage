@@ -8,28 +8,33 @@ web
 
 ## Users
 
-Dueños/gerentes de pequeños y medianos comercios en Argentina (rubros
-variados: indumentaria, sex shop, growshop, etc.) que están evaluando
-contratar a un desarrollador/estudio para tener una tienda online propia,
-en vez de usar una plataforma genérica no-code (Tiendanube, Shopify y
-similares). Llegan a esta landing para decidir si contactan a SmonDev
-Studio.
+Dueños/gerentes de pequeños y medianos negocios en Argentina que necesitan
+**software a medida** y están evaluando contratar a un desarrollador/estudio
+(público principal). Dentro de ese grupo, comerciantes (indumentaria, sex
+shop, growshop, etc.) que quieren una tienda online propia en vez de una
+plataforma genérica no-code (Tiendanube, Shopify y similares): a ellos se
+les ofrece **Store**. Llegan a esta landing para decidir si contactan a
+SmonDev Studio.
 
 ## Product Purpose
 
 `webpage` es la landing de marketing de **SmonDev Studio**, un estudio de
 desarrollo de software con base en Cipolletti, Río Negro, Argentina. La
-empresa hace desarrollo de software en general; esta landing en particular
-promociona específicamente **"Store"**, uno de sus productos: una
-plataforma de e-commerce multi-tenant (repos hermanos `smondev-backend` +
-`smondev-frontend`) que SmonDev construye y opera para sus clientes.
-Objetivo de la página: que un comerciante potencial complete el formulario
-de contacto para empezar a conversar sobre tener su propia tienda.
+empresa hace **desarrollo de software a medida**; **"Store"** es uno de sus
+productos: una plataforma de e-commerce multi-tenant (repos hermanos
+`smondev-backend` + `smondev-frontend`) que SmonDev construye y opera para
+sus clientes. La página presenta primero al estudio y, como bloque propio,
+a Store (Características, Planes y Tiendas son todos de Store).
+Objetivo **principal**: que alguien con una necesidad de software complete el
+formulario de contacto para conversar sobre su proyecto. Objetivo
+secundario: que un comerciante contrate Store.
 
 ## Positioning
 
-SmonDev Studio no es "una tienda online" — es el desarrollador que construye
-y opera Store a medida para cada cliente. El diferencial frente a
+SmonDev Studio no es "una tienda online": es un desarrollador de software a
+medida (una sola persona, hablás con quien programa) que además tiene un
+producto, Store, que construye y opera a medida para cada cliente. El
+diferencial de Store frente a
 plataformas genéricas: cada tienda tiene su propio panel de administración,
 colores/logo/tipografía personalizables, subdominio (o dominio propio), e
 integración de pagos con Mercado Pago ya resuelta — sin que el comerciante
@@ -48,9 +53,12 @@ tenga que armar nada por su cuenta ni depender de una plantilla compartida.
 
 ## Capabilities and Constraints
 
-- Precios reales y publicados (Starter ARS 50.000/mes + setup 35.000,
-  Commerce ARS 70.000/mes + setup 50.000, Enterprise a consultar/próximamente)
-  — no cambiar estas cifras sin instrucción explícita del usuario.
+- Precios reales y publicados **de Store** (Starter ARS 50.000/mes + setup
+  35.000, Commerce ARS 70.000/mes + setup 50.000, Enterprise a
+  consultar/próximamente) — no cambiar estas cifras sin instrucción explícita
+  del usuario. El **desarrollo a medida no tiene precio de lista**: se cotiza
+  según el proyecto. Nunca mostrar los precios de Store como si fueran del
+  estudio en general.
 - Facturación electrónica (AFIP/TusFacturas) existe en la plataforma Store
   pero **no está validada contra una cuenta real de producción todavía** —
   no presentarla como algo probado end-to-end.
@@ -90,8 +98,9 @@ Específicamente:
 
 ## Product Principles
 
-1. La landing vende a SmonDev Studio como desarrollador/operador de Store,
-   no como si Store fuera la empresa entera.
+1. La landing presenta primero a SmonDev Studio como desarrollador de
+   software a medida; Store es un producto del estudio con su propia sección
+   (y sus propios precios), nunca "la empresa entera".
 2. Nunca presentar una tienda de prueba o incompleta como un caso de
    cliente real terminado.
 3. Los precios y la información de facturación electrónica deben
