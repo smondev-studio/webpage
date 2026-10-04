@@ -5,8 +5,8 @@ interface Props {
 }
 
 const {
-  title = "SmonDev Studio — Desarrollo de software a medida y tiendas online",
-  description = "Desarrollo de software a medida desde la Patagonia argentina. Además, Store: mi plataforma de tiendas online con tu marca, panel propio y Mercado Pago ya conectado.",
+  title = "Software a medida en Cipolletti y Neuquén | SmonDev Studio",
+  description = "Desarrollo de software a medida desde Cipolletti, junto a Neuquén, y en remoto para todo el país. Además, Store: tu tienda online con Mercado Pago.",
 } = Astro.props;
 
 import "../styles/global.css";
@@ -31,7 +31,12 @@ const organizationLd = {
     addressRegion: "Río Negro",
     addressCountry: "AR",
   },
-  areaServed: { "@type": "Country", name: "Argentina" },
+  areaServed: [
+    { "@type": "City", name: "Cipolletti" },
+    { "@type": "City", name: "Neuquén" },
+    { "@type": "AdministrativeArea", name: "Río Negro" },
+    { "@type": "Country", name: "Argentina" },
+  ],
   knowsAbout: [
     "Desarrollo de software a medida",
     "Tiendas online",
@@ -56,7 +61,7 @@ const websiteLd = {
     <meta name="description" content={description} />
     <meta
       name="keywords"
-      content="desarrollo de software a medida, software a medida, desarrollo web, tiendas online, e-commerce, Store, Mercado Pago, Argentina, Patagonia, SmonDev Studio"
+      content="desarrollo de software a medida, software a medida Neuquén, software a medida Cipolletti, tienda online, e-commerce, Store, Mercado Pago, Alto Valle, Patagonia, Argentina, SmonDev Studio"
     />
     <meta name="author" content="SmonDev Studio" />
     <meta name="robots" content="index, follow" />
