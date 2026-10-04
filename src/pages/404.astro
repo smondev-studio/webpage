@@ -1,0 +1,49 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Página no encontrada | SmonDev Studio">
+  <main
+    class="min-h-screen flex items-center justify-center px-6"
+    style="background-color: var(--bg-primary);"
+  >
+    <div class="text-center max-w-md">
+      <a href="/" aria-label="Ir al inicio de SmonDev Studio">
+        <img
+          src="/images/logo.webp"
+          alt="SmonDev Studio"
+          class="mx-auto h-20 w-auto rounded-xl mb-8"
+        />
+      </a>
+
+      <p class="text-6xl font-black mb-2 text-orange-500" aria-hidden="true">
+        404
+      </p>
+
+      <h1 class="text-2xl font-black mb-3" style="color: var(--text-primary);">
+        Página no encontrada
+      </h1>
+
+      <p class="text-base mb-8" style="color: var(--text-muted);">
+        La dirección que buscás no existe o cambió de lugar. Podés volver al
+        inicio o contarme qué estabas buscando.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-3">
+        <a
+          href="/"
+          class="bg-orange-500 hover:bg-orange-400 text-white font-bold px-7 py-3 rounded-full transition-all shadow-lg shadow-orange-500/30"
+        >
+          Volver al inicio
+        </a>
+        <a
+          href="/#contact"
+          class="font-semibold px-7 py-3 rounded-full transition-all border"
+          style="border-color: var(--border); color: var(--text-muted);"
+        >
+          Contacto
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>
