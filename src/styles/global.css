@@ -118,6 +118,10 @@ html.light .group:hover .group-hover\:text-orange-500 {
   color: var(--orange-text-hover);
 }
 
+.font-display {
+  font-family: var(--font-family-display);
+}
+
 /* Títulos con la fuente de display (Bricolage Grotesque); el resto, Figtree. */
 h1,
 h2,
