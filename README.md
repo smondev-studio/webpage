@@ -1,87 +1,110 @@
-# SmonDev Studio — Landing Page
+# SmonDev Studio — Landing
 
-Landing page para SmonDev Studio, servicio de desarrollo de e-commerce multi-tenant en Argentina. Ofrecemos plataformas de tiendas online completas con catálogo, pagos con Mercado Pago, panel de administración y soporte integral.
+Sitio de [smondevstudio.com](https://smondevstudio.com): la presentación de **SmonDev Studio**, un estudio de desarrollo de **software a medida** (Cipolletti, Río Negro, Argentina) que además tiene **Store**, una plataforma propia de tiendas online.
 
-## 🚀 Stack Tecnológico
+La página presenta primero al estudio y, como bloque aparte, a Store (qué incluye, cómo funciona, planes y tiendas hechas con ella). El objetivo principal es que alguien con una necesidad de software complete el formulario de contacto.
 
-- **Framework**: Astro 6.4.3
-- **Estilos**: TailwindCSS v4
-- **Lenguaje**: TypeScript
-- **Testing**: Vitest
-- **Icons**: Lucide Astro
-- **Contacto**: `POST /api/landing-contact` (smondev-backend) (guarda el mensaje y avisa por email)
-- **Gestor de paquetes**: pnpm
+> El posicionamiento, el público y las reglas de contenido están en [`PRODUCT.md`](PRODUCT.md). Los precios de Store, en [`PRICING_TIERS.md`](PRICING_TIERS.md).
 
-## 📁 Estructura del Proyecto
+## Stack
+
+- **Astro 6** (sitio estático) + **TypeScript**
+- **Tailwind CSS v4** y variables CSS propias para el tema (`src/styles/global.css`)
+- **Tipografía:** Bricolage Grotesque (títulos) y Figtree (texto), vía Google Fonts
+- **Íconos:** `@lucide/astro`
+- **Imágenes:** `sharp` optimiza los logos de las tiendas durante el build
+- **Tests:** Vitest (unitarios) y Playwright (e2e)
+- **Calidad:** ESLint + Prettier, con Husky y lint-staged en cada commit
+- **Gestor de paquetes:** pnpm
+
+## Estructura
 
 ```text
 /
-├── public/              # Assets estáticos (imágenes, favicon)
+├── public/                  # Estáticos: imágenes (WebP), favicon, robots.txt, CNAME
 ├── src/
-│   ├── components/      # Componentes Astro (Hero, Features, Pricing, etc.)
-│   ├── layouts/         # Layouts base
-│   ├── lib/            # Utilidades y lógica de negocio
-│   │   ├── __tests__/   # Tests unitarios
-│   │   ├── contact.ts   # Lógica del formulario de contacto
-│   │   └── projects.ts # API de portfolio
-│   ├── pages/           # Páginas (rutas)
-│   └── styles/          # Estilos globales
-├── .env.example         # Variables de entorno de ejemplo
-├── PRICING_TIERS.md     # Documentación de planes y precios
-└── package.json
+│   ├── components/          # Navbar, Hero, About, StoreIntro, Features,
+│   │                        # HowItWorks, Pricing, Portfolio, Contact, Footer, Analytics
+│   ├── layouts/Layout.astro # <head>: SEO, Open Graph, datos estructurados, tema
+│   ├── lib/
+│   │   ├── contact.ts       # Envío del formulario de contacto
+│   │   ├── projects.ts      # Tiendas del portfolio (API pública del backend)
+│   │   └── __tests__/       # Tests unitarios
+│   ├── pages/
+│   │   ├── index.astro      # Portada (una sola página)
+│   │   ├── 404.astro        # Página no encontrada
+│   │   ├── 500.astro        # Página de mantenimiento
+│   │   ├── sitemap.xml.ts   # Sitemap generado en cada build
+│   │   └── stores/[id].webp.ts  # Logos de las tiendas, optimizados
+│   ├── scripts/reveal.ts    # Aparición suave de secciones al hacer scroll
+│   └── styles/global.css    # Tema claro/oscuro, fondo de cielo, animaciones
+├── docs/                    # Documentos de diseño (SDD-*.md)
+├── e2e/                     # Tests de Playwright
+├── .github/workflows/       # CI y despliegue
+├── PRODUCT.md               # Posicionamiento y reglas de contenido
+└── PRICING_TIERS.md         # Planes y precios de Store
 ```
 
-## 🔧 Configuración
+Orden de las secciones: Hero → Sobre mí → Store → Qué incluye → Cómo funciona → Planes → Tiendas → Contacto.
 
-### Variables de Entorno
+## Puesta en marcha
 
-Crea un archivo `.env.local` basándote en `.env.example`:
-
-```bash
-# Backend (tiendas del portfolio y formulario de contacto)
-PUBLIC_API_URL=tu_api_url
-```
-
-### Instalación
+Requiere Node 22 o superior y [pnpm](https://pnpm.io).
 
 ```bash
 pnpm install
+cp .env.example .env.local   # y completar las variables (ver abajo)
+pnpm dev                     # http://localhost:4321
 ```
 
-## 🧞 Comandos
+### Variables de entorno
 
-Todos los comandos se ejecutan desde la raíz del proyecto:
+| Variable                  | Para qué                                                                                                                                                                      | Obligatoria |
+| :------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| `PUBLIC_API_URL`          | API del backend: lista de tiendas (en el build) y `POST /api/landing-contact` (en el navegador). Local: `http://localhost:3001` · Producción: `https://api.smondevstudio.com` | Sí          |
+| `PUBLIC_GA_ID`            | ID de Google Analytics (`G-XXXXXXXXXX`)                                                                                                                                       | No          |
+| `PUBLIC_GSC_VERIFICATION` | Código de verificación de Search Console (etiqueta HTML)                                                                                                                      | No          |
 
-| Comando           | Acción                                            |
-| :---------------- | :------------------------------------------------ |
-| `pnpm dev`        | Inicia servidor de desarrollo en `localhost:4321` |
-| `pnpm build`      | Build para producción en `./dist/`                |
-| `pnpm preview`    | Previsualiza el build localmente                  |
-| `pnpm test`       | Ejecuta tests unitarios                           |
-| `pnpm test:watch` | Ejecuta tests en modo watch                       |
+Sin `PUBLIC_API_URL` el sitio compila igual, pero sin tiendas y con el formulario de contacto sin conexión.
 
-## 🎨 Características
+## Comandos
 
-- **Tema Dark/Light**: Toggle de tema con persistencia en localStorage
-- **Responsive**: Diseño adaptado a mobile, tablet y desktop
-- **SEO Optimizado**: Meta tags, URLs amigables
-- **Formulario de Contacto**: validación, anti-spam (honeypot y límite) y aviso por email vía smondev-backend
-- **Portfolio Dinámico**: Carga de tiendas desde API externa
-- **Componentes Modulares**: Arquitectura de componentes reutilizables
+| Comando                       | Acción                           |
+| :---------------------------- | :------------------------------- |
+| `pnpm dev`                    | Servidor de desarrollo           |
+| `pnpm build`                  | Build de producción en `./dist/` |
+| `pnpm preview`                | Sirve el build localmente        |
+| `pnpm test`                   | Tests unitarios (Vitest)         |
+| `pnpm test:e2e`               | Tests de navegador (Playwright)  |
+| `pnpm lint` / `pnpm lint:fix` | ESLint                           |
 
-## 📄 Documentación Adicional
+## Cómo funciona
 
-- `PRICING_TIERS.md`: Planes de precios y modelo de negocio detallado
+- **Formulario de contacto:** `src/lib/contact.ts` hace `POST {PUBLIC_API_URL}/api/landing-contact`. El backend guarda el mensaje y avisa por email. Tiene un campo oculto anti-spam (honeypot) y un límite de envíos por visitante. El sitio no consulta servicios de geolocalización.
+- **Tiendas del portfolio:** en el build se leen de `GET /api/stores/public`. Los logos (que llegan como base64) se convierten en archivos WebP en `/stores/<id>.webp` para no inflar el HTML. Si la API falla o no responde, `Portfolio.astro` muestra una tarjeta fija de ejemplo ("Quina"), que **no** refleja una tienda real terminada: es un pendiente conocido.
+- **Tema claro/oscuro:** el script del `<head>` aplica la clase `light` antes del primer render. Las imágenes del hero cambian por CSS, sin parpadeo.
+- **Movimiento:** las animaciones se desactivan con `prefers-reduced-motion`.
+- **SEO:** título, descripción, Open Graph, datos estructurados (JSON-LD), sitemap con fecha del último commit, `robots.txt` y página 404.
 
-## � Despliegue
+## Despliegue
 
-El sitio está configurado para desplegarse en `https://smondevstudio.com`. Para desplegar:
+El sitio se publica en **GitHub Pages** con el dominio `smondevstudio.com` (DNS en Cloudflare, sin proxy).
 
-1. Build del proyecto: `pnpm build`
-2. Sube el contenido de `dist/` a tu hosting
-3. Configura las variables de entorno en producción
+- **Se despliega solo** con cada push a `main` (`.github/workflows/deploy.yml`).
+- **CI:** `.github/workflows/ci.yml` corre lint, tests y build en cada push y pull request.
+- **Secretos del repositorio** (Settings → Secrets and variables → Actions): `PUBLIC_API_URL`, `PUBLIC_GA_ID` y `PUBLIC_GSC_VERIFICATION`.
 
-## 👀 Recursos
+Como cada merge a `main` publica el sitio, conviene trabajar en una rama y abrir un pull request.
 
-- [Documentación de Astro](https://docs.astro.build)
-- [Documentación de TailwindCSS](https://tailwindcss.com)
+## Contribuir
+
+- Una rama por cambio y un pull request hacia `main`.
+- El hook de commit corre ESLint y Prettier sobre los archivos modificados.
+- Los precios y las funciones de Store deben coincidir con los planes del backend (`STARTER` / `COMMERCE` / `ENTERPRISE`); ver `PRICING_TIERS.md`.
+
+## Documentación
+
+- [`PRODUCT.md`](PRODUCT.md): a quién se le habla, qué se promete y qué no.
+- [`PRICING_TIERS.md`](PRICING_TIERS.md): planes y precios de Store, y su relación con el backend.
+- [`docs/`](docs): documentos de diseño de funciones.
+- [`CLAUDE.md`](CLAUDE.md): contexto para asistentes de código.
