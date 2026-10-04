@@ -66,7 +66,12 @@ const accent = "rgba(var(--blue-rgb),";
         return (
           <div class="relative">
             {i < steps.length - 1 && (
-              <div class="hidden lg:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-[rgba(var(--blue-rgb),0.4)] to-transparent z-0"></div>
+              /* Solo el tramo entre un ícono (4rem) y el siguiente: arranca 1rem
+                   después del ícono y termina 1rem antes del próximo (no cruza ninguno). */
+              <div
+                class="hidden lg:block absolute top-8 left-20 h-px bg-gradient-to-r from-[rgba(var(--blue-rgb),0.45)] to-[rgba(var(--blue-rgb),0.12)] z-0"
+                style="width: calc(100% - 4rem);"
+              />
             )}
             <div class="relative z-10 group">
               <div

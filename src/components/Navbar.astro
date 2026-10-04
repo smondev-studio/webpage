@@ -1,8 +1,13 @@
 ---
+// spy = secciones que se resaltan en este link. Store abarca todo su bloque.
 const links = [
-  { href: "#about", label: "Sobre mí" },
-  { href: "#store", label: "Store" },
-  { href: "#contact", label: "Contacto" },
+  { href: "#about", label: "Sobre mí", spy: "about" },
+  {
+    href: "#store",
+    label: "Store",
+    spy: "store features how-it-works pricing clientes",
+  },
+  { href: "#contact", label: "Contacto", spy: "contact" },
 ];
 ---
 
@@ -26,7 +31,9 @@ const links = [
         <li>
           <a
             href={link.href}
-            class="text-sm font-medium transition-colors hover:text-orange-500"
+            data-nav-link
+            data-spy={link.spy}
+            class="nav-desktop text-sm font-medium transition-colors hover:text-orange-500"
             style="color: var(--text-muted);"
           >
             {link.label}
@@ -162,6 +169,8 @@ const links = [
         <li>
           <a
             href={link.href}
+            data-nav-link
+            data-spy={link.spy}
             class="text-sm font-medium block py-1 hover:text-orange-500 transition-colors"
             style="color: var(--text-muted);"
           >
@@ -238,4 +247,49 @@ const links = [
   const btn = document.getElementById("menu-btn");
   const menu = document.getElementById("mobile-menu");
   btn?.addEventListener("click", () => menu?.classList.toggle("hidden"));
+
+  // Sección activa: marca en el menú la sección que está cruzando una línea al 35 %
+  // de la altura de la pantalla. En el hero no hay ninguna; al llegar al final, la última.
+  const spyLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("a[data-spy]"),
+  );
+  const spySections = [
+    ...new Set(spyLinks.flatMap((a) => (a.dataset.spy ?? "").split(" "))),
+  ]
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null)
+    .sort((a, b) =>
+      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
+    );
+
+  let ticking = false;
+  function updateActiveSection() {
+    ticking = false;
+    const line = window.innerHeight * 0.35;
+    let current: string | null = null;
+    for (const section of spySections) {
+      if (section.getBoundingClientRect().top <= line) current = section.id;
+    }
+    const atBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 4;
+    if (atBottom && spySections.length) current = spySections.at(-1)!.id;
+
+    for (const link of spyLinks) {
+      const active =
+        current !== null &&
+        (link.dataset.spy ?? "").split(" ").includes(current);
+      if (active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    }
+  }
+  function requestUpdate() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateActiveSection);
+    }
+  }
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  updateActiveSection();
 </script>
