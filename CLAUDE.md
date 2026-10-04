@@ -1,7 +1,9 @@
 # webpage — smondev-studio landing
 
-Landing/marketing de **SmonDev Studio** (smondevstudio.com), el servicio de
-desarrollo de e-commerce multi-tenant. Sitio estático que usa solo la API
+Landing/marketing de **SmonDev Studio** (smondevstudio.com), un estudio de
+desarrollo de software a medida que además tiene **Store**, una plataforma de
+tiendas online (la tienda es un producto, no todo el negocio; ver `PRODUCT.md`).
+Sitio estático que usa solo la API
 **pública** del backend (`../smondev-backend`, vía `PUBLIC_API_URL`):
 `POST /api/landing-contact` (formulario de contacto, guarda el mensaje y avisa por
 email) y `GET /api/stores/public` (tiendas del portfolio). No usa nada
