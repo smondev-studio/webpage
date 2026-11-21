@@ -1,113 +1,64 @@
 import { describe, it, expect } from "vitest";
+import { pricingTiers, parsePrice } from "../pricing";
 
-// Mock de los tiers de precios
-const pricingTiers = [
-  {
-    name: "Starter",
-    price: "18.000",
-    setup: "20.000",
-    description:
-      "Ideal para comercios pequeños que quieren presencia online rápida",
-    features: [
-      "Catálogo básico (productos, variantes, fotos)",
-      "Checkout con Mercado Pago",
-      "Subdominio temporal / dominio propio (opcional)",
-      "Panel admin básico: productos, pedidos, clientes",
-      "Soporte por mensaje (respuesta 48h)",
-      "Importación CSV básica",
-    ],
-    excluded: [
-      "Dominio propio configurado",
-      "WhatsApp integrado",
-      "Reportes mensuales",
-      "SEO avanzado",
-    ],
-    popular: false,
-  },
-  {
-    name: "Commerce",
-    price: "38.000",
-    setup: "35.000",
-    description:
-      "Ideal para comercios con facturación media, integraciones de ventas",
-    features: [
-      "Todo lo de Starter",
-      "Dominio propio y configuración DNS",
-      "WhatsApp integrado (botón + plantillas)",
-      "Métodos de pago adicionales",
-      "Reportes mensuales básicos",
-      "Mejora de SEO y optimización",
-      "SLA de soporte (respuesta <24h)",
-      "Exportación/backup mensual",
-    ],
-    excluded: [
-      "Multi-sucursal",
-      "Analytics avanzado",
-      "Integración con marketplaces",
-    ],
-    popular: true,
-  },
-  {
-    name: "Enterprise",
-    price: "75.000",
-    setup: "50.000",
-    description: "Ideal para cadenas, multi-sucursal, integración avanzada",
-    features: [
-      "Todo lo de Commerce",
-      "Multi-sucursal / multi-ubicación",
-      "Integraciones con POS",
-      "Analytics avanzado (dashboards, cohortes, funnels)",
-      "Soporte prioritario (teléfono / reunión semanal)",
-      "Integración con marketplaces y redes sociales",
-      "Opciones de white-label",
-    ],
-    excluded: [],
-    popular: false,
-  },
-];
+const tier = (name: string) => pricingTiers.find((t) => t.name === name)!;
 
 describe("Pricing Tiers", () => {
   it("debe tener 3 tiers de precios", () => {
     expect(pricingTiers).toHaveLength(3);
   });
 
-  it("debe tener un tier popular", () => {
-    const popularTier = pricingTiers.find((tier) => tier.popular);
-    expect(popularTier).toBeDefined();
-    expect(popularTier?.name).toBe("Commerce");
+  it("Commerce es el único tier popular", () => {
+    const popular = pricingTiers.filter((t) => t.popular);
+    expect(popular).toHaveLength(1);
+    expect(popular[0].name).toBe("Commerce");
   });
 
-  it("el tier Starter debe tener el precio más bajo", () => {
-    const starter = pricingTiers.find((tier) => tier.name === "Starter");
-    const commerce = pricingTiers.find((tier) => tier.name === "Commerce");
-    const enterprise = pricingTiers.find((tier) => tier.name === "Enterprise");
-
-    expect(parseFloat(starter!.price.replace(".", ""))).toBeLessThan(
-      parseFloat(commerce!.price.replace(".", "")),
-    );
-    expect(parseFloat(commerce!.price.replace(".", ""))).toBeLessThan(
-      parseFloat(enterprise!.price.replace(".", "")),
-    );
+  it("precios vigentes de Starter y Commerce (ver PRICING_TIERS.md)", () => {
+    expect(tier("Starter").price).toBe("50.000");
+    expect(tier("Starter").setup).toBe("35.000");
+    expect(tier("Commerce").price).toBe("80.000");
+    expect(tier("Commerce").setup).toBe("60.000");
   });
 
-  it("cada tier debe tener nombre, precio, setup y descripción", () => {
-    pricingTiers.forEach((tier) => {
-      expect(tier.name).toBeDefined();
-      expect(tier.price).toBeDefined();
-      expect(tier.setup).toBeDefined();
-      expect(tier.description).toBeDefined();
-    });
+  it("Commerce cuesta 30.000/mes más que Starter", () => {
+    expect(
+      parsePrice(tier("Commerce").price) - parsePrice(tier("Starter").price),
+    ).toBe(30000);
   });
 
-  it("cada tier debe tener features", () => {
-    pricingTiers.forEach((tier) => {
-      expect(tier.features).toBeDefined();
-      expect(tier.features.length).toBeGreaterThan(0);
-    });
+  it("Enterprise es a consultar y no está a la venta", () => {
+    const e = tier("Enterprise");
+    expect(e.priced).toBe(false);
+    expect(e.comingSoon).toBe(true);
+    expect(e.excluded).toHaveLength(0);
   });
 
-  it("el tier Enterprise no debe tener features excluidas", () => {
-    const enterprise = pricingTiers.find((tier) => tier.name === "Enterprise");
-    expect(enterprise?.excluded).toHaveLength(0);
+  it("el alta de Commerce detalla qué incluye", () => {
+    const text = tier("Commerce").setupIncludes?.join(" ") ?? "";
+    expect(text).toContain("500 productos");
+    expect(text).toContain("dominio");
+  });
+
+  it("la facturación AFIP siempre se muestra como beta", () => {
+    for (const t of pricingTiers) {
+      for (const f of t.features) {
+        if (/AFIP/i.test(f)) expect(f).toMatch(/beta/i);
+      }
+    }
+  });
+
+  it("Promociones es solo de Commerce", () => {
+    expect(tier("Commerce").features.join()).toMatch(/Promociones/);
+    expect(tier("Starter").features.join()).not.toMatch(/Promociones/);
+    expect(tier("Starter").excluded.join()).toMatch(/Promociones/);
+  });
+
+  it("cada tier tiene nombre, precio, setup, descripción y features", () => {
+    for (const t of pricingTiers) {
+      expect(t.name && t.price && t.description).toBeTruthy();
+      expect(t.setup).toBeDefined();
+      expect(t.features.length).toBeGreaterThan(0);
+    }
   });
 });

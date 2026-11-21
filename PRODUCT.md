@@ -54,7 +54,7 @@ tenga que armar nada por su cuenta ni depender de una plantilla compartida.
 ## Capabilities and Constraints
 
 - Precios reales y publicados **de Store** (Starter ARS 50.000/mes + setup
-  35.000, Commerce ARS 70.000/mes + setup 50.000, Enterprise a
+  35.000, Commerce ARS 80.000/mes + alta 60.000, Enterprise a
   consultar/próximamente) — no cambiar estas cifras sin instrucción explícita
   del usuario. El **desarrollo a medida no tiene precio de lista**: se cotiza
   según el proyecto. Nunca mostrar los precios de Store como si fueran del

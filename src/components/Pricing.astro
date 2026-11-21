@@ -1,80 +1,7 @@
 ---
 import Check from "@lucide/astro/icons/check";
 import X from "@lucide/astro/icons/x";
-
-// Los códigos de plan del backend (STARTER / COMMERCE / ENTERPRISE) coinciden
-// con estos nombres -- ver PRICING_TIERS.md. Solo se listan funciones que la
-// plataforma tiene hoy; lo que no existe todavía va en Enterprise "Próximamente".
-const tiers = [
-  {
-    name: "Starter",
-    price: "50.000",
-    priced: true,
-    setup: "35.000",
-    description:
-      "Para empezar a vender online con un catálogo chico y manejarlo a mano",
-    productLimit: "Hasta 100 productos",
-    features: [
-      "Catálogo con variantes de talla y color, y fotos",
-      "Carga manual de productos",
-      "Checkout con Mercado Pago",
-      "Tu tienda en un subdominio de smondevstudio.com",
-      "Panel de administración: productos, pedidos y clientes",
-      "Dashboard con tus números del mes",
-      "1 usuario",
-      "Soporte por mensaje (respuesta en 48 h)",
-    ],
-    excluded: [
-      "Importación masiva desde Excel",
-      "Dominio propio",
-      "Códigos de descuento",
-      "Analytics y ventas por día",
-      "Facturación electrónica",
-    ],
-    popular: false,
-  },
-  {
-    name: "Commerce",
-    price: "70.000",
-    priced: true,
-    setup: "50.000",
-    description:
-      "Para comercios que venden en serio: más productos y todas las herramientas de venta",
-    productLimit: "Hasta 1.000 productos",
-    features: [
-      "Todo lo de Starter",
-      "Importación masiva desde Excel",
-      "Tu dominio propio, con configuración DNS",
-      "Códigos de descuento (gift codes)",
-      "Analytics: visitas, conversión y ventas por día",
-      "Clientes y productos más vendidos",
-      "Varios usuarios con roles dentro de la tienda",
-      "Facturación electrónica AFIP (beta)",
-      "Soporte por mensaje (respuesta en menos de 24 h)",
-    ],
-    excluded: ["Multi-sucursal", "Integración con marketplaces"],
-    popular: true,
-  },
-  {
-    name: "Enterprise",
-    price: "A consultar",
-    priced: false,
-    setup: "",
-    description: "Para cadenas y negocios con varias sucursales",
-    productLimit: "Productos ilimitados",
-    comingSoon: true,
-    features: [
-      "Todo lo de Commerce",
-      "Multi-sucursal / multi-ubicación",
-      "Analytics avanzado (cohortes, funnels)",
-      "Soporte prioritario (teléfono / reunión semanal)",
-      "Integración con marketplaces y redes sociales",
-      "Opciones de white-label",
-    ],
-    excluded: [],
-    popular: false,
-  },
-];
+import { pricingTiers as tiers } from "../lib/pricing";
 ---
 
 <section
@@ -96,8 +23,10 @@ const tiers = [
         class="text-base sm:text-lg max-w-xl mx-auto"
         style="color: var(--text-muted);"
       >
-        Precios de Store, en pesos argentinos. Setup único + mensual recurrente.
-        Sin contratos forzados, mínimo recomendado 3 meses.
+        Precios de Store, en pesos argentinos. Alta inicial única + abono
+        mensual por adelantado. Sin contratos forzados, mínimo recomendado 3
+        meses. El abono se actualiza cada 3 meses según el IPC, con aviso por
+        escrito 15 días antes.
       </p>
     </div>
 
@@ -147,8 +76,22 @@ const tiers = [
               </div>
             )}
             <div class="text-sm mt-1" style="color: var(--text-faint);">
-              {tier.setup ? `Setup único: ARS ${tier.setup}` : ""}
+              {tier.setup ? `Alta inicial (pago único): ARS ${tier.setup}` : ""}
             </div>
+            {tier.setupIncludes && (
+              <ul
+                class="mt-3 space-y-1.5 text-left text-xs"
+                style="color: var(--text-faint);"
+                aria-label="Qué incluye el alta"
+              >
+                {tier.setupIncludes.map((item) => (
+                  <li class="flex items-start gap-2">
+                    <span aria-hidden="true">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
             <div
               class="mt-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold"
               style="background-color: var(--bg-card); border-color: var(--border); color: var(--text-muted);"
