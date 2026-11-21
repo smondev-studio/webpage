@@ -15,7 +15,7 @@ Este documento describe el diseño del sistema de navegación y menú del panel 
 
 | Característica          | Starter              | Commerce           | Enterprise         |
 | ----------------------- | -------------------- | ------------------ | ------------------ |
-| **Precio mensual**      | $50.000              | $70.000            | A consultar        |
+| **Precio mensual**      | $50.000              | $80.000            | A consultar        |
 | **Límite de productos** | 100                  | 1.000              | Ilimitado          |
 | **Carga de productos**  | Manual (uno por uno) | Manual + CSV/Excel | Manual + CSV/Excel |
 | **Estado**              | ✅ Activo            | ✅ Activo          | ⏳ Próximamente    |
